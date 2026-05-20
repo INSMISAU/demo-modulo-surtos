@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo 4 — Investigação de surto no terreno</title>
+<style>
+  :root{
+    --ink:#15302b; --paper:#f7f5ef; --card:#fff;
+    --teal:#0f6e56; --teal-soft:#e1f5ee;
+    --amber:#b45309; --amber-soft:#fdf3e3;
+    --red:#9a2d2d; --red-soft:#fbeaea;
+    --green:#2f6b1f; --green-soft:#eaf3de;
+    --blue:#185fa5; --blue-soft:#e6f1fb;
+    --line:#dcd8cc; --muted:#6b6a62;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;background:var(--paper);color:var(--ink);line-height:1.6}
+  .wrap{max-width:760px;margin:0 auto;padding:0 20px 40px}
+  header.bar{background:var(--ink);color:#f7f5ef;padding:14px 0}
+  header.bar .wrap{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;padding:0 20px}
+  header.bar .title{font-size:15px;font-weight:600}
+  header.bar .crumb{font-size:12.5px;opacity:.75;font-family:system-ui,sans-serif}
+  .progress{height:5px;background:#2a4a43}
+  .progress>div{height:100%;width:14%;background:var(--teal);transition:width .4s}
+
+  .screen{display:none;animation:fade .35s ease}
+  .screen.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  h1{font-size:27px;line-height:1.25;margin:30px 0 6px;font-weight:600}
+  .lede{color:var(--muted);font-size:16px;margin-bottom:8px}
+  h2{font-size:21px;margin-bottom:10px;font-weight:600}
+  p.body{font-size:16px;margin:10px 0}
+
+  .objbox{background:var(--teal-soft);border-left:4px solid var(--teal);padding:14px 18px;margin:22px 0;border-radius:0 8px 8px 0}
+  .objbox h3{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--teal);font-family:system-ui,sans-serif;margin-bottom:6px}
+  .objbox ul{margin:0;padding-left:20px;font-size:15px}
+  .objbox li{margin:3px 0}
+
+  section.block{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px 26px;margin:20px 0}
+  .step-tag{display:inline-flex;align-items:center;gap:7px;font-family:system-ui,sans-serif;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--teal);background:var(--teal-soft);padding:5px 12px;border-radius:20px;margin-bottom:14px}
+  .step-tag svg{width:14px;height:14px;flex:0 0 auto}
+  .keypoints{list-style:none;margin:14px 0}
+  .keypoints li{font-size:15.5px;padding:9px 0 9px 30px;position:relative;border-bottom:1px solid #efece3}
+  .keypoints li:last-child{border-bottom:none}
+  .keypoints li svg{position:absolute;left:0;top:11px;width:18px;height:18px;color:var(--teal)}
+  .keypoints li b{color:var(--ink)}
+  .scenario{background:var(--amber-soft);border:1px solid #f0d9b0;border-radius:10px;padding:16px 18px;margin:16px 0;font-size:15.5px}
+  .scenario .who{font-family:system-ui,sans-serif;font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--amber);display:block;margin-bottom:4px}
+
+  .qcards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}
+  @media(max-width:560px){.qcards{grid-template-columns:1fr}}
+  .qcard{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:#fcfbf8}
+  .qcard .q{font-family:system-ui,sans-serif;font-weight:700;color:var(--teal);font-size:15px;margin-bottom:4px}
+  .qcard .a{font-size:14.5px;color:#3a4a45}
+
+  .case{border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:14px 0;background:#fcfbf8;transition:border-color .3s}
+  .case .pid{font-family:system-ui,sans-serif;font-weight:700;font-size:13px;background:#eceadf;display:inline-block;padding:2px 9px;border-radius:6px;margin-bottom:8px}
+  .case .pres{font-size:15.5px;margin-bottom:12px}
+  .opts{display:flex;gap:8px;flex-wrap:wrap}
+  .opts button{font-family:system-ui,sans-serif;font-size:14px;font-weight:500;border:1.5px solid var(--line);background:#fff;color:var(--ink);padding:8px 16px;border-radius:8px;cursor:pointer;transition:all .18s}
+  .opts button:hover:not(:disabled){border-color:var(--teal);background:var(--teal-soft)}
+  .opts button:disabled{cursor:default;opacity:.55}
+  .opts button.correct{background:var(--green-soft);border-color:var(--green);color:var(--green);opacity:1;font-weight:600}
+  .opts button.wrong{background:var(--red-soft);border-color:var(--red);color:var(--red);opacity:1}
+  .fb{margin-top:12px;font-size:14.5px;padding:11px 14px;border-radius:8px;display:none;font-family:system-ui,sans-serif}
+  .fb.show{display:block}
+  .fb.ok{background:var(--green-soft);color:var(--green);border:1px solid #b9d39a}
+  .fb.no{background:var(--red-soft);color:var(--red);border:1px solid #e6b8b8}
+  .case.done-ok{border-color:var(--green)}
+  .case.done-no{border-color:var(--red)}
+
+  .checklist{list-style:none;margin:14px 0}
+  .checklist li{font-size:15.5px;padding:11px 14px;margin:8px 0;border:1.5px solid var(--line);border-radius:9px;background:#fcfbf8;cursor:pointer;display:flex;align-items:center;gap:12px;transition:all .18s;font-family:system-ui,sans-serif}
+  .checklist li:hover{border-color:var(--teal)}
+  .checklist li .box{width:22px;height:22px;border:2px solid var(--line);border-radius:5px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;transition:all .18s}
+  .checklist li.on{background:var(--teal-soft);border-color:var(--teal)}
+  .checklist li.on .box{background:var(--teal);border-color:var(--teal)}
+
+  .epicurve{display:flex;align-items:flex-end;gap:6px;height:180px;margin:18px 0 6px;padding:14px;background:#fcfbf8;border:1px solid var(--line);border-radius:10px}
+  .epicurve .bar{flex:1;background:var(--teal);border-radius:3px 3px 0 0;min-height:4px;position:relative;transition:height .6s}
+  .epicurve .bar span{position:absolute;bottom:-20px;left:0;right:0;text-align:center;font-size:10.5px;color:var(--muted);font-family:system-ui,sans-serif}
+  .axis{font-family:system-ui,sans-serif;font-size:12px;color:var(--muted);text-align:center;margin-top:24px}
+
+  .insight{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
+  .insight button{font-family:system-ui,sans-serif;font-size:14px;border:1.5px solid var(--line);background:#fff;padding:10px 16px;border-radius:8px;cursor:pointer;transition:all .18s;flex:1;min-width:140px}
+  .insight button:hover:not(:disabled){border-color:var(--blue);background:var(--blue-soft)}
+  .insight button:disabled{opacity:.55;cursor:default}
+  .insight button.correct{background:var(--green-soft);border-color:var(--green);color:var(--green);font-weight:600}
+  .insight button.wrong{background:var(--red-soft);border-color:var(--red);color:var(--red)}
+
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+  @media(max-width:560px){.twocol{grid-template-columns:1fr}}
+  .colbox{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:#fcfbf8}
+  .colbox h4{font-family:system-ui,sans-serif;font-size:13.5px;color:var(--blue);margin-bottom:8px;text-transform:uppercase;letter-spacing:.03em}
+  .colbox ul{margin:0;padding-left:18px;font-size:14.5px}
+  .colbox li{margin:4px 0}
+
+  .score{font-family:system-ui,sans-serif;text-align:center;font-size:15px;color:var(--muted);margin:22px 0 6px}
+  .score b{color:var(--teal);font-size:18px}
+
+  .nav{display:flex;justify-content:space-between;margin-top:28px;gap:12px}
+  .nav button{font-family:system-ui,sans-serif;font-size:15px;font-weight:600;padding:12px 24px;border-radius:10px;cursor:pointer;border:none}
+  .nav .next{background:var(--teal);color:#fff}
+  .nav .next:disabled{background:#b6c9c2;cursor:not-allowed}
+  .nav .prev{background:transparent;color:var(--muted);border:1.5px solid var(--line)}
+  .nav .prev:disabled{opacity:.4;cursor:not-allowed}
+
+  .final{text-align:center;padding:30px 0}
+  .cert{background:var(--card);border:2px solid var(--teal);border-radius:14px;padding:34px;margin:24px 0}
+  .cert .big{font-size:46px;color:var(--teal);font-weight:600;margin:8px 0}
+  .note{font-family:system-ui,sans-serif;font-size:12.5px;color:var(--muted);text-align:center;margin-top:34px;padding-top:16px;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+<header class="bar"><div class="wrap">
+  <span class="title">Investigação de surto no terreno</span>
+  <span class="crumb" id="crumb">Abertura · 1 de 7</span>
+</div></header>
+<div class="progress"><div id="pbar"></div></div>
+
+<div class="wrap">
+
+  <!-- ECRÃ 0 — ABERTURA -->
+  <div class="screen active" data-s="0">
+    <h1>Investigação de surto no terreno</h1>
+    <p class="lede">Módulo 4 · um caso real, do princípio ao fim</p>
+    <div class="objbox">
+      <h3>O que vai fazer neste módulo</h3>
+      <ul>
+        <li>Conduzir uma investigação completa de um surto, passo a passo.</li>
+        <li>Tomar decisões reais em cada etapa e receber retorno imediato.</li>
+        <li>Aplicar a metodologia da Secção 5 do Manual Nacional de Surtos.</li>
+      </ul>
+    </div>
+    <section class="block">
+      <span class="step-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>O cenário</span>
+      <h2>Um alerta chega de Milange</h2>
+      <div class="scenario">
+        <span class="who">Distrito de Milange · Zambézia</span>
+        É época chuvosa. Chuvas fortes inundaram um poço comunitário em Milange-sede. Há 4 dias começaram a surgir casos de diarreia aquosa abundante numa família e nos seus vizinhos. O Serviço Distrital de Saúde aciona uma equipa de investigação — e você faz parte dela.
+      </div>
+      <p class="body">Ao longo de seis passos vai acompanhar a equipa de Milange: preparar-se, confirmar o surto, encontrar os casos, analisá-los, controlar a propagação e fechar o relatório.</p>
+    </section>
+    <div class="nav"><button class="prev" disabled>← Anterior</button><button class="next">Começar · Passo 1 →</button></div>
+  </div>
+
+  <!-- ECRÃ 1 — PREPARAR A EQUIPA -->
+  <div class="screen" data-s="1">
+    <h1>Passo 1 · Preparar a equipa de campo</h1>
+    <p class="lede">Antes de partir, organiza-se a equipa e o material</p>
+    <div class="objbox"><h3>Objetivo</h3><ul><li>Definir papéis e objetivos, e reunir o material essencial antes de ir para o terreno.</li></ul></div>
+    <section class="block">
+      <span class="step-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Contexto</span>
+      <h2>Quem vai e com o quê</h2>
+      <p class="body">Uma equipa de campo bem preparada define à partida os seus <strong>objetivos</strong> (o que se quer responder), os <strong>papéis</strong> de cada membro (quem lidera, quem analisa os dados, quem comunica), e faz uma <strong>reunião de alinhamento</strong> com o solicitante local antes de chegar.</p>
+      <p class="body">É também essencial conhecer o local — características da população, água, saneamento, serviços de saúde — e levar o material certo.</p>
+    </section>
+    <section class="block">
+      <span class="step-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Interação · avaliada</span>
+      <h2>Monte o kit de investigação</h2>
+      <p class="body">Selecione os itens que a equipa <strong>deve</strong> levar para esta investigação de campo. Clique para marcar.</p>
+      <ul class="checklist" id="kit">
+        <li data-good="1"><span class="box">✓</span> Computador portátil com Excel / Epi Info</li>
+        <li data-good="1"><span class="box">✓</span> EPI: luvas, máscaras e batas</li>
+        <li data-good="1"><span class="box">✓</span> GPS e telemóvel com contactos-chave</li>
+        <li data-good="1"><span class="box">✓</span> Material para colheita e transporte de amostras</li>
+        <li data-good="0"><span class="box">✓</span> Material promocional do distrito para distribuir</li>
+        <li data-good="0"><span class="box">✓</span> Equipamento de som para eventos públicos</li>
+      </ul>
+      <div class="fb" id="kit-fb"></div>
+    </section>
+    <div class="nav"><button class="prev">← Anterior</button><button class="next" disabled>Passo 2 →</button></div>
+  </div>
+
+  <!-- ECRÃ 2 — CONFIRMAR O SURTO -->
+  <div class="screen" data-s="2">
+    <h1>Passo 2 · Confirmar o surto e definir o caso</h1>
+    <p class="lede">O coração epidemiológico da investigação</p>
+    <div class="objbox"><h3>Objetivo</h3><ul>
+      <li>Confirmar o surto em duas etapas e reconhecer uma pseudoepidemia.</li>
+      <li>Organizar a informação com os 3 Q's e 1 C.</li>
+      <li>Classificar casos como suspeito, provável ou confirmado.</li></ul></div>
+    <section class="block">
+      <span class="step-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Contexto</span>
+      <h2>O que significa "confirmar"</h2>
+      <ul class="keypoints">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg><b>Verificar o diagnóstico</b> dos casos que levantaram a suspeita.</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg><b>Comparar a incidência</b> observada com a esperada para o local e época.</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L14.7 3.9a2 2 0 00-3.4 0z"/></svg>Cuidado com a <b>pseudoepidemia</b>: aumento aparente por erros de diagnóstico, sem doença real a subir.</li>
+      </ul>
+    </section>
+    <section class="block">
+      <span class="step-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Interação 1 · organizar</span>
+      <h2>Os 3 Q's e 1 C do alerta</h2>
+      <div class="scenario"><span class="who">Alerta recebido</span>Há 4 dias, após a cheia de um poço comunitário, surgiram casos de diarreia aquosa ("água de arroz") numa família e vizinhos. Reporta-se defecação a céu aberto e fonte de água partilhada.</div>
+      <div class="qcards">
+        <div class="qcard"><div class="q">Quem?</div><div class="a">Crianças e adultos de Milange-sede.</div></div>
+        <div class="qcard"><div class="q">Quando?</div><div class="a">Há 4 dias, após chuvas e cheia do poço.</div></div>
+        <div class="qcard"><div class="q">Onde?</div><div class="a">Bairro com água partilhada e defecação a céu aberto.</div></div>
+        <div class="qcard"><div class="q">Como?</div><div class="a">Diarreia aquosa; suspeita de via fecal-oral pela água.</div></div>
+      </div>
+      <p class="body" style="font-size:15px;color:var(--muted)">Tudo aponta para uma <strong>síndrome gastrointestinal de transmissão hídrica</strong>.</p>
+    </section>
+    <section class="block">
+      <span class="step-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Interação 2 · avaliada</span>
+      <h2>Classifique cada caso</h2>
+      <p class="body">Confirmou-se um surto de cólera em curso. Classifique cada doente segundo a <strong>definição de caso de cólera</strong>.</p>
+      <div class="case" data-q="cA"><span class="pid">Doente A</span><div class="pres">Adulto com diarreia aquosa aguda e desidratação, em zona com surto de cólera em curso. Sem teste.</div><div class="opts"><button data-c="0">Suspeito</button><button data-c="1">Provável</button><button data-c="2">Confirmado</button></div><div class="fb"></div></div>
+      <div class="case" data-q="cB"><span class="pid">Doente B</span><div class="pres">Caso suspeito com Teste de Diagnóstico Rápido (TDR) positivo para cólera. Sem cultura.</div><div class="opts"><button data-c="0">Suspeito</button><button data-c="1">Provável</button><button data-c="2">Confirmado</button></div><div class="fb"></div></div>
+      <div class="case" data-q="cC"><span class="pid">Doente C</span><div class="pres"><em>Vibrio cholerae</em> O1 isolado nas fezes por cultura.</div><div class="opts"><button data-c="0">Suspeito</button><button data-c="1">Provável</button><button data-c="2">Confirmado</button></div><div class="fb"></div></div>
+    </section>
+    <div class="nav"><button class="prev">← Anterior</button><button class="next" disabled>Passo 3 →</button></div>
+  </div>
+
+  <!-- ECRÃ 3 — BUSCA ATIVA -->
+  <div class="screen" data-s="3">
+    <h1>Passo 3 · Busca ativa de casos</h1>
+    <p class="lede">Encontrar todos os casos, não só os que chegaram ao hospital</p>
+    <div class="objbox"><h3>Objetivo</h3><ul><li>Compreender porque e como se procuram ativamente casos que a vigilância passiva não captou.</li></ul></div>
+    <section class="block">
+      <span class="step-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Contexto</span>
+      <h2>Porque procurar mais casos?</h2>
+      <p class="body">Muitos casos nunca chegam à unidade sanitária — ficam em casa, ou não são notificados. A <strong>busca ativa</strong> garante que se identificam todos os casos do surto, através de visitas a hospitais, centros de saúde e comunidades, entrevistas e inquéritos domiciliares.</p>
+      <p class="body">Envolver <strong>líderes comunitários e agentes de saúde locais</strong> é decisivo para encontrar e acompanhar os casos.</p>
+    </section>
+    <section class="block">
+      <span class="step-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Interação · avaliada</span>
+      <h2>Onde a equipa deve procurar?</h2>
+      <p class="body">Selecione os locais e meios adequados para a busca ativa neste surto de cólera.</p>
+      <ul class="checklist" id="search">
+        <li data-good="1"><span class="box">✓</span> Centros de saúde e hospital do distrito</li>
+        <li data-good="1"><span class="box">✓</span> Visitas domiciliares no bairro afetado</li>
+        <li data-good="1"><span class="box">✓</span> Conversas com líderes comunitários e agentes de saúde</li>
+        <li data-good="0"><span class="box">✓</span> Apenas aguardar que os doentes venham à unidade sanitária</li>
+        <li data-good="1"><span class="box">✓</span> Registo dos casos no Formulário Nacional de Investigação</li>
+      </ul>
+      <div class="fb" id="search-fb"></div>
+    </section>
+    <div class="nav"><button class="prev">← Anterior</button><button class="next" disabled>Passo 4 →</button></div>
+  </div>
+
+  <!-- ECRÃ 4 — EPIDEMIOLOGIA DESCRITIVA -->
+  <div class="screen" data-s="4">
+    <h1>Passo 4 · Epidemiologia descritiva</h1>
+    <p class="lede">Tempo, lugar e pessoa — ler o que os dados dizem</p>
+    <div class="objbox"><h3>Objetivo</h3><ul><li>Caracterizar o surto por tempo, lugar e pessoa, e interpretar uma curva epidémica.</li></ul></div>
+    <section class="block">
+      <span class="step-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Contexto</span>
+      <h2>Os três eixos da descrição</h2>
+      <div class="twocol">
+        <div class="colbox"><h4>Tempo</h4><ul><li>Quando começaram os casos?</li><li>Curva epidémica: casos por dia.</li></ul></div>
+        <div class="colbox"><h4>Lugar</h4><ul><li>Onde estão os casos?</li><li>Que áreas mais afetadas?</li></ul></div>
+      </div>
+      <div class="colbox" style="margin-top:0"><h4>Pessoa</h4><ul><li>Quem adoece? Idade, sexo, ocupação e fatores de risco.</li></ul></div>
+    </section>
+    <section class="block">
+      <span class="step-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Interação · avaliada</span>
+      <h2>Leia a curva epidémica</h2>
+      <p class="body">A equipa registou os casos diários de cólera em Milange. Observe a curva e responda.</p>
+      <div class="epicurve" id="curve">
+        <div class="bar" style="height:14%"><span>Dia 1</span></div>
+        <div class="bar" style="height:30%"><span>Dia 2</span></div>
+        <div class="bar" style="height:55%"><span>Dia 3</span></div>
+        <div class="bar" style="height:92%"><span>Dia 4</span></div>
+        <div class="bar" style="height:70%"><span>Dia 5</span></div>
+        <div class="bar" style="height:40%"><span>Dia 6</span></div>
+        <div class="bar" style="height:20%"><span>Dia 7</span></div>
+      </div>
+      <p class="axis">Número de casos por dia desde o início do surto</p>
+      <p class="body">O que esta curva sugere?</p>
+      <div class="insight" id="curve-q">
+        <button data-c="1">Uma fonte comum (ex: água contaminada), com pico e depois queda</button>
+        <button data-c="0">Transmissão pessoa-a-pessoa contínua e crescente</button>
+        <button data-c="0">Não há surto — os números são normais</button>
+      </div>
+      <div class="fb" id="curve-fb"></div>
+    </section>
+    <div class="nav"><button class="prev">← Anterior</button><button class="next" disabled>Passo 5 →</button></div>
+  </div>
+
+  <!-- ECRÃ 5 — MEDIDAS DE CONTROLO -->
+  <div class="screen" data-s="5">
+    <h1>Passo 5 · Medidas de controlo</h1>
+    <p class="lede">Agir para travar a propagação — sem esperar pelo fim da investigação</p>
+    <div class="objbox"><h3>Objetivo</h3><ul><li>Distinguir medidas dirigidas à fonte das medidas de proteção das pessoas suscetíveis.</li></ul></div>
+    <section class="block">
+      <span class="step-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Contexto</span>
+      <h2>Duas frentes de intervenção</h2>
+      <div class="twocol">
+        <div class="colbox"><h4>Atacar a fonte</h4><ul><li>Tratar os doentes</li><li>Isolamento e quarentena</li><li>Desinfeção de áreas contaminadas</li><li>Controlo de vetores</li></ul></div>
+        <div class="colbox"><h4>Proteger os suscetíveis</h4><ul><li>Vacinação em massa</li><li>Profilaxia pós-exposição</li><li>Promoção de higiene e água segura</li></ul></div>
+      </div>
+    </section>
+    <section class="block">
+      <span class="step-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Interação · avaliada</span>
+      <h2>Que medidas para o surto de cólera?</h2>
+      <p class="body">Selecione as medidas de controlo imediato apropriadas para este surto de transmissão hídrica.</p>
+      <ul class="checklist" id="control">
+        <li data-good="1"><span class="box">✓</span> Centros de tratamento com SRO e fluidos IV</li>
+        <li data-good="1"><span class="box">✓</span> Tratamento e desinfeção da água (intervenções WASH)</li>
+        <li data-good="1"><span class="box">✓</span> Sensibilização comunitária sobre higiene e água segura</li>
+        <li data-good="1"><span class="box">✓</span> Considerar vacinação oral contra a cólera</li>
+        <li data-good="0"><span class="box">✓</span> Não fazer nada até a investigação estar 100% concluída</li>
+      </ul>
+      <div class="fb" id="control-fb"></div>
+    </section>
+    <div class="nav"><button class="prev">← Anterior</button><button class="next" disabled>Passo 6 →</button></div>
+  </div>
+
+  <!-- ECRÃ 6 — RELATÓRIO E FECHO -->
+  <div class="screen" data-s="6">
+    <h1>Passo 6 · Ética e relatório final</h1>
+    <p class="lede">Documentar, respeitar, recomendar</p>
+    <div class="objbox"><h3>Objetivo</h3><ul><li>Reconhecer os princípios éticos e os elementos do relatório final da investigação.</li></ul></div>
+    <section class="block">
+      <span class="step-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Contexto</span>
+      <h2>Fechar a investigação com responsabilidade</h2>
+      <p class="body">Toda a investigação deve respeitar a <strong>confidencialidade</strong> dos dados das pessoas e princípios éticos no manuseio da informação. No fim, produz-se um <strong>relatório final</strong> que documenta o surto, as ações tomadas, as lições aprendidas e as recomendações.</p>
+    </section>
+    <section class="block">
+      <span class="step-tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21 8 14 2 9.4h7.6z"/></svg>Avaliação final</span>
+      <h2>O que pertence ao relatório final?</h2>
+      <p class="body">Selecione os elementos que um bom relatório de investigação deve conter.</p>
+      <ul class="checklist" id="report">
+        <li data-good="1"><span class="box">✓</span> Descrição do surto: tempo, lugar e pessoa</li>
+        <li data-good="1"><span class="box">✓</span> Medidas de controlo implementadas e seus resultados</li>
+        <li data-good="1"><span class="box">✓</span> Lições aprendidas e recomendações</li>
+        <li data-good="0"><span class="box">✓</span> Nomes e dados pessoais completos de todos os doentes</li>
+      </ul>
+      <div class="fb" id="report-fb"></div>
+    </section>
+    <div class="nav"><button class="prev">← Anterior</button><button class="next" disabled>Ver resultado →</button></div>
+  </div>
+
+  <!-- ECRÃ 7 — RESULTADO -->
+  <div class="screen" data-s="7">
+    <div class="final">
+      <h1>Módulo concluído</h1>
+      <p class="lede">Acompanhou uma investigação de surto do princípio ao fim</p>
+      <div class="cert">
+        <p style="font-family:system-ui,sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)">Pontuação final</p>
+        <div class="big"><span id="finalscore">0</span>%</div>
+        <p class="body" id="finalmsg" style="font-family:system-ui,sans-serif;font-size:15px"></p>
+      </div>
+      <p class="body">Concluiu os seis passos: preparar a equipa, confirmar o surto, busca ativa, epidemiologia descritiva, medidas de controlo e relatório final.</p>
+      <div class="nav" style="justify-content:center"><button class="prev">← Rever</button></div>
+    </div>
+  </div>
+
+  <p class="note">Protótipo de demonstração · conteúdo baseado no Manual Nacional para Deteção e Investigação de Surtos (INS/MISAU, v1.0), Secções 5 e 6. Numa versão final, a pontuação e o progresso seriam registados na plataforma (SCORM/xAPI) e os critérios clínicos ligariam às fichas de doença do manual interativo.</p>
+</div>
+
+<script>
+  const TOTAL = 7;
+  let cur = 0;
+  const scored = {};
+
+  function show(n){
+    cur = n;
+    document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', +s.dataset.s === n));
+    document.getElementById('pbar').style.width = ((n+1)/(TOTAL+1)*100) + '%';
+    const names = ['Abertura','Passo 1','Passo 2','Passo 3','Passo 4','Passo 5','Passo 6','Resultado'];
+    document.getElementById('crumb').textContent = names[n] + ' · ' + (n+1) + ' de ' + (TOTAL+1);
+    window.scrollTo({top:0,behavior:'smooth'});
+    if(n === TOTAL) computeFinal();
+  }
+
+  document.querySelectorAll('.nav .next').forEach(b => b.addEventListener('click', () => { if(!b.disabled) show(cur+1); }));
+  document.querySelectorAll('.nav .prev').forEach(b => b.addEventListener('click', () => { if(!b.disabled) show(cur-1); }));
+
+  function enableNext(screenEl){
+    const nb = screenEl.querySelector('.nav .next');
+    if(nb) nb.disabled = false;
+  }
+
+  // CASE classification (screen 2)
+  const caseAns = {
+    cA:{c:0,fb:["Correto. Em área de surto, diarreia aquosa aguda com desidratação é caso suspeito.","Não. Provável exige TDR positivo ou ligação a caso confirmado.","Não. Confirmado exige cultura laboratorial."]},
+    cB:{c:1,fb:["Não. Um TDR positivo eleva o caso acima de suspeito.","Correto. Suspeito com TDR positivo = provável.","Não. TDR não é confirmação por cultura."]},
+    cC:{c:2,fb:["Não. Há isolamento laboratorial.","Não. Provável é sem confirmação; aqui houve cultura.","Correto. Cultura positiva de V. cholerae O1 confirma o caso."]}
+  };
+  let caseRight = 0;
+  const caseResolved = {};
+
+  function resetCase(ce){
+    ce.querySelectorAll('.opts button').forEach(b => { b.disabled = false; b.classList.remove('wrong','correct'); });
+    ce.classList.remove('done-no');
+    const fb = ce.querySelector('.fb');
+    fb.className = 'fb';
+    const retry = ce.querySelector('.retry');
+    if(retry) retry.remove();
+  }
+
+  document.querySelectorAll('.case').forEach(ce => {
+    const data = caseAns[ce.dataset.q], fb = ce.querySelector('.fb');
+    ce.querySelectorAll('.opts button').forEach(btn => btn.addEventListener('click', () => {
+      const ch = +btn.dataset.c, ok = ch === data.c;
+      ce.querySelectorAll('.opts button').forEach(b => b.disabled = true);
+      fb.textContent = data.fb[ch];
+      fb.className = 'fb show ' + (ok?'ok':'no');
+      if(ok){
+        btn.classList.add('correct');
+        ce.classList.remove('done-no');
+        ce.classList.add('done-ok');
+        if(!caseResolved[ce.dataset.q]){ caseResolved[ce.dataset.q] = true; caseRight++; }
+        if(Object.keys(caseResolved).length === 3){
+          scored.s2 = caseRight/3;
+          enableNext(document.querySelector('[data-s="2"]'));
+        }
+      } else {
+        btn.classList.add('wrong');
+        ce.classList.add('done-no');
+        const retry = document.createElement('button');
+        retry.className = 'retry';
+        retry.textContent = '↻ Tentar de novo';
+        retry.style.cssText = 'font-family:system-ui,sans-serif;font-size:13.5px;font-weight:600;margin-top:10px;padding:8px 16px;border-radius:8px;cursor:pointer;border:1.5px solid var(--teal);background:#fff;color:var(--teal)';
+        retry.addEventListener('click', () => resetCase(ce));
+        fb.insertAdjacentElement('afterend', retry);
+      }
+    }));
+  });
+
+  // CHECKLIST interactions (screens 1,3,5,6)
+  function setupChecklist(id, fbId, screenSel, goodMsg, key){
+    const ul = document.getElementById(id), fb = document.getElementById(fbId);
+    let submitted = false;
+    ul.querySelectorAll('li').forEach(li => li.addEventListener('click', () => {
+      if(submitted) return;
+      li.classList.toggle('on');
+      const anyOn = [...ul.querySelectorAll('li')].some(l => l.classList.contains('on'));
+      if(anyOn && !ul.dataset.armed){ ul.dataset.armed = '1'; }
+    }));
+    // submit on first interaction completion via a check after each toggle is messy;
+    // simpler: evaluate live and enable next once at least the good ones are chosen
+    ul.addEventListener('click', () => {
+      const lis = [...ul.querySelectorAll('li')];
+      const goods = lis.filter(l => l.dataset.good === '1');
+      const bads = lis.filter(l => l.dataset.good === '0');
+      const goodOn = goods.filter(l => l.classList.contains('on')).length;
+      const badOn = bads.filter(l => l.classList.contains('on')).length;
+      const perfect = goodOn === goods.length && badOn === 0;
+      if(perfect && !submitted){
+        submitted = true;
+        lis.forEach(l => l.style.pointerEvents = 'none');
+        fb.textContent = goodMsg; fb.className = 'fb show ok';
+        scored[key] = 1;
+        enableNext(document.querySelector(screenSel));
+      } else if(badOn > 0){
+        fb.textContent = 'Reveja: há um item que não pertence a esta investigação. Desmarque-o.';
+        fb.className = 'fb show no';
+      } else {
+        fb.className = 'fb';
+      }
+    });
+  }
+  setupChecklist('kit','kit-fb','[data-s="1"]','Correto. Estes são os equipamentos essenciais para o trabalho de campo seguro e eficaz.','s1');
+  setupChecklist('search','search-fb','[data-s="3"]','Correto. A busca ativa vai além de esperar pelos doentes — procura nos serviços e na comunidade.','s3');
+  setupChecklist('control','control-fb','[data-s="5"]','Correto. Combina tratamento, WASH, sensibilização e vacinação — agindo já, sem esperar.','s5');
+  setupChecklist('report','report-fb','[data-s="6"]','Correto. O relatório documenta o surto e recomenda — sempre respeitando a confidencialidade.','s6');
+
+  // CURVE insight (screen 4)
+  const curveFb = document.getElementById('curve-fb');
+  let curveResolved = false;
+  function resetCurve(){
+    document.querySelectorAll('#curve-q button').forEach(b => { b.disabled = false; b.classList.remove('wrong','correct'); });
+    curveFb.className = 'fb';
+    const r = document.getElementById('curve-retry');
+    if(r) r.remove();
+  }
+  document.querySelectorAll('#curve-q button').forEach(btn => btn.addEventListener('click', () => {
+    const ok = btn.dataset.c === '1';
+    document.querySelectorAll('#curve-q button').forEach(b => b.disabled = true);
+    if(ok){
+      btn.classList.add('correct');
+      curveFb.textContent = 'Correto. Um pico único seguido de queda sugere uma fonte comum pontual — coerente com água contaminada.';
+      curveFb.className = 'fb show ok';
+      if(!curveResolved){ curveResolved = true; scored.s4 = 1; }
+      enableNext(document.querySelector('[data-s="4"]'));
+    } else {
+      btn.classList.add('wrong');
+      curveFb.textContent = 'Reveja: a subida rápida até um pico e depois a queda é típica de fonte comum, não de transmissão contínua.';
+      curveFb.className = 'fb show no';
+      const retry = document.createElement('button');
+      retry.id = 'curve-retry';
+      retry.textContent = '↻ Tentar de novo';
+      retry.style.cssText = 'font-family:system-ui,sans-serif;font-size:13.5px;font-weight:600;margin-top:10px;padding:8px 16px;border-radius:8px;cursor:pointer;border:1.5px solid var(--teal);background:#fff;color:var(--teal)';
+      retry.addEventListener('click', resetCurve);
+      curveFb.insertAdjacentElement('afterend', retry);
+    }
+  }));
+
+  function computeFinal(){
+    const keys = ['s1','s2','s4','s6','s3','s5'];
+    let sum = 0, n = 0;
+    keys.forEach(k => { if(k in scored){ sum += scored[k]; n++; } });
+    const pct = n ? Math.round(sum/n*100) : 0;
+    document.getElementById('finalscore').textContent = pct;
+    const msg = pct >= 80 ? 'Excelente — domina os passos da investigação de surto.'
+      : pct >= 50 ? 'Bom trabalho. Vale a pena rever os passos onde teve dúvidas.'
+      : 'Recomenda-se rever o módulo e o manual antes de avançar.';
+    document.getElementById('finalmsg').textContent = msg;
+  }
+</script>
+</body>
+</html>
