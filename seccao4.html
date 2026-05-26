@@ -104,6 +104,39 @@
   .backlink{display:inline-flex;align-items:center;gap:6px;font-family:var(--body);font-size:12.5px;font-weight:600;color:var(--blue);background:var(--blue-soft);padding:6px 12px;border-radius:20px;text-decoration:none;transition:all .18s}
   .backlink:hover{background:var(--blue);color:#fff}
   .backlink svg{width:14px;height:14px}
+
+  /* ===== Afinação para telemóvel ===== */
+  @media (max-width:600px){
+    .wrap{padding:0 16px 48px}
+    .topbar-inner{padding:11px 16px;gap:8px}
+    .brand .t1{font-size:12.5px}
+    .brand .t2{font-size:10px}
+    .brand .mark{width:30px;height:30px}
+    .backlink span{display:none}
+    .backlink{padding:7px 9px}
+    .step-ind{font-size:11px}
+    .hero{padding:30px 0 4px}
+    h1{font-size:26px;line-height:1.12}
+    .hero .sub{font-size:15.5px}
+    h2{font-size:20px}
+    .block{padding:20px 18px;border-radius:14px}
+    .objectives{padding:20px 20px}
+    .objectives li{font-size:14.5px}
+    .keypoints li{font-size:14.5px;gap:11px}
+    .keypoints li .ic{width:27px;height:27px}
+    .opts button{font-size:14px;padding:12px 15px}
+    .nav{gap:9px}
+    .nav button{font-size:14px;padding:12px 17px;flex:1;justify-content:center}
+    .nav .prev{flex:0 0 auto;padding:12px 14px}
+    .eyebrow{font-size:11px;padding:5px 11px}
+    .cert{padding:32px 20px}
+    .scenario{padding:16px 16px}
+  }
+  @media (max-width:380px){
+    h1{font-size:23px}
+    .nav button span,.nav .next{font-size:13.5px}
+    .block{padding:17px 15px}
+  }
 </style>
 <style>
   .syn{border:1px solid var(--line);border-radius:var(--radius-sm);padding:18px 20px;margin:12px 0;background:linear-gradient(180deg,#fff,#fafcfe)}
