@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Secção 2 · Competências e Notificação · INS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f7fa;--surface:#fff;--ink:#0e2233;--ink-soft:#3d5468;--muted:#6b8199;
+    --line:#e2eaf1;--line-soft:#eef3f8;--blue:#0b5fa5;--blue-deep:#063a66;--blue-soft:#e8f1f9;
+    --teal:#0f8f86;--teal-soft:#e2f4f1;--amber:#b9701b;--amber-soft:#fbf0e2;
+    --red:#b23a48;--red-soft:#fbeaec;--green:#2f7d4f;--green-soft:#e7f4ec;
+    --shadow:0 1px 3px rgba(14,34,51,.04),0 8px 24px rgba(14,34,51,.06);
+    --shadow-lg:0 4px 12px rgba(14,34,51,.06),0 20px 48px rgba(14,34,51,.10);
+    --radius:18px;--radius-sm:12px;--display:'Fraunces',Georgia,serif;--body:'Outfit',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--body);background:var(--bg);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(circle at 12% 8%,rgba(15,143,134,.05),transparent 42%),radial-gradient(circle at 88% 0%,rgba(11,95,165,.05),transparent 40%);background-attachment:fixed}
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.82);backdrop-filter:saturate(180%) blur(14px);border-bottom:1px solid var(--line)}
+  .topbar-inner{max-width:880px;margin:0 auto;padding:13px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .brand{display:flex;align-items:center;gap:11px;min-width:0}
+  .brand .mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--blue),var(--teal));display:flex;align-items:center;justify-content:center;flex:0 0 auto;box-shadow:0 4px 12px rgba(11,95,165,.25)}
+  .brand .mark svg{width:19px;height:19px;color:#fff}
+  .brand .txt{min-width:0}
+  .brand .t1{font-size:13.5px;font-weight:600;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .brand .t2{font-size:11px;color:var(--muted);font-weight:400}
+  .topbar .step-ind{font-size:12px;color:var(--muted);font-weight:500;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .pbar-track{height:3px;background:var(--line);overflow:hidden}
+  .pbar-fill{height:100%;width:14%;background:linear-gradient(90deg,var(--blue),var(--teal));transition:width .55s cubic-bezier(.22,.61,.36,1);border-radius:0 3px 3px 0}
+  .wrap{max-width:880px;margin:0 auto;padding:0 24px 64px}
+  .screen{display:none}.screen.active{display:block}
+  .screen.active>*{animation:rise .5s cubic-bezier(.22,.61,.36,1) backwards}
+  .screen.active>*:nth-child(1){animation-delay:.02s}.screen.active>*:nth-child(2){animation-delay:.08s}
+  .screen.active>*:nth-child(3){animation-delay:.14s}.screen.active>*:nth-child(4){animation-delay:.20s}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.screen.active>*{animation:none}*{transition:none!important}}
+  .hero{padding:44px 0 8px}
+  .eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--teal);background:var(--teal-soft);padding:6px 13px;border-radius:30px;margin-bottom:18px}
+  .eyebrow svg{width:13px;height:13px}
+  h1{font-family:var(--display);font-size:clamp(30px,5vw,44px);line-height:1.08;font-weight:600;letter-spacing:-.02em;margin-bottom:12px}
+  .hero .sub{font-size:17px;color:var(--ink-soft);max-width:56ch;font-weight:300}
+  h2{font-family:var(--display);font-size:25px;font-weight:600;letter-spacing:-.015em;margin-bottom:12px;line-height:1.2}
+  .objectives{background:linear-gradient(135deg,var(--blue-deep),var(--blue));border-radius:var(--radius);padding:26px 28px;margin:26px 0;color:#fff;box-shadow:var(--shadow-lg);position:relative;overflow:hidden}
+  .objectives::after{content:"";position:absolute;right:-40px;top:-40px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.06)}
+  .objectives h3{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:14px}
+  .objectives ul{list-style:none;display:grid;gap:11px;position:relative}
+  .objectives li{display:flex;gap:12px;align-items:flex-start;font-size:15.5px;font-weight:300}
+  .objectives li svg{width:20px;height:20px;flex:0 0 auto;margin-top:1px;color:var(--teal-soft)}
+  .block{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:28px 30px;margin:18px 0;box-shadow:var(--shadow)}
+  .tag{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:6px 13px;border-radius:30px;margin-bottom:16px}
+  .tag svg{width:14px;height:14px;flex:0 0 auto}
+  .tag.ctx{color:var(--blue);background:var(--blue-soft)}.tag.int{color:var(--teal);background:var(--teal-soft)}
+  .tag.evl{color:var(--amber);background:var(--amber-soft)}
+  .keypoints{list-style:none;display:grid;gap:2px}
+  .keypoints li{display:flex;gap:14px;align-items:flex-start;font-size:15.5px;padding:13px 0;border-bottom:1px solid var(--line-soft)}
+  .keypoints li:last-child{border-bottom:none}
+  .keypoints li .ic{width:30px;height:30px;border-radius:9px;background:var(--blue-soft);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .keypoints li .ic svg{width:16px;height:16px;color:var(--blue)}
+  .keypoints li b{font-weight:600}
+  .diseasegrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:16px 0}
+  .dcard{border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px;background:linear-gradient(180deg,#fff,#fafcfe)}
+  .dcard .dn{font-family:var(--display);font-weight:600;font-size:16px;color:var(--blue-deep);margin-bottom:4px}
+  .dcard .dd{font-size:13.5px;color:var(--ink-soft);font-weight:300}
+  .principles{display:grid;gap:10px;margin:16px 0}
+  .principle{border:1px solid var(--line);border-radius:var(--radius-sm);padding:15px 18px;background:#fff;display:flex;gap:13px;align-items:flex-start}
+  .principle .pic{width:32px;height:32px;border-radius:9px;background:var(--teal-soft);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .principle .pic svg{width:17px;height:17px;color:var(--teal)}
+  .principle .pt{font-weight:600;font-size:15px;margin-bottom:2px}
+  .principle .pd{font-size:14px;color:var(--ink-soft);font-weight:300}
+  .opts{display:flex;flex-direction:column;gap:9px;margin-top:6px}
+  .opts button{font-family:var(--body);font-size:14.5px;font-weight:500;border:1.5px solid var(--line);background:#fff;color:var(--ink);padding:12px 18px;border-radius:10px;cursor:pointer;transition:all .18s;text-align:left}
+  .opts button:hover:not(:disabled){border-color:var(--teal);background:var(--teal-soft)}
+  .opts button:disabled{cursor:default;opacity:.5}
+  .opts button.correct{background:var(--green-soft);border-color:var(--green);color:var(--green);opacity:1;font-weight:600}
+  .opts button.wrong{background:var(--red-soft);border-color:var(--red);color:var(--red);opacity:1}
+  .fb{margin-top:14px;font-size:14.5px;padding:13px 16px;border-radius:10px;display:none;line-height:1.55}
+  .fb.show{display:flex;gap:10px;align-items:flex-start;animation:rise .35s}
+  .fb svg{width:18px;height:18px;flex:0 0 auto;margin-top:1px}
+  .fb.ok{background:var(--green-soft);color:var(--green)}.fb.no{background:var(--red-soft);color:var(--red)}
+  .retry{font-family:var(--body);font-size:13.5px;font-weight:600;margin-top:11px;padding:9px 17px;border-radius:10px;cursor:pointer;border:1.5px solid var(--teal);background:#fff;color:var(--teal);display:inline-flex;align-items:center;gap:7px}
+  .retry:hover{background:var(--teal-soft)}.retry svg{width:14px;height:14px}
+  .nav{display:flex;justify-content:space-between;gap:12px;margin-top:30px}
+  .nav button{font-family:var(--body);font-size:15px;font-weight:600;padding:13px 26px;border-radius:12px;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:9px;transition:all .2s}
+  .nav .next{background:linear-gradient(135deg,var(--blue),var(--blue-deep));color:#fff;box-shadow:0 6px 18px rgba(11,95,165,.28)}
+  .nav .next:hover:not(:disabled){transform:translateY(-2px)}
+  .nav .next:disabled{background:#c4d2de;cursor:not-allowed;box-shadow:none}
+  .nav .next svg,.nav .prev svg{width:17px;height:17px}
+  .nav .prev{background:#fff;color:var(--ink-soft);border:1.5px solid var(--line)}
+  .nav .prev:disabled{opacity:.4;cursor:not-allowed}
+  .final{text-align:center;padding:36px 0}
+  .cert{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:44px 36px;margin:26px 0;box-shadow:var(--shadow-lg)}
+  .cert .ring{width:120px;height:120px;margin:0 auto 18px;position:relative}
+  .cert .ring svg{transform:rotate(-90deg)}
+  .cert .ring .pct{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .cert .ring .pct .num{font-family:var(--display);font-size:34px;font-weight:600;color:var(--blue);line-height:1}
+  .cert .ring .pct .lbl{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .cert .msg{font-size:15.5px;color:var(--ink-soft);font-weight:300;max-width:48ch;margin:0 auto}
+  .footnote{font-size:12.5px;color:var(--muted);text-align:center;margin-top:40px;padding-top:18px;border-top:1px solid var(--line);line-height:1.6;font-weight:300}
+</style>
+<style>
+  .flowchain{display:grid;gap:0;margin:18px 0}
+  .flowstep{border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px 18px;background:linear-gradient(180deg,#fff,#fafcfe);position:relative}
+  .flowstep+.flowstep{margin-top:30px}
+  .flowstep+.flowstep::before{content:"";position:absolute;top:-24px;left:50%;width:2px;height:20px;background:var(--teal)}
+  .flowstep+.flowstep::after{content:"";position:absolute;top:-10px;left:calc(50% - 5px);border:5px solid transparent;border-top-color:var(--teal)}
+  .flowstep .lvl{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--blue);background:var(--blue-soft);padding:4px 11px;border-radius:20px;margin-bottom:8px}
+  .flowstep .lvl svg{width:13px;height:13px}
+  .flowstep .ft{font-size:14.5px;color:var(--ink-soft);font-weight:300}
+  .compgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+  @media(max-width:560px){.compgrid{grid-template-columns:1fr}}
+  .comp{border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px 16px;background:#fff;display:flex;gap:11px;align-items:flex-start}
+  .comp .ci{width:30px;height:30px;border-radius:8px;background:var(--teal-soft);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .comp .ci svg{width:16px;height:16px;color:var(--teal)}
+  .comp .ct{font-size:14px;font-weight:600;margin-bottom:2px}
+  .comp .cd{font-size:13px;color:var(--ink-soft);font-weight:300}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2 5 4-12 2 7h6"/></svg></div>
+      <div class="txt"><div class="t1">Competências e Notificação</div><div class="t2">Secção 2 · Investigação de Surtos · INS</div></div>
+    </div>
+    <div class="step-ind" id="stepind">Abertura · 1 / 4</div>
+  </div>
+  <div class="pbar-track"><div class="pbar-fill" id="pbar"></div></div>
+</div>
+<div class="wrap">
+
+  <div class="screen active" data-s="0">
+    <div class="hero">
+      <span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.87"/></svg>Secção 2 · Competências e Notificação</span>
+      <h1>Competências e fluxo de notificação</h1>
+      <p class="sub">Quem investiga um surto, que competências precisa de ter, e como a informação flui do nível local até ao nacional.</p>
+    </div>
+    <div class="objectives">
+      <h3>No fim desta secção, vai saber</h3>
+      <ul>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>As competências essenciais de quem investiga surtos.</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Quem deve conduzir uma investigação e o papel do nível local.</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Como funciona o fluxo de notificação entre os níveis do sistema de saúde.</li>
+      </ul>
+    </div>
+    <div class="nav"><button class="prev" disabled>Anterior</button><button class="next">Começar · Módulo 2.1 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+  </div>
+
+  <div class="screen" data-s="1">
+    <div class="hero"><span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>Módulo 2.1</span>
+    <h1>Competências essenciais</h1><p class="sub">O que um investigador de surtos precisa de saber fazer.</p></div>
+    <div class="block">
+      <span class="tag ctx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>As sete competências</span>
+      <h2>Identificar, caracterizar e controlar</h2>
+      <div class="compgrid">
+        <div class="comp"><div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></div><div><div class="ct">Sistemas de vigilância</div><div class="cd">Familiaridade com sistemas e protocolos de notificação.</div></div></div>
+        <div class="comp"><div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 00-3 3v7a3 3 0 006 0V5a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/></svg></div><div><div class="ct">Conhecimento técnico</div><div class="cd">Princípios epidemiológicos, laboratoriais e clínicos.</div></div></div>
+        <div class="comp"><div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 16l4-6 4 3 5-8"/></svg></div><div><div class="ct">Capacidade analítica</div><div class="cd">Analisar dados e interpretar tendências para decidir.</div></div></div>
+        <div class="comp"><div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg></div><div><div class="ct">Comunicação e coordenação</div><div class="cd">Comunicar com autoridades, laboratórios e comunidades.</div></div></div>
+        <div class="comp"><div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="ct">Trabalho de campo</div><div class="cd">Recolha de amostras, inquéritos e medidas de controlo.</div></div></div>
+        <div class="comp"><div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg></div><div><div class="ct">Gestão de crises</div><div class="cd">Decidir sob pressão, com recursos limitados.</div></div></div>
+      </div>
+      <p style="font-size:14.5px;color:var(--muted);font-weight:300">Mais uma competência transversal e indispensável: <b style="color:var(--ink-soft)">ética e confidencialidade</b> — proteção de dados e respeito pela privacidade das populações.</p>
+    </div>
+    <div class="block">
+      <span class="tag evl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21 8 14 2 9.4h7.6z"/></svg>Verificação</span>
+      <h2>Qual destas é uma competência essencial do investigador?</h2>
+      <div class="opts" id="q1">
+        <button data-c="1">Capacidade analítica para interpretar dados epidemiológicos e orientar decisões</button>
+        <button data-c="0">Saber operar equipamento de construção civil</button>
+        <button data-c="0">Experiência em gestão hoteleira</button>
+      </div>
+      <div class="fb" id="q1-fb"></div>
+    </div>
+    <div class="nav"><button class="prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Anterior</button><button class="next" disabled>Módulo 2.2 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+  </div>
+
+  <div class="screen" data-s="2">
+    <div class="hero"><span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>Módulo 2.2</span>
+    <h1>Fluxo de notificação e resposta</h1><p class="sub">Como a informação sobe do terreno até ao nível nacional.</p></div>
+    <div class="block">
+      <span class="tag ctx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Quem investiga</span>
+      <h2>O papel do nível local</h2>
+      <ul class="keypoints">
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></span><div>Muitas vezes, o <b>primeiro relato</b> chega a um técnico, enfermeiro ou médico na unidade sanitária — o nível local é crucial na deteção inicial.</div></li>
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.87"/></svg></span><div>A investigação deve ser coordenada por uma <b>equipa multidisciplinar</b>: epidemiologia, laboratório, saúde ambiental, comunicação de risco.</div></li>
+      </ul>
+    </div>
+    <div class="block">
+      <span class="tag ctx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>O fluxo por níveis</span>
+      <h2>Da deteção à avaliação nacional</h2>
+      <div class="flowchain">
+        <div class="flowstep"><span class="lvl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Fontes de alerta</span><div class="ft">Unidade sanitária, dados de vigilância (ativa e passiva), média e comunidade — levam à <b>identificação do surto</b>.</div></div>
+        <div class="flowstep"><span class="lvl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/></svg>Nível distrital</span><div class="ft">Registo e avaliação da notificação. Início da investigação através da epidemiologia descritiva.</div></div>
+        <div class="flowstep"><span class="lvl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>Nível provincial</span><div class="ft">Avaliação do alerta e notificação ao nível nacional. Investigação descritiva ou analítica.</div></div>
+        <div class="flowstep"><span class="lvl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-3"/></svg>Nível central</span><div class="ft">Avaliação da gravidade do evento, do risco de casos e da sua disseminação.</div></div>
+      </div>
+    </div>
+    <div class="block">
+      <span class="tag evl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21 8 14 2 9.4h7.6z"/></svg>Verificação final</span>
+      <h2>Onde costuma ocorrer o primeiro relato de um surto?</h2>
+      <div class="opts" id="q2">
+        <button data-c="1">No nível local — técnicos, enfermeiros ou médicos da unidade sanitária</button>
+        <button data-c="0">Apenas no nível central, em Maputo</button>
+        <button data-c="0">Apenas através de organizações internacionais</button>
+      </div>
+      <div class="fb" id="q2-fb"></div>
+    </div>
+    <div class="nav"><button class="prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Anterior</button><button class="next" disabled>Ver resultado <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+  </div>
+
+  <div class="screen" data-s="3">
+    <div class="final">
+      <span class="eyebrow" style="margin:0 auto 18px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>Secção 2 concluída</span>
+      <div class="cert">
+        <div class="ring">
+          <svg width="120" height="120" viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="#e2eaf1" stroke-width="10"/><circle id="ringfill" cx="60" cy="60" r="52" fill="none" stroke="#0b5fa5" stroke-width="10" stroke-linecap="round" stroke-dasharray="327" stroke-dashoffset="327" style="transition:stroke-dashoffset 1.1s cubic-bezier(.22,.61,.36,1)"/></svg>
+          <div class="pct"><span class="num" id="finalscore">0</span><span class="lbl">Pontuação</span></div>
+        </div>
+        <h2>Competências e notificação</h2>
+        <p class="msg" id="finalmsg"></p>
+        <p id="finalbadge" style="display:inline-block;margin-top:16px;font-size:13.5px;font-weight:600;padding:9px 18px;border-radius:30px;font-family:var(--body)"></p>
+      </div>
+      <p style="font-size:15px;color:var(--ink-soft);font-weight:300;max-width:50ch;margin:0 auto">Já sabe quem investiga, que competências são precisas e como flui a notificação. Pronto para a Secção 3.</p>
+      <div class="nav" style="justify-content:center;margin-top:26px"><button class="prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Rever</button></div>
+    </div>
+  </div>
+
+  <p class="footnote">Protótipo de demonstração · Secção 2 (Competências e Fluxo de Notificação) · conteúdo baseado no Manual Nacional para Deteção e Investigação de Surtos, v1.0 (INS/MISAU). O miniteste de 8 perguntas e o progresso seriam fornecidos pelo INS e registados na Telessaúde.</p>
+</div>
+
+<script>
+  const TOTAL=3;let cur=0;const scored={};
+  const names=['Abertura','Módulo 2.1','Módulo 2.2','Resultado'];
+  const okIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>';
+  const noIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>';
+  function show(n){cur=n;document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',+s.dataset.s===n));document.getElementById('pbar').style.width=((n+1)/(TOTAL+1)*100)+'%';document.getElementById('stepind').textContent=names[n]+' · '+(n+1)+' / '+(TOTAL+1);window.scrollTo({top:0,behavior:'smooth'});if(n===TOTAL)computeFinal();}
+  document.querySelectorAll('.nav .next').forEach(b=>b.addEventListener('click',()=>{if(!b.disabled)show(cur+1)}));
+  document.querySelectorAll('.nav .prev').forEach(b=>b.addEventListener('click',()=>{if(!b.disabled)show(cur-1)}));
+  function enableNext(sc){const nb=sc.querySelector('.nav .next');if(nb)nb.disabled=false;}
+  function fbHTML(ok,text){return (ok?okIcon:noIcon)+'<span>'+text+'</span>';}
+  const Q={
+    q1:{sid:1,ok:'Correto. A capacidade analítica para interpretar dados é uma das competências essenciais.',no:'Reveja: a competência essencial é analítica e epidemiológica, não de outras áreas.'},
+    q2:{sid:2,ok:'Correto. O primeiro relato chega frequentemente ao nível local da unidade sanitária.',no:'Reveja: é o nível local que costuma detetar e relatar primeiro.'}
+  };
+  Object.keys(Q).forEach(qid=>{
+    const cfg=Q[qid],fb=document.getElementById(qid+'-fb');let tries=0,done=false;
+    document.querySelectorAll('#'+qid+' button').forEach(btn=>btn.addEventListener('click',()=>{
+      if(done)return;const ok=btn.dataset.c==='1';tries++;
+      document.querySelectorAll('#'+qid+' button').forEach(b=>b.disabled=true);
+      if(ok){btn.classList.add('correct');fb.innerHTML=fbHTML(true,cfg.ok);fb.className='fb show ok';scored['s'+cfg.sid]=(tries===1)?1:0.5;done=true;enableNext(document.querySelector('[data-s="'+cfg.sid+'"]'));}
+      else if(tries===1){btn.classList.add('wrong');fb.innerHTML=fbHTML(false,cfg.no+' Tem mais uma tentativa.');fb.className='fb show no';const retry=document.createElement('button');retry.className='retry';retry.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.5 9A9 9 0 006 5.3L1 10M23 14l-5 4.7A9 9 0 013.5 15"/></svg> Segunda tentativa';retry.addEventListener('click',()=>{retry.remove();fb.className='fb';document.querySelectorAll('#'+qid+' button').forEach(b=>{b.disabled=false;b.classList.remove('wrong');});});fb.insertAdjacentElement('afterend',retry);}
+      else{btn.classList.add('wrong');document.querySelectorAll('#'+qid+' button').forEach(b=>{if(b.dataset.c==='1')b.classList.add('correct');});fb.innerHTML=fbHTML(false,'A resposta correta está assinalada a verde. '+cfg.ok);fb.className='fb show no';scored['s'+cfg.sid]=0;done=true;enableNext(document.querySelector('[data-s="'+cfg.sid+'"]'));}
+    }));
+  });
+  function computeFinal(){
+    const keys=['s1','s2'];let sum=0,n=0;keys.forEach(k=>{if(k in scored){sum+=scored[k];n++;}});
+    const pct=n?Math.round(sum/n*100):0;const aprovado=pct>=80;
+    let i=0;const tick=setInterval(()=>{i+=2;if(i>=pct){i=pct;clearInterval(tick);}document.getElementById('finalscore').textContent=i;},18);
+    const circ=327,off=circ-(pct/100)*circ;const ring=document.getElementById('ringfill');ring.style.stroke=aprovado?'#2f7d4f':'#b9701b';
+    setTimeout(()=>{ring.style.strokeDashoffset=off;},150);
+    const badge=document.getElementById('finalbadge');badge.textContent=aprovado?'✓ Aproveitamento suficiente (≥ 80%)':'Abaixo de 80% — reveja para consolidar';badge.style.color=aprovado?'#2f7d4f':'#b9701b';badge.style.background=aprovado?'#e7f4ec':'#fbf0e2';
+    const msg=aprovado?'Excelente — domina as competências e o fluxo de notificação.':pct>=50?'Bom trabalho. Reveja os pontos onde teve dúvidas.':'Recomenda-se rever a secção antes de avançar.';
+    document.getElementById('finalmsg').textContent=msg;
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Secção 3 · Orientações para Resposta · INS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f7fa;--surface:#fff;--ink:#0e2233;--ink-soft:#3d5468;--muted:#6b8199;
+    --line:#e2eaf1;--line-soft:#eef3f8;--blue:#0b5fa5;--blue-deep:#063a66;--blue-soft:#e8f1f9;
+    --teal:#0f8f86;--teal-soft:#e2f4f1;--amber:#b9701b;--amber-soft:#fbf0e2;
+    --red:#b23a48;--red-soft:#fbeaec;--green:#2f7d4f;--green-soft:#e7f4ec;
+    --shadow:0 1px 3px rgba(14,34,51,.04),0 8px 24px rgba(14,34,51,.06);
+    --shadow-lg:0 4px 12px rgba(14,34,51,.06),0 20px 48px rgba(14,34,51,.10);
+    --radius:18px;--radius-sm:12px;--display:'Fraunces',Georgia,serif;--body:'Outfit',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--body);background:var(--bg);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(circle at 12% 8%,rgba(15,143,134,.05),transparent 42%),radial-gradient(circle at 88% 0%,rgba(11,95,165,.05),transparent 40%);background-attachment:fixed}
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.82);backdrop-filter:saturate(180%) blur(14px);border-bottom:1px solid var(--line)}
+  .topbar-inner{max-width:880px;margin:0 auto;padding:13px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .brand{display:flex;align-items:center;gap:11px;min-width:0}
+  .brand .mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--blue),var(--teal));display:flex;align-items:center;justify-content:center;flex:0 0 auto;box-shadow:0 4px 12px rgba(11,95,165,.25)}
+  .brand .mark svg{width:19px;height:19px;color:#fff}
+  .brand .txt{min-width:0}
+  .brand .t1{font-size:13.5px;font-weight:600;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .brand .t2{font-size:11px;color:var(--muted);font-weight:400}
+  .topbar .step-ind{font-size:12px;color:var(--muted);font-weight:500;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .pbar-track{height:3px;background:var(--line);overflow:hidden}
+  .pbar-fill{height:100%;width:14%;background:linear-gradient(90deg,var(--blue),var(--teal));transition:width .55s cubic-bezier(.22,.61,.36,1);border-radius:0 3px 3px 0}
+  .wrap{max-width:880px;margin:0 auto;padding:0 24px 64px}
+  .screen{display:none}.screen.active{display:block}
+  .screen.active>*{animation:rise .5s cubic-bezier(.22,.61,.36,1) backwards}
+  .screen.active>*:nth-child(1){animation-delay:.02s}.screen.active>*:nth-child(2){animation-delay:.08s}
+  .screen.active>*:nth-child(3){animation-delay:.14s}.screen.active>*:nth-child(4){animation-delay:.20s}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.screen.active>*{animation:none}*{transition:none!important}}
+  .hero{padding:44px 0 8px}
+  .eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--teal);background:var(--teal-soft);padding:6px 13px;border-radius:30px;margin-bottom:18px}
+  .eyebrow svg{width:13px;height:13px}
+  h1{font-family:var(--display);font-size:clamp(30px,5vw,44px);line-height:1.08;font-weight:600;letter-spacing:-.02em;margin-bottom:12px}
+  .hero .sub{font-size:17px;color:var(--ink-soft);max-width:56ch;font-weight:300}
+  h2{font-family:var(--display);font-size:25px;font-weight:600;letter-spacing:-.015em;margin-bottom:12px;line-height:1.2}
+  .objectives{background:linear-gradient(135deg,var(--blue-deep),var(--blue));border-radius:var(--radius);padding:26px 28px;margin:26px 0;color:#fff;box-shadow:var(--shadow-lg);position:relative;overflow:hidden}
+  .objectives::after{content:"";position:absolute;right:-40px;top:-40px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.06)}
+  .objectives h3{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:14px}
+  .objectives ul{list-style:none;display:grid;gap:11px;position:relative}
+  .objectives li{display:flex;gap:12px;align-items:flex-start;font-size:15.5px;font-weight:300}
+  .objectives li svg{width:20px;height:20px;flex:0 0 auto;margin-top:1px;color:var(--teal-soft)}
+  .block{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:28px 30px;margin:18px 0;box-shadow:var(--shadow)}
+  .tag{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:6px 13px;border-radius:30px;margin-bottom:16px}
+  .tag svg{width:14px;height:14px;flex:0 0 auto}
+  .tag.ctx{color:var(--blue);background:var(--blue-soft)}.tag.int{color:var(--teal);background:var(--teal-soft)}
+  .tag.evl{color:var(--amber);background:var(--amber-soft)}
+  .keypoints{list-style:none;display:grid;gap:2px}
+  .keypoints li{display:flex;gap:14px;align-items:flex-start;font-size:15.5px;padding:13px 0;border-bottom:1px solid var(--line-soft)}
+  .keypoints li:last-child{border-bottom:none}
+  .keypoints li .ic{width:30px;height:30px;border-radius:9px;background:var(--blue-soft);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .keypoints li .ic svg{width:16px;height:16px;color:var(--blue)}
+  .keypoints li b{font-weight:600}
+  .diseasegrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:16px 0}
+  .dcard{border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px;background:linear-gradient(180deg,#fff,#fafcfe)}
+  .dcard .dn{font-family:var(--display);font-weight:600;font-size:16px;color:var(--blue-deep);margin-bottom:4px}
+  .dcard .dd{font-size:13.5px;color:var(--ink-soft);font-weight:300}
+  .principles{display:grid;gap:10px;margin:16px 0}
+  .principle{border:1px solid var(--line);border-radius:var(--radius-sm);padding:15px 18px;background:#fff;display:flex;gap:13px;align-items:flex-start}
+  .principle .pic{width:32px;height:32px;border-radius:9px;background:var(--teal-soft);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .principle .pic svg{width:17px;height:17px;color:var(--teal)}
+  .principle .pt{font-weight:600;font-size:15px;margin-bottom:2px}
+  .principle .pd{font-size:14px;color:var(--ink-soft);font-weight:300}
+  .opts{display:flex;flex-direction:column;gap:9px;margin-top:6px}
+  .opts button{font-family:var(--body);font-size:14.5px;font-weight:500;border:1.5px solid var(--line);background:#fff;color:var(--ink);padding:12px 18px;border-radius:10px;cursor:pointer;transition:all .18s;text-align:left}
+  .opts button:hover:not(:disabled){border-color:var(--teal);background:var(--teal-soft)}
+  .opts button:disabled{cursor:default;opacity:.5}
+  .opts button.correct{background:var(--green-soft);border-color:var(--green);color:var(--green);opacity:1;font-weight:600}
+  .opts button.wrong{background:var(--red-soft);border-color:var(--red);color:var(--red);opacity:1}
+  .fb{margin-top:14px;font-size:14.5px;padding:13px 16px;border-radius:10px;display:none;line-height:1.55}
+  .fb.show{display:flex;gap:10px;align-items:flex-start;animation:rise .35s}
+  .fb svg{width:18px;height:18px;flex:0 0 auto;margin-top:1px}
+  .fb.ok{background:var(--green-soft);color:var(--green)}.fb.no{background:var(--red-soft);color:var(--red)}
+  .retry{font-family:var(--body);font-size:13.5px;font-weight:600;margin-top:11px;padding:9px 17px;border-radius:10px;cursor:pointer;border:1.5px solid var(--teal);background:#fff;color:var(--teal);display:inline-flex;align-items:center;gap:7px}
+  .retry:hover{background:var(--teal-soft)}.retry svg{width:14px;height:14px}
+  .nav{display:flex;justify-content:space-between;gap:12px;margin-top:30px}
+  .nav button{font-family:var(--body);font-size:15px;font-weight:600;padding:13px 26px;border-radius:12px;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:9px;transition:all .2s}
+  .nav .next{background:linear-gradient(135deg,var(--blue),var(--blue-deep));color:#fff;box-shadow:0 6px 18px rgba(11,95,165,.28)}
+  .nav .next:hover:not(:disabled){transform:translateY(-2px)}
+  .nav .next:disabled{background:#c4d2de;cursor:not-allowed;box-shadow:none}
+  .nav .next svg,.nav .prev svg{width:17px;height:17px}
+  .nav .prev{background:#fff;color:var(--ink-soft);border:1.5px solid var(--line)}
+  .nav .prev:disabled{opacity:.4;cursor:not-allowed}
+  .final{text-align:center;padding:36px 0}
+  .cert{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:44px 36px;margin:26px 0;box-shadow:var(--shadow-lg)}
+  .cert .ring{width:120px;height:120px;margin:0 auto 18px;position:relative}
+  .cert .ring svg{transform:rotate(-90deg)}
+  .cert .ring .pct{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .cert .ring .pct .num{font-family:var(--display);font-size:34px;font-weight:600;color:var(--blue);line-height:1}
+  .cert .ring .pct .lbl{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .cert .msg{font-size:15.5px;color:var(--ink-soft);font-weight:300;max-width:48ch;margin:0 auto}
+  .footnote{font-size:12.5px;color:var(--muted);text-align:center;margin-top:40px;padding-top:18px;border-top:1px solid var(--line);line-height:1.6;font-weight:300}
+</style>
+<style>
+  .triade{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
+  @media(max-width:560px){.triade{grid-template-columns:1fr}}
+  .tnode{border:1px solid var(--line);border-radius:var(--radius-sm);padding:18px 16px;text-align:center;background:linear-gradient(180deg,#fff,#fafcfe)}
+  .tnode .ti{width:44px;height:44px;border-radius:12px;margin:0 auto 10px;background:var(--teal-soft);display:flex;align-items:center;justify-content:center}
+  .tnode .ti svg{width:23px;height:23px;color:var(--teal)}
+  .tnode .tt{font-family:var(--display);font-weight:600;font-size:17px;margin-bottom:4px}
+  .tnode .td{font-size:13px;color:var(--ink-soft);font-weight:300}
+  .thresh{display:grid;gap:12px;margin:18px 0}
+  .tline{border-radius:var(--radius-sm);padding:16px 18px;border:1px solid var(--line)}
+  .tline.alert{background:var(--amber-soft);border-color:#f0dcc0}
+  .tline.epi{background:var(--red-soft);border-color:#e6b8b8}
+  .tline .th{display:flex;align-items:center;gap:9px;font-weight:600;font-size:15px;margin-bottom:5px}
+  .tline.alert .th{color:var(--amber)}.tline.epi .th{color:var(--red)}
+  .tline .th svg{width:17px;height:17px}
+  .tline .tx{font-size:14px;color:var(--ink-soft);font-weight:300}
+  .tline .ex{font-size:13px;color:var(--muted);font-style:italic;margin-top:6px}
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="topbar-inner">
+  <div class="brand"><div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2 5 4-12 2 7h6"/></svg></div>
+  <div class="txt"><div class="t1">Orientações para Resposta</div><div class="t2">Secção 3 · Investigação de Surtos · INS</div></div></div>
+  <div class="step-ind" id="stepind">Abertura · 1 / 8</div>
+</div><div class="pbar-track"><div class="pbar-fill" id="pbar"></div></div></div>
+<div class="wrap">
+
+  <div class="screen active" data-s="0">
+    <div class="hero"><span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Secção 3 · Orientações Gerais</span>
+    <h1>Orientações para resposta a surtos</h1><p class="sub">O que é um surto, porque e quando ocorre, e como o identificar a tempo — incluindo limiares e a curva epidémica.</p></div>
+    <div class="objectives"><h3>No fim desta secção, vai saber</h3><ul>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Definir o que é um surto e porque ocorre (a tríade da doença).</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Distinguir o limiar de alerta do limiar epidémico.</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Interpretar a curva epidémica e os tipos de surto.</li>
+    </ul></div>
+    <div class="nav"><button class="prev" disabled>Anterior</button><button class="next">Começar · Módulo 3.1 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+  </div>
+
+  <div class="screen" data-s="1">
+    <div class="hero"><span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>Módulos 3.1 e 3.2</span>
+    <h1>O que é um surto, e porque ocorre</h1><p class="sub">A definição e a tríade da doença.</p></div>
+    <div class="block"><span class="tag ctx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Definição</span>
+      <h2>O que é um surto</h2>
+      <ul class="keypoints"><li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 3 4-6"/></svg></span><div>Um surto é a ocorrência de um número de casos <b>superior ao esperado</b> num determinado local e período.</div></li>
+      <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg></span><div>A suspeita surge quando se identifica um número fora do comum — ou até <b>um único caso inesperado</b> que se desvia do padrão habitual.</div></li></ul>
+    </div>
+    <div class="block"><span class="tag ctx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>A tríade da doença</span>
+      <h2>Porque ocorrem os surtos</h2>
+      <p style="font-size:15px;color:var(--ink-soft);font-weight:300;margin-bottom:4px">Um surto resulta da interação de três componentes:</p>
+      <div class="triade">
+        <div class="tnode"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 016-6h4a6 6 0 016 6v1"/></svg></div><div class="tt">Hospedeiro</div><div class="td">Pessoa susceptível, sem imunidade suficiente.</div></div>
+        <div class="tnode"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></div><div class="tt">Agente</div><div class="td">O vírus, bactéria ou outro agente que causa doença.</div></div>
+        <div class="tnode"><div class="ti"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zM2 12h20"/></svg></div><div class="tt">Ambiente</div><div class="td">As condições que permitem o encontro e a transmissão.</div></div>
+      </div>
+      <p style="font-size:14px;color:var(--muted);font-weight:300">O surto ocorre quando há uma <b style="color:var(--ink-soft)">mudança no equilíbrio</b> entre os três — mais exposição, agente mais virulento, novos hospedeiros, ou queda de imunidade.</p>
+    </div>
+    <div class="block"><span class="tag evl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21 8 14 2 9.4h7.6z"/></svg>Verificação</span>
+      <h2>O que é, então, um surto?</h2>
+      <div class="opts" id="q1"><button data-c="1">Casos acima do número esperado para um local e período</button><button data-c="0">Qualquer caso de qualquer doença</button><button data-c="0">Apenas doenças que aparecem no inverno</button></div>
+      <div class="fb" id="q1-fb"></div>
+    </div>
+    <div class="nav"><button class="prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Anterior</button><button class="next" disabled>Continuar <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+  </div>
+
+  <div class="screen" data-s="2">
+    <div class="hero"><span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>Módulo 3.3</span>
+    <h1>Quando ocorre um surto</h1><p class="sub">As mudanças no equilíbrio que desencadeiam um surto.</p></div>
+    <div class="block"><span class="tag ctx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Gatilhos de um surto</span>
+      <h2>Qualquer uma destas mudanças pode causar um surto</h2>
+      <ul class="keypoints">
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg></span><div><b>Mais exposição ao agente</b> ou aumento da sua infectividade/virulência.</div></li>
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 00-3-3.87"/></svg></span><div><b>Exposição a novos hospedeiros</b> — alguém infetado desloca-se para uma comunidade sem a doença.</div></li>
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></span><div><b>Mais transmissão</b> em locais densamente povoados, eventos de massa ou confinamento.</div></li>
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span><div><b>Queda de imunidade</b> — imunidade que diminui com o tempo, ou novas gerações nunca expostas.</div></li>
+      </ul>
+    </div>
+    <div class="block"><span class="tag evl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21 8 14 2 9.4h7.6z"/></svg>Verificação</span>
+      <h2>Os três componentes da tríade da doença são...</h2>
+      <div class="opts" id="q2"><button data-c="1">Hospedeiro, agente e ambiente</button><button data-c="0">Médico, doente e hospital</button><button data-c="0">Vacina, tratamento e cura</button></div>
+      <div class="fb" id="q2-fb"></div>
+    </div>
+    <div class="nav"><button class="prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Anterior</button><button class="next" disabled>Módulo 3.4 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+  </div>
+
+  <div class="screen" data-s="3">
+    <div class="hero"><span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Módulo 3.4</span>
+    <h1>Importância da deteção precoce</h1><p class="sub">Porque é que detetar cedo muda tudo.</p></div>
+    <div class="block"><span class="tag ctx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>O que a deteção precoce permite</span>
+      <h2>Agir a tempo</h2>
+      <ul class="keypoints">
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg></span><div><b>Resposta imediata</b>: isolar casos, tratar afetados, mobilizar recursos para prevenir a disseminação.</div></li>
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.3-4.3"/></svg></span><div><b>Identificar a fonte</b> e os fatores de transmissão, para medidas específicas que interrompam o surto.</div></li>
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 16l4-6 4 3 5-8"/></svg></span><div><b>Aprender</b>: padrões de propagação, eficácia das intervenções, e melhorar os sistemas de vigilância.</div></li>
+      </ul>
+    </div>
+    <div class="block"><span class="tag evl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21 8 14 2 9.4h7.6z"/></svg>Verificação</span>
+      <h2>Uma vantagem da deteção precoce é...</h2>
+      <div class="opts" id="q3"><button data-c="1">Permitir resposta imediata e identificar a fonte de transmissão</button><button data-c="0">Tornar a doença mais grave</button><button data-c="0">Dispensar qualquer investigação</button></div>
+      <div class="fb" id="q3-fb"></div>
+    </div>
+    <div class="nav"><button class="prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Anterior</button><button class="next" disabled>Módulo 3.5 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+  </div>
+
+  <div class="screen" data-s="4">
+    <div class="hero"><span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 12l3-3 4 4 5-6"/></svg>Módulo 3.5</span>
+    <h1>Identificação de surtos e limiares</h1><p class="sub">Dois conceitos que guiam a resposta: alerta e epidémico.</p></div>
+    <div class="block"><span class="tag ctx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Os dois limiares</span>
+      <h2>Comparar com o esperado</h2>
+      <p style="font-size:15px;color:var(--ink-soft);font-weight:300;margin-bottom:4px">Primeiro estabelece-se a <b>linha de base</b> (o padrão normal da doença). Depois compara-se com dois limiares:</p>
+      <div class="thresh">
+        <div class="tline alert"><div class="th"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L14.7 3.9a2 2 0 00-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>Limiar de alerta</div><div class="tx">O ponto em que os casos começam a subir acima do esperado. Sinaliza uma potencial ameaça — é hora de vigiar mais de perto.</div><div class="ex">Ex.: se a média é 5 casos/semana, o alerta pode ser 10 casos numa semana.</div></div>
+        <div class="tline epi"><div class="th"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9z"/></svg>Limiar epidémico</div><div class="tx">O ponto que confirma que um surto está em curso e requer intervenções imediatas. Mobiliza recursos e resposta.</div><div class="ex">Ex.: se a alta normal é 50 casos/mês, o epidémico pode ser 75 casos.</div></div>
+      </div>
+    </div>
+    <div class="block"><span class="tag evl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21 8 14 2 9.4h7.6z"/></svg>Verificação</span>
+      <h2>Qual é a diferença entre os dois limiares?</h2>
+      <div class="opts" id="q4"><button data-c="1">O de alerta sinaliza subida a vigiar; o epidémico confirma o surto e exige ação imediata</button><button data-c="0">São exatamente a mesma coisa</button><button data-c="0">O epidémico é menos grave que o de alerta</button></div>
+      <div class="fb" id="q4-fb"></div>
+    </div>
+    <div class="nav"><button class="prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Anterior</button><button class="next" disabled>Módulo 3.6 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+  </div>
+
+  <div class="screen" data-s="5">
+    <div class="hero"><span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 16l4-6 4 3 5-8"/></svg>Módulo 3.6</span>
+    <h1>Curva epidémica e tipos de surto</h1><p class="sub">A forma da curva conta a história do surto.</p></div>
+    <div class="block"><span class="tag ctx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>A curva epidémica</span>
+      <h2>O que a curva mostra</h2>
+      <p style="font-size:15.5px;color:var(--ink-soft);font-weight:300;margin-bottom:6px">É um gráfico dos casos ao longo do tempo (casos no eixo vertical, tempo no horizontal). A sua <b>forma</b> indica o tipo de transmissão e a fase do surto.</p>
+      <div class="twocol" style="margin-top:14px">
+        <div class="colbox"><h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Fonte comum pontual</h4><ul><li>Exposição a uma fonte comum num curto período</li><li>Pico único acentuado, depois declínio</li><li>Exemplo típico: água ou alimento contaminado (cólera)</li></ul></div>
+        <div class="colbox"><h4><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Propagada (pessoa-a-pessoa)</h4><ul><li>Transmissão de pessoa para pessoa</li><li>Ondas sucessivas, cada uma uma nova geração</li><li>Exemplo típico: sarampo</li></ul></div>
+      </div>
+      <p style="font-size:13.5px;color:var(--muted);font-weight:300;margin-top:6px">Esta distinção é a base do que se aprende na Secção 5 (Investigação Passo a Passo).</p>
+    </div>
+    <div class="block"><span class="tag evl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21 8 14 2 9.4h7.6z"/></svg>Verificação final</span>
+      <h2>Uma curva com um pico único e depois declínio indica...</h2>
+      <div class="opts" id="q5"><button data-c="1">Um surto de fonte comum pontual</button><button data-c="0">Transmissão pessoa-a-pessoa contínua</button><button data-c="0">Ausência de surto</button></div>
+      <div class="fb" id="q5-fb"></div>
+    </div>
+    <div class="nav"><button class="prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Anterior</button><button class="next" disabled>Ver resultado <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+  </div>
+
+  <div class="screen" data-s="6">
+    <div class="final"><span class="eyebrow" style="margin:0 auto 18px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>Secção 3 concluída</span>
+      <div class="cert"><div class="ring"><svg width="120" height="120" viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="#e2eaf1" stroke-width="10"/><circle id="ringfill" cx="60" cy="60" r="52" fill="none" stroke="#0b5fa5" stroke-width="10" stroke-linecap="round" stroke-dasharray="327" stroke-dashoffset="327" style="transition:stroke-dashoffset 1.1s cubic-bezier(.22,.61,.36,1)"/></svg><div class="pct"><span class="num" id="finalscore">0</span><span class="lbl">Pontuação</span></div></div>
+      <h2>Orientações dominadas</h2><p class="msg" id="finalmsg"></p>
+      <p id="finalbadge" style="display:inline-block;margin-top:16px;font-size:13.5px;font-weight:600;padding:9px 18px;border-radius:30px;font-family:var(--body)"></p></div>
+      <p style="font-size:15px;color:var(--ink-soft);font-weight:300;max-width:50ch;margin:0 auto">Já domina os conceitos-base. Está pronto para a vigilância sindrómica (Secção 4) e a investigação prática (Secção 5).</p>
+      <div class="nav" style="justify-content:center;margin-top:26px"><button class="prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Rever</button></div>
+    </div>
+  </div>
+  <p class="footnote">Protótipo de demonstração · Secção 3 (Orientações Gerais) · conteúdo baseado no Manual Nacional para Deteção e Investigação de Surtos, v1.0 (INS/MISAU). O miniteste de 12 perguntas será fornecido pelo INS.</p>
+</div><script>
+  const TOTAL=6;let cur=0;const scored={};
+  const names=['Abertura','Mód. 3.1–3.2','Módulo 3.3','Módulo 3.4','Módulo 3.5','Módulo 3.6','Resultado'];
+  const okIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>';
+  const noIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>';
+  function show(n){cur=n;document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',+s.dataset.s===n));document.getElementById('pbar').style.width=((n+1)/(TOTAL+1)*100)+'%';document.getElementById('stepind').textContent=names[n]+' · '+(n+1)+' / '+(TOTAL+1);window.scrollTo({top:0,behavior:'smooth'});if(n===TOTAL)computeFinal();}
+  document.querySelectorAll('.nav .next').forEach(b=>b.addEventListener('click',()=>{if(!b.disabled)show(cur+1)}));
+  document.querySelectorAll('.nav .prev').forEach(b=>b.addEventListener('click',()=>{if(!b.disabled)show(cur-1)}));
+  function enableNext(sc){const nb=sc.querySelector('.nav .next');if(nb)nb.disabled=false;}
+  function fbHTML(ok,text){return (ok?okIcon:noIcon)+'<span>'+text+'</span>';}
+  const Q={
+    q1:{sid:1,ok:'Correto. Um surto é um número de casos superior ao esperado para um local e período.',no:'Reveja: surto = casos acima do esperado para aquele local e período.'},
+    q2:{sid:2,ok:'Correto. A tríade da doença é a interação entre hospedeiro, agente e ambiente.',no:'Reveja: a tríade é hospedeiro + agente + ambiente.'},
+    q3:{sid:3,ok:'Correto. A deteção precoce permite resposta imediata e identificar a fonte de transmissão.',no:'Reveja: detetar cedo permite agir e encontrar a fonte rapidamente.'},
+    q4:{sid:4,ok:'Correto. O limiar de alerta sinaliza uma subida acima do esperado; o epidémico confirma o surto.',no:'Reveja: alerta = subida a vigiar; epidémico = surto confirmado, ação imediata.'},
+    q5:{sid:5,ok:'Correto. Um pico único seguido de declínio indica fonte comum pontual.',no:'Reveja: pico único = fonte comum pontual (todos expostos quase ao mesmo tempo).'}
+  };
+  Object.keys(Q).forEach(qid=>{
+    const cfg=Q[qid],fb=document.getElementById(qid+'-fb');let tries=0,done=false;
+    document.querySelectorAll('#'+qid+' button').forEach(btn=>btn.addEventListener('click',()=>{
+      if(done)return;const ok=btn.dataset.c==='1';tries++;
+      document.querySelectorAll('#'+qid+' button').forEach(b=>b.disabled=true);
+      if(ok){btn.classList.add('correct');fb.innerHTML=fbHTML(true,cfg.ok);fb.className='fb show ok';scored['s'+cfg.sid]=(tries===1)?1:0.5;done=true;enableNext(document.querySelector('[data-s="'+cfg.sid+'"]'));}
+      else if(tries===1){btn.classList.add('wrong');fb.innerHTML=fbHTML(false,cfg.no+' Tem mais uma tentativa.');fb.className='fb show no';const r=document.createElement('button');r.className='retry';r.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.5 9A9 9 0 006 5.3L1 10M23 14l-5 4.7A9 9 0 013.5 15"/></svg> Segunda tentativa';r.addEventListener('click',()=>{r.remove();fb.className='fb';document.querySelectorAll('#'+qid+' button').forEach(b=>{b.disabled=false;b.classList.remove('wrong');});});fb.insertAdjacentElement('afterend',r);}
+      else{btn.classList.add('wrong');document.querySelectorAll('#'+qid+' button').forEach(b=>{if(b.dataset.c==='1')b.classList.add('correct');});fb.innerHTML=fbHTML(false,'A resposta correta está assinalada a verde. '+cfg.ok);fb.className='fb show no';scored['s'+cfg.sid]=0;done=true;enableNext(document.querySelector('[data-s="'+cfg.sid+'"]'));}
+    }));
+  });
+  function computeFinal(){
+    const keys=['s1','s2','s3','s4','s5'];let sum=0,n=0;keys.forEach(k=>{if(k in scored){sum+=scored[k];n++;}});
+    const pct=n?Math.round(sum/n*100):0;const aprovado=pct>=80;
+    let i=0;const tick=setInterval(()=>{i+=2;if(i>=pct){i=pct;clearInterval(tick);}document.getElementById('finalscore').textContent=i;},18);
+    const circ=327,off=circ-(pct/100)*circ;const ring=document.getElementById('ringfill');ring.style.stroke=aprovado?'#2f7d4f':'#b9701b';
+    setTimeout(()=>{ring.style.strokeDashoffset=off;},150);
+    const badge=document.getElementById('finalbadge');badge.textContent=aprovado?'✓ Aproveitamento suficiente (≥ 80%)':'Abaixo de 80% — reveja para consolidar';badge.style.color=aprovado?'#2f7d4f':'#b9701b';badge.style.background=aprovado?'#e7f4ec':'#fbf0e2';
+    const msg=aprovado?'Excelente — domina as orientações para resposta a surtos.':pct>=50?'Bom trabalho. Reveja os pontos onde teve dúvidas.':'Recomenda-se rever a secção antes de avançar.';
+    document.getElementById('finalmsg').textContent=msg;
+  }
+</script>
+</body>
+</html>
