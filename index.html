@@ -101,14 +101,6 @@
   .cert .msg{font-size:15.5px;color:var(--ink-soft);font-weight:300;max-width:48ch;margin:0 auto}
   .footnote{font-size:12.5px;color:var(--muted);text-align:center;margin-top:40px;padding-top:18px;border-top:1px solid var(--line);line-height:1.6;font-weight:300}
 
-  .modesel{display:flex;flex-direction:column;align-items:center;gap:12px;margin:8px 0 28px}
-  .modesel .ml{font-size:13px;font-weight:600;color:var(--muted);letter-spacing:.02em}
-  .modetabs{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:30px;padding:5px;box-shadow:var(--shadow)}
-  .modetab{display:inline-flex;align-items:center;gap:8px;font-family:var(--body);font-size:14px;font-weight:600;color:var(--ink-soft);background:transparent;border:none;padding:10px 20px;border-radius:24px;cursor:pointer;transition:all .2s}
-  .modetab svg{width:16px;height:16px}
-  .modetab.on{background:linear-gradient(135deg,var(--blue),var(--blue-deep));color:#fff;box-shadow:0 4px 12px rgba(11,95,165,.25)}
-  .modehint{font-size:13px;color:var(--ink-soft);font-weight:300;text-align:center;max-width:48ch;min-height:20px}
-
   /* ===== Afinação para telemóvel ===== */
   @media (max-width:600px){
     .wrap{padding:0 16px 48px}
@@ -183,14 +175,6 @@
     <div class="progress-summary"><span>Secções disponíveis</span><div class="bar"><span style="width:100%"></span></div><span>6 de 6</span></div>
   </div>
   
-    <div class="modesel">
-      <span class="ml">ESCOLHA O MODO</span>
-      <div class="modetabs">
-        <button class="modetab on" data-modo="formativo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Formativo</button>
-        <button class="modetab" data-modo="preview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>Pré-visualização</button>
-      </div>
-      <p class="modehint" id="modehint">Modo formativo: responda em cada módulo para avançar. A pontuação conta para o certificado (mínimo 80%).</p>
-    </div>
 
   <div class="sections">
   <a class="seccard ready" href="seccao1.html">
@@ -254,28 +238,5 @@
   </div>
   <p class="footnote">Academia Digital de Epidemiologia · INS / MISAU · protótipo baseado no Manual Nacional para Deteção e Investigação de Surtos, v1.0.</p>
 </div>
-
-
-<script>
-  let modoAtual='formativo';
-  const hints={
-    formativo:'Modo formativo: responda em cada módulo para avançar. A pontuação conta para o certificado (mínimo 80%).',
-    preview:'Modo pré-visualização: navegue livremente por todo o conteúdo. A pontuação não é gravada.'
-  };
-  function aplicarLinks(){
-    document.querySelectorAll('.seccard.ready').forEach(a=>{
-      const base=a.getAttribute('href').split('?')[0];
-      a.setAttribute('href',base+'?modo='+modoAtual);
-    });
-  }
-  document.querySelectorAll('.modetab').forEach(t=>t.addEventListener('click',()=>{
-    document.querySelectorAll('.modetab').forEach(x=>x.classList.remove('on'));
-    t.classList.add('on');
-    modoAtual=t.dataset.modo;
-    document.getElementById('modehint').textContent=hints[modoAtual];
-    aplicarLinks();
-  }));
-  aplicarLinks();
-</script>
 </body>
 </html>

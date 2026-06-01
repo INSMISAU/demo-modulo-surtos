@@ -75,6 +75,9 @@
   .opts button{font-family:var(--body);font-size:14.5px;font-weight:500;border:1.5px solid var(--line);background:#fff;color:var(--ink);padding:12px 18px;border-radius:10px;cursor:pointer;transition:all .18s;text-align:left}
   .opts button:hover:not(:disabled){border-color:var(--teal);background:var(--teal-soft)}
   .opts button:disabled{cursor:default;opacity:.5}
+  .opts button.selected{background:var(--blue-soft);border-color:var(--blue);color:var(--blue-deep);font-weight:600;opacity:1}
+  .opts li.on{background:var(--blue-soft);border-color:var(--blue)}
+
   .opts button.correct{background:var(--green-soft);border-color:var(--green);color:var(--green);opacity:1;font-weight:600}
   .opts button.wrong{background:var(--red-soft);border-color:var(--red);color:var(--red);opacity:1}
   .fb{margin-top:14px;font-size:14.5px;padding:13px 16px;border-radius:10px;display:none;line-height:1.55}
@@ -203,16 +206,18 @@
   function enableNext(sc){const nb=sc.querySelector('.nav .next');if(nb)nb.disabled=false;}
   function fbHTML(ok,text){return (ok?okIcon:noIcon)+'<span>'+text+'</span>';}
   const Q={q1:{sid:1,ok:'Correto. As zoonoses são transmitidas por animais e vetores, com risco para populações expostas.',no:'Reveja: zoonoses são doenças transmitidas por animais e vetores ao ser humano.'}};
-  Object.keys(Q).forEach(qid=>{
-    const cfg=Q[qid],fb=document.getElementById(qid+'-fb');let tries=0,done=false;
+    Object.keys(Q).forEach(qid=>{
+    const cfg=Q[qid];let done=false;
     document.querySelectorAll('#'+qid+' button').forEach(btn=>btn.addEventListener('click',()=>{
-      if(done)return;const ok=btn.dataset.c==='1';tries++;
+      if(done)return;done=true;
+      const ok=btn.dataset.c==='1';
       document.querySelectorAll('#'+qid+' button').forEach(b=>b.disabled=true);
-      if(ok){btn.classList.add('correct');fb.innerHTML=fbHTML(true,cfg.ok);fb.className='fb show ok';scored['s'+cfg.sid]=(tries===1)?1:0.5;done=true;enableNext(document.querySelector('[data-s="'+cfg.sid+'"]'));}
-      else if(tries===1){btn.classList.add('wrong');fb.innerHTML=fbHTML(false,cfg.no+' Tem mais uma tentativa.');fb.className='fb show no';const r=document.createElement('button');r.className='retry';r.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.5 9A9 9 0 006 5.3L1 10M23 14l-5 4.7A9 9 0 013.5 15"/></svg> Segunda tentativa';r.addEventListener('click',()=>{r.remove();fb.className='fb';document.querySelectorAll('#'+qid+' button').forEach(b=>{b.disabled=false;b.classList.remove('wrong');});});fb.insertAdjacentElement('afterend',r);}
-      else{btn.classList.add('wrong');document.querySelectorAll('#'+qid+' button').forEach(b=>{if(b.dataset.c==='1')b.classList.add('correct');});fb.innerHTML=fbHTML(false,'A resposta correta está assinalada a verde. '+cfg.ok);fb.className='fb show no';scored['s'+cfg.sid]=0;done=true;enableNext(document.querySelector('[data-s="'+cfg.sid+'"]'));}
+      btn.classList.add('selected');
+      scored['s'+cfg.sid]=ok?1:0;              // pontua em silêncio, sem revelar
+      enableNext(document.querySelector('[data-s="'+cfg.sid+'"]'));
     }));
   });
+
   function computeFinal(){
     const keys=['s1'];let sum=0,n=0;keys.forEach(k=>{if(k in scored){sum+=scored[k];n++;}});
     const pct=n?Math.round(sum/n*100):0;const aprovado=pct>=80;
@@ -222,14 +227,8 @@
     const badge=document.getElementById('finalbadge');badge.textContent=aprovado?'✓ Aproveitamento suficiente (≥ 80%)':'Abaixo de 80% — reveja para consolidar';badge.style.color=aprovado?'#2f7d4f':'#b9701b';badge.style.background=aprovado?'#e7f4ec':'#fbf0e2';
     document.getElementById('finalmsg').textContent=aprovado?'Domina as definições de caso desta síndrome.':'Reveja as fichas antes de avançar.';
   }
-  const MODO=new URLSearchParams(location.search).get('modo')||'formativo';
-  const isPreview=MODO==='preview';
-  if(isPreview){document.querySelectorAll('.nav .next').forEach(b=>b.disabled=false);
-    const b=document.createElement('div');b.id='previewBanner';
-    b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;flex:0 0 auto"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg><span>Modo pré-visualização — navegação livre, a pontuação não é gravada.</span>';
-    b.style.cssText='position:sticky;top:54px;z-index:40;display:flex;gap:9px;align-items:center;justify-content:center;background:#fbf0e2;color:#b9701b;font-family:var(--body);font-size:13px;font-weight:600;padding:9px 16px;border-bottom:1px solid #f0dcc0';
-    document.body.insertBefore(b,document.body.children[1]);
-  }
+  // modo único (formativo) — pré-visualização removida (decisão INS-OLOGA)
+  const isPreview=false;
 </script>
 </body>
 </html>

@@ -623,92 +623,60 @@
     const allDone=casesHere.every(c=>c.dataset.done==='1');
     if(allDone){
       const sid=sc.dataset.s;
-      const right=casesHere.filter(c=>caseFirstOk[c.dataset.q]).length;
+      const right=casesHere.filter(c=>caseFirstOk[c.dataset.q]===true).length;
       scored['c'+sid]=right/casesHere.length; // fração certa à primeira
       enableNext(sc);
     }
   }
-  document.querySelectorAll('.case').forEach(ce=>{
-    const data=caseAns[ce.dataset.q],fb=ce.querySelector('.fb');
-    caseTries[ce.dataset.q]=0;
+    document.querySelectorAll('.case').forEach(ce=>{
+    const data=caseAns[ce.dataset.q];
     ce.querySelectorAll('.opts button').forEach(btn=>btn.addEventListener('click',()=>{
       if(ce.dataset.done==='1')return;
-      const ch=+btn.dataset.c,ok=ch===data.c;
-      caseTries[ce.dataset.q]++;
-      const tries=caseTries[ce.dataset.q];
+      ce.dataset.done='1';
+      const ok=(+btn.dataset.c)===data.c;
       ce.querySelectorAll('.opts button').forEach(b=>b.disabled=true);
-      if(ok){
-        btn.classList.add('correct');ce.classList.remove('done-no');ce.classList.add('done-ok');
-        if(tries===1)caseFirstOk[ce.dataset.q]=true;
-        fb.innerHTML=fbHTML(true,data.fb[ch]);fb.className='fb show ok';
-        ce.dataset.done='1';markResolved(ce);
-      }else if(tries===1){
-        // primeira tentativa errada — permite UMA segunda
-        btn.classList.add('wrong');ce.classList.add('done-no');
-        fb.innerHTML=fbHTML(false,data.fb[ch]+' Tem mais uma tentativa.');fb.className='fb show no';
-        const retry=document.createElement('button');retry.className='retry';
-        retry.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.5 9A9 9 0 006 5.3L1 10M23 14l-5 4.7A9 9 0 013.5 15"/></svg> Segunda tentativa';
-        retry.addEventListener('click',()=>{
-          retry.remove();ce.classList.remove('done-no');fb.className='fb';
-          ce.querySelectorAll('.opts button').forEach(b=>{b.disabled=false;b.classList.remove('wrong');});
-        });
-        fb.insertAdjacentElement('afterend',retry);
-      }else{
-        // segunda tentativa errada — revela a correta, sem mais tentativas
-        btn.classList.add('wrong');ce.classList.add('done-no');
-        revealCorrect(ce,data);
-        fb.innerHTML=fbHTML(false,'A resposta correta está assinalada a verde. '+data.fb[data.c]);fb.className='fb show no';
-        ce.dataset.done='1';markResolved(ce);
-      }
+      btn.classList.add('selected');
+      caseFirstOk[ce.dataset.q]=ok;            // regista em silêncio
+      markResolved(ce);
     }));
   });
 
-  // checklists
-  function setupChecklist(id,fbId,sel,msg,key){
-    const ul=document.getElementById(id),fb=document.getElementById(fbId);let done=false;
-    ul.querySelectorAll('li').forEach(li=>li.addEventListener('click',()=>{if(!done)li.classList.toggle('on')}));
-    ul.addEventListener('click',()=>{
-      if(done)return;
+    // checklists
+    function setupChecklist(id,fbId,sel,msg,key){
+    const ul=document.getElementById(id);let touched=false;
+    function scoreNow(){
       const lis=[...ul.querySelectorAll('li')];
       const goods=lis.filter(l=>l.dataset.good==='1'),bads=lis.filter(l=>l.dataset.good==='0');
       const goodOn=goods.filter(l=>l.classList.contains('on')).length;
       const badOn=bads.filter(l=>l.classList.contains('on')).length;
-      if(goodOn===goods.length&&badOn===0){done=true;lis.forEach(l=>l.style.pointerEvents='none');
-        fb.innerHTML=fbHTML(true,msg);fb.className='fb show ok';scored[key]=1;enableNext(document.querySelector(sel));
-      }else if(badOn>0){fb.innerHTML=fbHTML(false,'Reveja: há um item que não pertence a esta investigação. Desmarque-o.');fb.className='fb show no';}
-      else{fb.className='fb';}
-    });
+      scored[key]=(goodOn===goods.length&&badOn===0)?1:0;
+    }
+    ul.querySelectorAll('li').forEach(li=>li.addEventListener('click',()=>{
+      li.classList.toggle('on');
+      scoreNow();
+      if(!touched){touched=true;enableNext(document.querySelector(sel));}
+    }));
   }
-  setupChecklist('kit','kit-fb','[data-s="1"]','Correto. Estes são os equipamentos essenciais para o trabalho de campo seguro e eficaz.','s1');
+
+    setupChecklist('kit','kit-fb','[data-s="1"]','Correto. Estes são os equipamentos essenciais para o trabalho de campo seguro e eficaz.','s1');
   setupChecklist('search','search-fb','[data-s="3"]','Correto. A busca ativa vai além de esperar pelos doentes — procura nos serviços e na comunidade.','s3');
   setupChecklist('control','control-fb','[data-s="5"]','Correto. Combina tratamento, WASH, sensibilização e vacinação — agindo já, sem esperar.','s5');
   setupChecklist('report','report-fb','[data-s="6"]','Correto. O relatório documenta o surto e recomenda — sempre respeitando a confidencialidade.','s6');
 
   // curvas — função genérica, máximo 2 tentativas, pontua acerto à 1ª
-  function setupInsight(qId,fbId,sid,okMsg,noMsg){
-    const fb=document.getElementById(fbId);let tries=0,doneFlag=false;
+    function setupInsight(qId,fbId,sid,okMsg,noMsg){
+    let done=false;
     document.querySelectorAll('#'+qId+' button').forEach(btn=>btn.addEventListener('click',()=>{
-      if(doneFlag)return;
-      const ok=btn.dataset.c==='1';tries++;
+      if(done)return;done=true;
+      const ok=btn.dataset.c==='1';
       document.querySelectorAll('#'+qId+' button').forEach(b=>b.disabled=true);
-      if(ok){
-        btn.classList.add('correct');fb.innerHTML=fbHTML(true,okMsg);fb.className='fb show ok';
-        scored[sid]=(tries===1)?1:0.5;doneFlag=true;enableNext(document.querySelector('[data-s="'+sid.replace('s','')+'"]'));
-      }else if(tries===1){
-        btn.classList.add('wrong');fb.innerHTML=fbHTML(false,noMsg+' Tem mais uma tentativa.');fb.className='fb show no';
-        const retry=document.createElement('button');retry.id=qId+'-retry';retry.className='retry';
-        retry.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.5 9A9 9 0 006 5.3L1 10M23 14l-5 4.7A9 9 0 013.5 15"/></svg> Segunda tentativa';
-        retry.addEventListener('click',()=>{retry.remove();fb.className='fb';document.querySelectorAll('#'+qId+' button').forEach(b=>{b.disabled=false;b.classList.remove('wrong');});});
-        fb.insertAdjacentElement('afterend',retry);
-      }else{
-        btn.classList.add('wrong');
-        document.querySelectorAll('#'+qId+' button').forEach(b=>{if(b.dataset.c==='1')b.classList.add('correct');});
-        fb.innerHTML=fbHTML(false,'A resposta correta está assinalada a verde. '+okMsg);fb.className='fb show no';
-        scored[sid]=0;doneFlag=true;enableNext(document.querySelector('[data-s="'+sid.replace('s','')+'"]'));
-      }
+      btn.classList.add('selected');
+      scored[sid]=ok?1:0;
+      enableNext(document.querySelector('[data-s="'+sid.replace('s','')+'"]'));
     }));
   }
-  setupInsight('curve-q','curve-fb','s4','Correto. Um pico único seguido de queda sugere uma fonte comum pontual — coerente com água contaminada.','Reveja: a subida rápida até um pico e depois a queda é típica de fonte comum, não de transmissão contínua.');
+
+    setupInsight('curve-q','curve-fb','s4','Correto. Um pico único seguido de queda sugere uma fonte comum pontual — coerente com água contaminada.','Reveja: a subida rápida até um pico e depois a queda é típica de fonte comum, não de transmissão contínua.');
   setupInsight('curve2-q','curve2-fb','s9','Correto. Cada onda é uma nova geração de casos — caraterística da transmissão pessoa-a-pessoa, como no sarampo.','Reveja: as ondas sucessivas indicam gerações de contágio entre pessoas, não várias fontes nem erros de registo.');
 
   function computeFinal(){
@@ -731,24 +699,8 @@
     document.getElementById('finalmsg').textContent=msg;
   }
 
-  // ===== MODO: formativo (bloqueia) vs preview (livre, não grava) =====
-  const MODO = new URLSearchParams(location.search).get('modo') || 'formativo';
-  const isPreview = MODO === 'preview';
-  function aplicarModo(){
-    if(isPreview){
-      // desbloquear toda a navegação
-      document.querySelectorAll('.nav .next').forEach(b=>b.disabled=false);
-      // banner de pré-visualização
-      if(!document.getElementById('previewBanner')){
-        const b=document.createElement('div');b.id='previewBanner';
-        b.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;flex:0 0 auto"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg><span>Modo pré-visualização — navegação livre, a pontuação não é gravada.</span>';
-        b.style.cssText='position:sticky;top:54px;z-index:40;display:flex;gap:9px;align-items:center;justify-content:center;background:#fbf0e2;color:#b9701b;font-family:var(--body);font-size:13px;font-weight:600;padding:9px 16px;border-bottom:1px solid #f0dcc0';
-        document.body.insertBefore?document.body.insertBefore(b,document.body.children[1]):document.body.prepend(b);
-      }
-    }
-  }
-  // garantir que enableNext em preview não é necessário, mas manter coerência
-  aplicarModo();
+  // ===== MODO ÚNICO (formativo) — pré-visualização removida (decisão INS-OLOGA) =====
+  const isPreview = false;
 
 </script>
 </body>
