@@ -155,6 +155,30 @@
   .note-box{background:var(--blue-soft);border-radius:var(--radius-sm);padding:18px 22px;margin:24px 0;font-size:14px;color:var(--ink-soft);font-weight:300;display:flex;gap:12px;align-items:flex-start}
   .note-box svg{width:20px;height:20px;color:var(--blue);flex:0 0 auto;margin-top:1px}
   .footnote{font-size:12.5px;color:var(--muted);text-align:center;margin-top:30px;padding-top:18px;border-top:1px solid var(--line);font-weight:300;line-height:1.6}
+</style><style>
+  /* ===== Duas paginas: capa + cursos ===== */
+  .view{display:none}
+  .view.active{display:block}
+  #cover.active{display:flex}
+  .cover{min-height:calc(100vh - 72px);min-height:calc(100svh - 72px);flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px 0}
+  .cover .coursehead{padding:0}
+  .cover-cta{display:flex;flex-direction:column;align-items:center;width:100%;max-width:360px;margin-top:32px}
+  .ver-cursos{font-family:var(--body);font-size:16px;font-weight:600;color:#fff;background:linear-gradient(135deg,var(--blue),var(--blue-deep));border:none;border-radius:14px;padding:16px 40px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 6px 18px rgba(11,95,165,.28);transition:transform .2s,box-shadow .2s;width:100%}
+  .ver-cursos:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(11,95,165,.34)}
+  .ver-cursos:active{transform:translateY(0)}
+  .ver-cursos svg{width:18px;height:18px}
+  .cover-hint{font-size:13px;color:var(--muted);margin-top:14px;font-weight:400}
+  .courses-head{display:flex;align-items:center;gap:12px;padding:30px 0 4px}
+  .back-btn{width:40px;height:40px;border-radius:11px;border:1.5px solid var(--line);background:#fff;color:var(--ink-soft);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;transition:all .18s}
+  .back-btn:hover{border-color:var(--teal);background:var(--teal-soft);color:var(--teal)}
+  .back-btn svg{width:18px;height:18px}
+  .courses-title{font-family:var(--display);font-size:24px;font-weight:600;letter-spacing:-.015em;margin:0}
+  @media (max-width:600px){
+    .cover{min-height:calc(100vh - 60px);min-height:calc(100svh - 60px)}
+    .ver-cursos{font-size:15.5px;padding:15px 24px}
+    .courses-head{padding:22px 0 4px}
+    .courses-title{font-size:21px}
+  }
 </style>
 </head>
 <body>
@@ -168,15 +192,28 @@
   </div>
 </div>
 <div class="wrap">
-  <div style="display:flex;justify-content:center;margin:22px 0 6px">
-    <img src="logo_ins.png" alt="Instituto Nacional de Saúde — Moçambique" style="height:64px;width:auto"/>
-  </div>
-  <div class="coursehead">
-    <span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>Curso de formação</span>
-    <h1>Investigação de Surtos</h1>
-    <p class="sub">Formação digital interativa baseada no Manual Nacional para Deteção e Investigação de Surtos. Organizada nas seis secções do manual.</p>
+
+  <section id="cover" class="view cover">
+    <div class="coursehead">
+      <div style="display:flex;justify-content:center;margin:0 0 16px">
+        <img src="logo_ins.png" alt="Instituto Nacional de Saúde — Moçambique" style="height:64px;width:auto"/>
+      </div>
+      <span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>Curso de formação</span>
+      <h1>Investigação de Surtos</h1>
+      <p class="sub">Formação digital interativa baseada no Manual Nacional para Deteção e Investigação de Surtos. Organizada nas seis secções do manual.</p>
+    </div>
+    <div class="cover-cta">
+      <button class="ver-cursos" onclick="location.hash='cursos'">Ver cursos <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      <p class="cover-hint">6 cursos · do panorama ao relatório</p>
+    </div>
+  </section>
+
+  <section id="cursos" class="view">
+    <div class="courses-head">
+      <button class="back-btn" onclick="location.hash=''" aria-label="Voltar à capa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+      <h2 class="courses-title">Cursos</h2>
+    </div>
     <div class="progress-summary"><span>Cursos disponíveis</span><div class="bar"><span style="width:100%"></span></div><span>6 de 6</span></div>
-  </div>
   
 
   <div class="sections">
@@ -240,6 +277,21 @@
     <div>Protótipo de demonstração dos seis cursos. O conteúdo segue o Manual Nacional; os minitestes e perguntas oficiais (incluindo o pré-teste e o teste final de 40 perguntas) serão fornecidos pelo INS. O Curso 4 apresenta o panorama das síndromes; o detalhe clínico de cada doença será desenvolvido com o INS.</div>
   </div>
   <p class="footnote">Academia Digital de Epidemiologia · INS / MISAU · protótipo baseado no Manual Nacional para Deteção e Investigação de Surtos, v1.0.</p>
+  </section>
 </div>
+<script>
+(function(){
+  var cover=document.getElementById('cover');
+  var cursos=document.getElementById('cursos');
+  function render(){
+    var verCursos=location.hash==='#cursos';
+    cover.classList.toggle('active',!verCursos);
+    cursos.classList.toggle('active',verCursos);
+    window.scrollTo(0,0);
+  }
+  window.addEventListener('hashchange',render);
+  render();
+})();
+</script>
 </body>
 </html>
