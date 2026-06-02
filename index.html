@@ -163,6 +163,7 @@
   .cover{min-height:calc(100vh - 72px);min-height:calc(100svh - 72px);flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px 0}
   .cover .coursehead{padding:0;max-width:500px;margin-left:auto;margin-right:auto}
   .cover .coursehead .sub{max-width:100%}
+  .cover-card{background:var(--surface);border:1px solid var(--line);border-radius:34px;box-shadow:var(--shadow-lg);padding:48px 30px;width:100%;max-width:400px;min-height:600px;display:flex;flex-direction:column;align-items:center;justify-content:center}
   .cover-cta{display:flex;flex-direction:column;align-items:center;width:100%;max-width:360px;margin-top:32px}
   .ver-cursos{font-family:var(--body);font-size:16px;font-weight:600;color:#fff;background:linear-gradient(135deg,var(--blue),var(--blue-deep));border:none;border-radius:14px;padding:16px 40px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 6px 18px rgba(11,95,165,.28);transition:transform .2s,box-shadow .2s;width:100%}
   .ver-cursos:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(11,95,165,.34)}
@@ -176,6 +177,7 @@
   .courses-title{font-family:var(--display);font-size:24px;font-weight:600;letter-spacing:-.015em;margin:0}
   @media (max-width:600px){
     .cover{min-height:calc(100vh - 60px);min-height:calc(100svh - 60px)}
+    .cover-card{padding:40px 22px;border-radius:26px}
     .ver-cursos{font-size:15.5px;padding:15px 24px}
     .courses-head{padding:22px 0 4px}
     .courses-title{font-size:21px}
@@ -195,6 +197,7 @@
 <div class="wrap">
 
   <section id="cover" class="view cover">
+    <div class="cover-card">
     <div class="coursehead">
       <div style="display:flex;justify-content:center;margin:0 0 16px">
         <img src="logo_ins.png" alt="Instituto Nacional de Saúde — Moçambique" style="height:64px;width:auto"/>
@@ -206,6 +209,7 @@
     <div class="cover-cta">
       <button class="ver-cursos" onclick="location.hash='cursos'">Ver cursos <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
       <p class="cover-hint">6 cursos · do panorama ao relatório</p>
+    </div>
     </div>
   </section>
 
