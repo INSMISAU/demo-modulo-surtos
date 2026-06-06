@@ -170,6 +170,9 @@
   .ver-cursos:active{transform:translateY(0)}
   .ver-cursos svg{width:18px;height:18px}
   .cover-hint{font-size:13px;color:var(--muted);margin-top:14px;font-weight:400}
+  .cover-img-ph{width:100%;max-width:300px;margin:18px auto 2px;aspect-ratio:16/9;border:1.5px dashed var(--line);border-radius:14px;background:linear-gradient(180deg,#fbfdfe,#f1f7fa);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;color:var(--muted);padding:14px;text-align:center}
+  .cover-img-ph svg{width:28px;height:28px;color:#aebfcf}
+  .cover-img-ph span{font-size:11.5px;font-weight:500;line-height:1.4;max-width:26ch}
   .courses-head{display:flex;align-items:center;gap:12px;padding:30px 0 4px}
   .back-btn{width:40px;height:40px;border-radius:11px;border:1.5px solid var(--line);background:#fff;color:var(--ink-soft);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;transition:all .18s}
   .back-btn:hover{border-color:var(--teal);background:var(--teal-soft);color:var(--teal)}
@@ -204,11 +207,14 @@
       </div>
       <span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>Curso de formação</span>
       <h1>Investigação de Surtos</h1>
-      <p class="sub">Formação digital interativa baseada no Manual Nacional para Deteção e Investigação de Surtos. Organizada nas seis secções do manual.</p>
+      <div class="cover-img-ph" role="img" aria-label="Espaço reservado para imagem da capa">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span>Imagem a definir — investigação em campo ou curva epidémica</span>
+      </div>
     </div>
     <div class="cover-cta">
-      <button class="ver-cursos" onclick="location.hash='cursos'">Ver cursos <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
-      <p class="cover-hint">6 cursos · do panorama ao relatório</p>
+      <button class="ver-cursos" onclick="location.hash='cursos'">Ver módulos <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      <p class="cover-hint">6 módulos · do panorama ao relatório</p>
     </div>
     </div>
   </section>
@@ -216,16 +222,16 @@
   <section id="cursos" class="view">
     <div class="courses-head">
       <button class="back-btn" onclick="location.hash=''" aria-label="Voltar à capa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
-      <h2 class="courses-title">Cursos</h2>
+      <h2 class="courses-title">Módulos</h2>
     </div>
-    <div class="progress-summary"><span>Cursos disponíveis</span><div class="bar"><span style="width:100%"></span></div><span>6 de 6</span></div>
+    <div class="progress-summary"><span>Módulos disponíveis</span><div class="bar"><span style="width:100%"></span></div><span>6 de 6</span></div>
   
 
   <div class="sections">
   <a class="seccard ready" href="seccao1.html">
     <div class="snum">1</div>
     <div class="sbody">
-      <div class="stitle">Curso 1 — Introdução</div>
+      <div class="stitle">Módulo 1 — Introdução</div>
       <div class="sdesc">Panorama dos surtos, objetivos, princípios e público-alvo.</div>
       <div class="smeta"><span class="badge ok">Disponível</span><span class="modcount">5 módulos</span></div>
     </div>
@@ -234,7 +240,7 @@
   <a class="seccard ready" href="seccao2.html">
     <div class="snum">2</div>
     <div class="sbody">
-      <div class="stitle">Curso 2 — Competências e Notificação</div>
+      <div class="stitle">Módulo 2 — Competências e Notificação</div>
       <div class="sdesc">Quem investiga, que competências, e o fluxo de notificação.</div>
       <div class="smeta"><span class="badge ok">Disponível</span><span class="modcount">2 módulos</span></div>
     </div>
@@ -243,7 +249,7 @@
   <a class="seccard ready" href="seccao3.html">
     <div class="snum">3</div>
     <div class="sbody">
-      <div class="stitle">Curso 3 — Orientações para Resposta</div>
+      <div class="stitle">Módulo 3 — Orientações para Resposta</div>
       <div class="sdesc">Definição de surto, limiares e curva epidemiológica.</div>
       <div class="smeta"><span class="badge ok">Disponível</span><span class="modcount">6 módulos</span></div>
     </div>
@@ -252,7 +258,7 @@
   <a class="seccard ready" href="seccao4.html">
     <div class="snum">4</div>
     <div class="sbody">
-      <div class="stitle">Curso 4 — Vigilância Sindrómica</div>
+      <div class="stitle">Módulo 4 — Vigilância Sindrómica</div>
       <div class="sdesc">As 10 síndromes e respetivas doenças, com panorama do manual.</div>
       <div class="smeta"><span class="badge ok">Disponível</span><span class="modcount">10 módulos</span></div>
     </div>
@@ -261,7 +267,7 @@
   <a class="seccard ready" href="seccao5.html">
     <div class="snum">5</div>
     <div class="sbody">
-      <div class="stitle">Curso 5 — Investigação Passo a Passo</div>
+      <div class="stitle">Módulo 5 — Investigação Passo a Passo</div>
       <div class="sdesc">Conduzir uma investigação real, do terreno ao relatório.</div>
       <div class="smeta"><span class="badge ok">Disponível</span><span class="modcount">Casos: cólera e sarampo</span></div>
     </div>
@@ -270,7 +276,7 @@
   <a class="seccard ready" href="seccao6.html">
     <div class="snum">6</div>
     <div class="sbody">
-      <div class="stitle">Curso 6 — Considerações Éticas</div>
+      <div class="stitle">Módulo 6 — Considerações Éticas</div>
       <div class="sdesc">Ética, consentimento e confidencialidade.</div>
       <div class="smeta"><span class="badge ok">Disponível</span><span class="modcount">2 módulos</span></div>
     </div>
@@ -279,7 +285,7 @@
   </div>
   <div class="note-box">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-    <div>Protótipo de demonstração dos seis cursos. O conteúdo segue o Manual Nacional; os minitestes e perguntas oficiais (incluindo o pré-teste e o teste final de 40 perguntas) serão fornecidos pelo INS. O Curso 4 apresenta o panorama das síndromes; o detalhe clínico de cada doença será desenvolvido com o INS.</div>
+    <div>Protótipo de demonstração dos seis módulos. O conteúdo segue o Manual Nacional; os minitestes e perguntas oficiais (incluindo o pré-teste e o teste final de 40 perguntas) serão fornecidos pelo INS. O Módulo 4 apresenta o panorama das síndromes; o detalhe clínico de cada doença será desenvolvido com o INS.</div>
   </div>
   <p class="footnote">Academia Digital de Epidemiologia · INS / MISAU · protótipo baseado no Manual Nacional para Deteção e Investigação de Surtos, v1.0.</p>
   </section>
