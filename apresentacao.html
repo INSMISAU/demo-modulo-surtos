@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apresentação do curso · Investigação de Surtos · INS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Mulish:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EAF1F2;--surface:#fff;--ink:#0e2233;--ink-soft:#3d5468;--muted:#6b8199;
+    --line:#e2eaf1;--line-soft:#eef3f8;--blue:#007088;--blue-deep:#00525F;--blue-soft:#E0EFF1;
+    --teal:#007088;--teal-soft:#E0EFF1;--amber:#b9701b;--amber-soft:#fbf0e2;
+    --red:#B02040;--red-soft:#F8E7EC;--green:#2f7d4f;--green-soft:#e7f4ec;
+    --shadow:0 1px 3px rgba(14,34,51,.04),0 8px 24px rgba(14,34,51,.06);
+    --shadow-lg:0 4px 12px rgba(14,34,51,.06),0 20px 48px rgba(14,34,51,.10);
+    --radius:18px;--radius-sm:12px;--display:'Poppins',system-ui,sans-serif;--body:'Mulish',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--body);background:var(--bg);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(circle at 12% 8%,rgba(15,143,134,.05),transparent 42%),radial-gradient(circle at 88% 0%,rgba(11,95,165,.05),transparent 40%);background-attachment:fixed}
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:saturate(180%) blur(14px);border-bottom:1px solid var(--line)}
+  .topbar-inner{max-width:880px;margin:0 auto;padding:13px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .brand{display:flex;align-items:center;gap:11px;min-width:0}
+  .brand .mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--blue),var(--teal));display:flex;align-items:center;justify-content:center;flex:0 0 auto;box-shadow:0 4px 12px rgba(11,95,165,.25)}
+  .brand .mark svg{width:19px;height:19px;color:#fff}
+  .brand .txt{min-width:0}
+  .brand .t1{font-size:13.5px;font-weight:600;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .brand .t2{font-size:11px;color:var(--muted);font-weight:400}
+  .topbar .step-ind{font-size:12px;color:var(--muted);font-weight:500;white-space:nowrap}
+  .backlink{display:inline-flex;align-items:center;gap:6px;font-family:var(--body);font-size:12.5px;font-weight:600;color:var(--blue);background:var(--blue-soft);padding:6px 12px;border-radius:20px;text-decoration:none;transition:all .18s}
+  .backlink:hover{background:var(--blue);color:#fff}
+  .backlink svg{width:14px;height:14px}
+  .wrap{max-width:880px;margin:0 auto;padding:0 24px 72px}
+  .reveal{animation:rise .5s cubic-bezier(.22,.61,.36,1) backwards}
+  .wrap>.reveal:nth-child(1){animation-delay:.02s}.wrap>.reveal:nth-child(2){animation-delay:.07s}
+  .wrap>.reveal:nth-child(3){animation-delay:.12s}.wrap>.reveal:nth-child(4){animation-delay:.17s}
+  .wrap>.reveal:nth-child(5){animation-delay:.22s}.wrap>.reveal:nth-child(6){animation-delay:.27s}
+  .wrap>.reveal:nth-child(7){animation-delay:.32s}.wrap>.reveal:nth-child(8){animation-delay:.37s}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.reveal{animation:none}*{transition:none!important}}
+  .hero{padding:44px 0 6px}
+  .eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--teal);background:var(--teal-soft);padding:6px 13px;border-radius:30px;margin-bottom:18px}
+  .eyebrow svg{width:13px;height:13px}
+  h1{font-family:var(--display);font-size:clamp(28px,5vw,42px);line-height:1.1;font-weight:600;letter-spacing:-.02em;margin-bottom:12px}
+  .hero .sub{font-size:16.5px;color:var(--ink-soft);max-width:62ch;font-weight:300}
+  .note-banner{background:var(--amber-soft);border:1px solid #efd9b6;border-radius:var(--radius-sm);padding:14px 18px;margin:22px 0 6px;font-size:13.5px;color:#7a4d12;font-weight:400;display:flex;gap:11px;align-items:flex-start;line-height:1.55}
+  .note-banner svg{width:18px;height:18px;color:var(--amber);flex:0 0 auto;margin-top:2px}
+  .note-banner b{font-weight:700}
+  .block{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:26px 28px;margin:16px 0;box-shadow:var(--shadow)}
+  .tag{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:6px 13px;border-radius:30px;margin-bottom:14px;color:var(--blue);background:var(--blue-soft)}
+  .tag svg{width:14px;height:14px;flex:0 0 auto}
+  .block h2{font-family:var(--display);font-size:22px;font-weight:600;letter-spacing:-.015em;margin-bottom:6px;line-height:1.2}
+  .sec-help{font-size:14px;color:var(--ink-soft);font-weight:300;margin-bottom:16px;max-width:66ch}
+  .field{margin:12px 0}
+  .flabel{font-weight:600;font-size:14.5px;margin-bottom:7px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  .pill{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:20px;white-space:nowrap}
+  .pill.todo{color:var(--amber);background:var(--amber-soft)}
+  .pill.prov{color:var(--blue);background:var(--blue-soft)}
+  .ph{border:1.5px dashed var(--line);border-radius:var(--radius-sm);background:linear-gradient(180deg,#fbfdfe,#f3f8fb);padding:14px 16px;color:var(--muted);font-size:14px;font-weight:400;display:flex;gap:10px;align-items:flex-start;line-height:1.5}
+  .ph svg{width:16px;height:16px;color:#a9bccd;flex:0 0 auto;margin-top:2px}
+  .ph.prov{border-style:solid;border-color:var(--blue-soft);background:linear-gradient(180deg,#fff,#f6fbfc);color:var(--ink-soft)}
+  .ph.prov svg{color:var(--blue)}
+  .reflist{list-style:none;display:grid;gap:10px;margin-top:4px}
+  .reflist li{display:flex;gap:12px;align-items:flex-start;font-size:14.5px;color:var(--ink-soft);font-weight:300}
+  .reflist li .ic{width:26px;height:26px;border-radius:8px;background:var(--blue-soft);display:flex;align-items:center;justify-content:center;flex:0 0 auto;margin-top:1px}
+  .reflist li .ic svg{width:14px;height:14px;color:var(--blue)}
+  .manlink{display:inline-flex;align-items:center;gap:9px;margin-top:14px;font-family:var(--body);font-size:14px;font-weight:600;color:var(--blue);background:var(--blue-soft);padding:11px 18px;border-radius:11px;text-decoration:none;transition:all .18s}
+  .manlink:hover{background:var(--blue);color:#fff}
+  .manlink svg{width:16px;height:16px}
+  .cta{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin:30px 0 6px}
+  .cta a{font-family:var(--body);font-size:15px;font-weight:600;padding:14px 26px;border-radius:12px;text-decoration:none;display:inline-flex;align-items:center;gap:9px;transition:transform .2s,box-shadow .2s}
+  .cta a svg{width:17px;height:17px}
+  .cta .primary{background:linear-gradient(135deg,var(--blue),var(--blue-deep));color:#fff;box-shadow:0 6px 18px rgba(11,95,165,.28)}
+  .cta .primary:hover{transform:translateY(-2px)}
+  .cta .ghost{background:#fff;color:var(--ink-soft);border:1.5px solid var(--line)}
+  .cta .ghost:hover{border-color:var(--teal);color:var(--teal)}
+  .footnote{font-size:12.5px;color:var(--muted);text-align:center;margin-top:34px;padding-top:18px;border-top:1px solid var(--line);font-weight:300;line-height:1.6}
+  @media (max-width:600px){
+    .wrap{padding:0 16px 56px}.topbar-inner{padding:11px 16px}
+    .block{padding:22px 18px}.backlink span{display:none}.backlink{padding:7px 9px}
+    .hero{padding:32px 0 4px}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2 5 4-12 2 7h6"/></svg></div>
+      <div class="txt"><div class="t1">Apresentação do curso</div><div class="t2">Investigação de Surtos · INS / MISAU</div></div>
+    </div>
+    <a href="index.html" class="backlink" title="Voltar à capa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg><span>Capa</span></a>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <section class="hero reveal">
+    <span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>Apresentação · estrutura proposta</span>
+    <h1>Sobre o curso</h1>
+    <p class="sub">Estrutura da página de apresentação, preparada pela OLOGA a partir das indicações da Dra. Faiza. Reúne os blocos pedidos — apresentação, objectivos, público-alvo, metodologia, critérios de avaliação e o manual de referência — prontos a receber o conteúdo oficial do INS.</p>
+    <div class="note-banner">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+      <div>Esta página é um esqueleto para validação. <b>«A definir pelo INS»</b> = campo em branco a preencher na reunião; <b>«Proposta a confirmar»</b> = sugestão que reflecte as observações já recebidas do INS.</div>
+    </div>
+  </section>
+
+  <section class="block reveal">
+    <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Apresentação do curso</span>
+    <h2>Do que se trata</h2>
+    <p class="sec-help">Breve descrição do curso, condições de acesso, número de módulos e carga horária.</p>
+
+    <div class="field">
+      <div class="flabel">Descrição <span class="pill todo">A definir pelo INS</span></div>
+      <div class="ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>Texto de apresentação — o que é o curso e a que se propõe.</span></div>
+    </div>
+    <div class="field">
+      <div class="flabel">Acesso <span class="pill todo">A definir pelo INS</span></div>
+      <div class="ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg><span>Gratuito ou condicionado — a confirmar.</span></div>
+    </div>
+    <div class="field">
+      <div class="flabel">Número de módulos <span class="pill prov">Proposta a confirmar</span></div>
+      <div class="ph prov"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>6 módulos (estrutura actual do protótipo) — sujeito à decisão de âmbito do INS.</span></div>
+    </div>
+    <div class="field">
+      <div class="flabel">Carga horária <span class="pill todo">A definir pelo INS</span></div>
+      <div class="ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span>Duração estimada do curso.</span></div>
+    </div>
+  </section>
+
+  <section class="block reveal">
+    <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/></svg>Objectivos de aprendizagem</span>
+    <h2>O que o participante saberá fazer</h2>
+    <p class="sec-help">Objectivos gerais do curso e objectivos específicos por módulo, formulados como objectivos de aprendizagem.</p>
+    <div class="field">
+      <div class="flabel">Objectivos gerais <span class="pill todo">A definir pelo INS</span></div>
+      <div class="ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg><span>Competências que o curso pretende desenvolver, no conjunto.</span></div>
+    </div>
+    <div class="field">
+      <div class="flabel">Objectivos por módulo <span class="pill todo">A definir pelo INS</span></div>
+      <div class="ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg><span>Objectivos específicos de cada um dos módulos.</span></div>
+    </div>
+  </section>
+
+  <section class="block reveal">
+    <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>Público-alvo</span>
+    <h2>A quem se destina</h2>
+    <p class="sec-help">Reflecte a observação do INS para substituir «investigador de surtos» por «profissionais de saúde».</p>
+    <div class="field">
+      <div class="flabel">Destinatários <span class="pill prov">Proposta a confirmar</span></div>
+      <div class="ph prov"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><span>Profissionais de saúde e demais intervenientes na detecção e resposta a surtos, a todos os níveis.</span></div>
+    </div>
+  </section>
+
+  <section class="block reveal">
+    <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>Metodologia de ensino</span>
+    <h2>Como o curso é dado</h2>
+    <p class="sec-help">Modo de estudo e estrutura pedagógica de cada módulo.</p>
+    <div class="field">
+      <div class="flabel">Abordagem <span class="pill prov">Proposta a confirmar</span></div>
+      <div class="ph prov"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg><span>Formação digital em autoestudo, com conteúdo teórico apresentado antes de cada avaliação (referência: estrutura dos cursos GCP).</span></div>
+    </div>
+    <div class="field">
+      <div class="flabel">Detalhe adicional <span class="pill todo">A definir pelo INS</span></div>
+      <div class="ph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>Outros elementos de metodologia que o INS queira incluir.</span></div>
+    </div>
+  </section>
+
+  <section class="block reveal">
+    <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Critérios de avaliação</span>
+    <h2>Como o aproveitamento é medido</h2>
+    <p class="sec-help">Proposta que reflecte as observações do INS — a confirmar a regra do pré-teste e o mínimo de aproveitamento.</p>
+    <ul class="reflist">
+      <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="3"/></svg></span><div><b>Pré-teste no início.</b> Função (diagnóstico ou condicionar a progressão) <span class="pill todo">A definir pelo INS</span></div></li>
+      <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg></span><div><b>Avaliação no fim de cada módulo</b>, incluindo as perguntas dos submódulos.</div></li>
+      <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg></span><div><b>Avaliação final abrangente</b> (cerca de 12 ou mais perguntas), cobrindo todos os módulos.</div></li>
+      <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/></svg></span><div><b>Aproveitamento mínimo para certificação</b> <span class="pill todo">A definir pelo INS</span></div></li>
+    </ul>
+  </section>
+
+  <section class="block reveal">
+    <span class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>Documento de referência</span>
+    <h2>O Manual Nacional</h2>
+    <p class="sec-help">O curso baseia-se no Manual Nacional para Detecção e Investigação de Surtos (INS / MISAU), que serve de documento de referência ao longo de todos os módulos.</p>
+    <a class="manlink" href="manual.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>Abrir o manual (PDF)</a>
+  </section>
+
+  <div class="cta reveal">
+    <a class="primary" href="index.html#cursos">Ver módulos <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+    <a class="ghost" href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Voltar à capa</a>
+  </div>
+
+  <p class="footnote reveal">Protótipo de demonstração · Página de apresentação (estrutura) · INS / MISAU. Os campos assinalados serão preenchidos com o conteúdo oficial validado pelo INS.</p>
+
+</div>
+</body>
+</html>

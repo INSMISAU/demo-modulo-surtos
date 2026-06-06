@@ -170,6 +170,9 @@
   .ver-cursos:active{transform:translateY(0)}
   .ver-cursos svg{width:18px;height:18px}
   .cover-hint{font-size:13px;color:var(--muted);margin-top:14px;font-weight:400}
+  .cover-link2{display:inline-flex;align-items:center;justify-content:center;gap:7px;margin-top:12px;font-family:var(--body);font-size:14px;font-weight:600;color:var(--blue);text-decoration:none;padding:9px 16px;border-radius:11px;transition:background .18s}
+  .cover-link2:hover{background:var(--blue-soft)}
+  .cover-link2 svg{width:15px;height:15px}
   .cover-img-ph{width:100%;max-width:300px;margin:18px auto 2px;aspect-ratio:16/9;border:1.5px dashed var(--line);border-radius:14px;background:linear-gradient(180deg,#fbfdfe,#f1f7fa);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;color:var(--muted);padding:14px;text-align:center}
   .cover-img-ph svg{width:28px;height:28px;color:#aebfcf}
   .cover-img-ph span{font-size:11.5px;font-weight:500;line-height:1.4;max-width:26ch}
@@ -214,6 +217,7 @@
     </div>
     <div class="cover-cta">
       <button class="ver-cursos" onclick="location.hash='cursos'">Ver módulos <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+      <a class="cover-link2" href="apresentacao.html">Apresentação do curso <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
       <p class="cover-hint">6 módulos · do panorama ao relatório</p>
     </div>
     </div>
