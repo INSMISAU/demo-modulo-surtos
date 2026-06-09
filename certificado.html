@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modelo de certificado · Investigação de Surtos · INS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Mulish:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EAF1F2;--surface:#fff;--ink:#0e2233;--ink-soft:#3d5468;--muted:#6b8199;
+    --line:#e2eaf1;--blue:#007088;--blue-deep:#00525F;--blue-soft:#E0EFF1;--red:#B02040;
+    --gold:#b9701b;--shadow-lg:0 4px 12px rgba(14,34,51,.06),0 24px 56px rgba(14,34,51,.14);
+    --display:'Poppins',system-ui,sans-serif;--body:'Mulish',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--body);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(circle at 12% 8%,rgba(0,112,136,.05),transparent 42%),radial-gradient(circle at 88% 0,rgba(176,32,64,.04),transparent 40%);min-height:100vh}
+  .topbar{background:rgba(255,255,255,.92);backdrop-filter:saturate(180%) blur(14px);border-bottom:1px solid var(--line)}
+  .topbar-inner{max-width:1040px;margin:0 auto;padding:11px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .brand{display:flex;align-items:center;gap:11px}
+  .brand .mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--blue),var(--blue-deep));display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,112,136,.25)}
+  .brand .mark svg{width:18px;height:18px;color:#fff}
+  .brand .t1{font-size:13.5px;font-weight:600}
+  .brand .t2{font-size:11px;color:var(--muted)}
+  .actions{display:flex;gap:8px}
+  .btn{display:inline-flex;align-items:center;gap:7px;font-family:var(--body);font-size:12.5px;font-weight:600;padding:8px 14px;border-radius:20px;text-decoration:none;border:0;cursor:pointer;transition:all .18s}
+  .btn.ghost{color:var(--ink-soft);background:#fff;border:1.5px solid var(--line)}
+  .btn.ghost:hover{border-color:var(--blue);color:var(--blue)}
+  .btn.solid{color:#fff;background:linear-gradient(135deg,var(--blue),var(--blue-deep))}
+  .btn svg{width:14px;height:14px}
+  .wrap{max-width:1040px;margin:0 auto;padding:26px 22px 60px}
+  .note{display:flex;gap:11px;align-items:flex-start;background:var(--blue-soft);border:1px solid #c7e3e7;border-radius:12px;padding:14px 18px;font-size:13.5px;color:var(--blue-deep);line-height:1.55;margin-bottom:22px}
+  .note svg{width:18px;height:18px;color:var(--blue);flex:0 0 auto;margin-top:2px}
+  .note b{font-weight:700}
+
+  /* ---- certificate ---- */
+  .cert-shell{display:flex;justify-content:center}
+  .cert{position:relative;width:100%;max-width:920px;aspect-ratio:1.414/1;background:var(--surface);border-radius:10px;box-shadow:var(--shadow-lg);overflow:hidden}
+  .cert .frame{position:absolute;inset:14px;border:2px solid var(--blue);border-radius:6px}
+  .cert .frame2{position:absolute;inset:20px;border:1px solid #cfe0e4;border-radius:4px}
+  .cert .bar{position:absolute;top:0;left:0;right:0;height:8px;background:linear-gradient(90deg,var(--blue) 0 60%,var(--red) 60% 100%)}
+  .cert .wm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:13vw;font-weight:800;color:rgba(0,112,136,.05);letter-spacing:.1em;transform:rotate(-18deg);pointer-events:none;user-select:none}
+  .inner{position:absolute;inset:34px;display:flex;flex-direction:column;align-items:center;text-align:center;padding:6px}
+  .inner .logo{height:9%;min-height:42px;margin-top:1%}
+  .gov{font-size:11px;letter-spacing:.04em;color:var(--muted);margin-top:8px;font-weight:500}
+  .eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-top:12px}
+  h1{font-family:var(--display);font-size:clamp(26px,4.4vw,42px);font-weight:700;letter-spacing:.01em;color:var(--ink);margin-top:6px;line-height:1}
+  .lead{font-size:14px;color:var(--ink-soft);margin-top:18px;font-weight:300}
+  .name{font-family:var(--display);font-size:clamp(22px,3.8vw,34px);font-weight:600;color:var(--blue-deep);margin-top:6px;padding-bottom:6px;border-bottom:2px solid #e7d7bf;min-width:60%}
+  .body-txt{font-size:14.5px;color:var(--ink-soft);margin-top:16px;max-width:74%;line-height:1.6;font-weight:300}
+  .body-txt b{color:var(--ink);font-weight:700}
+  .ph{color:var(--gold);font-weight:700;background:#fbf0e2;padding:1px 7px;border-radius:5px}
+  .meta{display:flex;gap:26px;margin-top:auto;margin-bottom:2%;flex-wrap:wrap;justify-content:center}
+  .meta .chip{font-size:12px;color:var(--muted);font-weight:500}
+  .meta .chip b{display:block;color:var(--ink);font-family:var(--display);font-size:14px;font-weight:600;margin-top:2px}
+  .sigs{display:flex;justify-content:space-between;width:84%;margin-bottom:2%;gap:30px}
+  .sig{flex:1;text-align:center}
+  .sig .line{border-top:1.5px solid var(--ink-soft);padding-top:7px;font-size:12px;color:var(--ink-soft);font-weight:600}
+  .sig .role{font-size:10.5px;color:var(--muted);font-weight:400;margin-top:1px}
+  .seal{position:absolute;right:8%;bottom:13%;width:13%;min-width:64px;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#0a8aa3,var(--blue-deep));display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(0,82,95,.3);border:3px solid #fff}
+  .seal svg{width:46%;height:46%;color:#fff}
+
+  .where{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-top:24px;box-shadow:0 1px 3px rgba(14,34,51,.05)}
+  .where h3{font-family:var(--display);font-size:16px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:9px}
+  .where h3 svg{width:18px;height:18px;color:var(--blue)}
+  .where ul{list-style:none;display:grid;gap:9px}
+  .where li{display:flex;gap:11px;font-size:14px;color:var(--ink-soft);font-weight:300;line-height:1.5}
+  .where li svg{width:16px;height:16px;color:var(--blue);flex:0 0 auto;margin-top:3px}
+  .pill{display:inline-flex;align-items:center;font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 8px;border-radius:20px;color:var(--gold);background:#fbf0e2;margin-left:4px}
+
+  @media print{
+    body{background:#fff;background-image:none}
+    .topbar,.note,.where,.actions{display:none!important}
+    .wrap{padding:0;max-width:none}
+    .cert{box-shadow:none;max-width:none;width:100%}
+    @page{size:A4 landscape;margin:8mm}
+  }
+  @media (max-width:600px){.body-txt{max-width:92%}.sigs{width:92%}.name{min-width:80%}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2 5 4-12 2 7h6"/></svg></div>
+      <div><div class="t1">Modelo de certificado</div><div class="t2">Investigação de Surtos · INS / MISAU</div></div>
+    </div>
+    <div class="actions">
+      <button class="btn solid" onclick="window.print()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/></svg>Imprimir / PDF</button>
+      <a class="btn ghost" href="apresentacao.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Voltar</a>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="note">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+    <div><b>Modelo para validação do INS.</b> É uma proposta de aspecto e de conteúdo do certificado. Os campos a dourado são preenchidos automaticamente; o texto, as assinaturas e a regra de emissão ficam a confirmar pelo INS.</div>
+  </div>
+
+  <div class="cert-shell">
+    <div class="cert">
+      <div class="bar"></div>
+      <div class="frame"></div>
+      <div class="frame2"></div>
+      <div class="wm">MODELO</div>
+      <div class="inner">
+        <img class="logo" src="logo_ins.png" alt="Instituto Nacional de Saúde">
+        <div class="gov">República de Moçambique · Ministério da Saúde · Instituto Nacional de Saúde</div>
+        <div class="eyebrow">Academia Digital de Epidemiologia</div>
+        <h1>Certificado de Conclusão</h1>
+        <div class="lead">Certifica-se que</div>
+        <div class="name"><span class="ph">[ Nome do Participante ]</span></div>
+        <div class="body-txt">concluiu com aproveitamento o curso <b>Investigação de Surtos</b>, baseado no Manual Nacional para Detecção e Investigação de Surtos, com a classificação final de <span class="ph">[ XX% ]</span>.</div>
+        <div class="meta">
+          <div class="chip">Módulos<b>6</b></div>
+          <div class="chip">Carga horária<b><span class="ph">[ Xh ]</span></b></div>
+          <div class="chip">Data<b><span class="ph">[ DD/MM/AAAA ]</span></b></div>
+          <div class="chip">Código<b><span class="ph">[ INS-IS-0000 ]</span></b></div>
+        </div>
+        <div class="sigs">
+          <div class="sig"><div class="line">Direcção do INS</div><div class="role">Instituto Nacional de Saúde</div></div>
+          <div class="sig"><div class="line">Coordenação da Formação</div><div class="role">Academia Digital de Epidemiologia</div></div>
+        </div>
+      </div>
+      <div class="seal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg></div>
+    </div>
+  </div>
+
+  <div class="where">
+    <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Onde e como é emitido (proposta)</h3>
+    <ul>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg>Disponibilizado ao concluir os 6 módulos e a avaliação final com o aproveitamento mínimo <span class="pill">a definir pelo INS</span></li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="3"/></svg>Nome, data, classificação e código preenchidos automaticamente pela plataforma</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/></svg>Descarregável em PDF e/ou impressão directa pelo participante</li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg>Texto oficial, assinaturas e eventual verificação por código ficam a validar pelo INS</li>
+    </ul>
+  </div>
+</div>
+</body>
+</html>
