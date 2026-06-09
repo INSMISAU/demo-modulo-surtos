@@ -105,7 +105,10 @@
     var links=Array.prototype.slice.call(document.querySelectorAll('.toc a'));
     var toc=document.getElementById('toc');
     function go(p, push){
-      frame.src=BASE+'#page='+p+'&view=FitH';
+      // reinicia o iframe e recarrega no mesmo URL: força o salto para a página
+      // mantendo o PDF em cache (sem voltar a descarregar a cada capítulo).
+      frame.src='about:blank';
+      setTimeout(function(){ frame.src=BASE+'#page='+p+'&view=FitH'; }, 60);
       links.forEach(function(a){a.classList.toggle('active', a.getAttribute('data-p')===String(p));});
       if(push){ history.replaceState(null,'','#page='+p); }
       if(window.innerWidth<=820){ toc.classList.remove('open'); }
