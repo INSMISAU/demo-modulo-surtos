@@ -1,0 +1,305 @@
+<!DOCTYPE html><html lang="pt"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Módulo 3 · Preparação para Investigação de Campo · INS</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800" rel="stylesheet"><style>
+  :root{
+    /* paleta médica institucional — azul profundo, teal, neutros frios */
+    --bg:#EAF1F2;
+    --surface:#ffffff;
+    --ink:#0e2233;
+    --ink-soft:#3d5468;
+    --muted:#6b8199;
+    --line:#e2eaf1;
+    --line-soft:#eef3f8;
+    --blue:#007088;
+    --blue-deep:#00525F;
+    --blue-soft:#E0EFF1;
+    --teal:#007088;
+    --teal-soft:#E0EFF1;
+    --amber:#b9701b;
+    --amber-soft:#fbf0e2;
+    --red:#B02040;
+    --red-soft:#F8E7EC;
+    --green:#2f7d4f;
+    --green-soft:#e7f4ec;
+    --shadow:0 1px 3px rgba(14,34,51,.04), 0 8px 24px rgba(14,34,51,.06);
+    --shadow-lg:0 4px 12px rgba(14,34,51,.06), 0 20px 48px rgba(14,34,51,.10);
+    --radius:18px;
+    --radius-sm:12px;
+    --display:'Raleway',system-ui,sans-serif;
+    --body:'Raleway',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--body);background:var(--bg);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(circle at 12% 8%, rgba(15,143,134,.05), transparent 42%),radial-gradient(circle at 88% 0%, rgba(11,95,165,.05), transparent 40%);
+    background-attachment:fixed;}
+
+  /* ---------- top bar ---------- */
+  .topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.82);backdrop-filter:saturate(180%) blur(14px);border-bottom:1px solid var(--line);}
+  .topbar-inner{max-width:880px;margin:0 auto;padding:13px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .brand{display:flex;align-items:center;gap:11px;min-width:0}
+  .brand .mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--blue),var(--teal));display:flex;align-items:center;justify-content:center;flex:0 0 auto;box-shadow:0 4px 12px rgba(11,95,165,.25)}
+  .brand .mark svg{width:19px;height:19px;color:#fff}
+  .brand .txt{min-width:0}
+  .brand .t1{font-size:13.5px;font-weight:600;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .brand .t2{font-size:11px;color:var(--muted);font-weight:400;letter-spacing:.02em}
+  .topbar .step-ind{font-size:12px;color:var(--muted);font-weight:500;white-space:nowrap;font-variant-numeric:tabular-nums}
+
+  .pbar-track{height:3px;background:var(--line);position:relative;overflow:hidden}
+  .pbar-fill{height:100%;width:12.5%;background:linear-gradient(90deg,var(--blue),var(--teal));transition:width .55s cubic-bezier(.22,.61,.36,1);border-radius:0 3px 3px 0}
+
+  .wrap{max-width:880px;margin:0 auto;padding:0 24px 64px}
+
+  /* ---------- screens ---------- */
+  .screen{display:none}
+  .screen.active{display:block}
+  .screen.active>*{animation:rise .5s cubic-bezier(.22,.61,.36,1) backwards}
+  .screen.active>*:nth-child(1){animation-delay:.02s}
+  .screen.active>*:nth-child(2){animation-delay:.08s}
+  .screen.active>*:nth-child(3){animation-delay:.14s}
+  .screen.active>*:nth-child(4){animation-delay:.20s}
+  .screen.active>*:nth-child(5){animation-delay:.26s}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.screen.active>*{animation:none}*{transition:none!important}}
+
+  /* ---------- hero ---------- */
+  .hero{padding:44px 0 8px}
+  .eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--teal);background:var(--teal-soft);padding:6px 13px;border-radius:30px;margin-bottom:18px}
+  .eyebrow svg{width:13px;height:13px}
+  h1{font-family:var(--display);font-size:clamp(30px,5vw,44px);line-height:1.08;font-weight:600;letter-spacing:-.02em;margin-bottom:12px;color:var(--ink)}
+  .hero .sub{font-size:17px;color:var(--ink-soft);max-width:54ch;font-weight:300}
+
+  h2{font-family:var(--display);font-size:25px;font-weight:600;letter-spacing:-.015em;margin-bottom:12px;line-height:1.2}
+
+  /* ---------- objectives band ---------- */
+  .objectives{background:linear-gradient(135deg,var(--blue-deep),var(--blue));border-radius:var(--radius);padding:26px 28px;margin:26px 0;color:#fff;box-shadow:var(--shadow-lg);position:relative;overflow:hidden}
+  .objectives::after{content:"";position:absolute;right:-40px;top:-40px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.06)}
+  .objectives h3{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:14px}
+  .objectives ul{list-style:none;display:grid;gap:11px;position:relative}
+  .objectives li{display:flex;gap:12px;align-items:flex-start;font-size:15.5px;font-weight:300}
+  .objectives li svg{width:20px;height:20px;flex:0 0 auto;margin-top:1px;color:var(--teal-soft);opacity:.95}
+
+  /* ---------- cards / blocks ---------- */
+  .block{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:28px 30px;margin:18px 0;box-shadow:var(--shadow)}
+  .tag{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:6px 13px;border-radius:30px;margin-bottom:16px}
+  .tag svg{width:14px;height:14px;flex:0 0 auto}
+  .tag.ctx{color:var(--blue);background:var(--blue-soft)}
+  .tag.int{color:var(--teal);background:var(--teal-soft)}
+  .tag.evl{color:var(--amber);background:var(--amber-soft)}
+  .tag.sce{color:var(--blue);background:var(--blue-soft)}
+
+  /* keypoints */
+  .keypoints{list-style:none;display:grid;gap:2px}
+  .keypoints li{display:flex;gap:14px;align-items:flex-start;font-size:15.5px;padding:13px 0;border-bottom:1px solid var(--line-soft)}
+  .keypoints li:last-child{border-bottom:none}
+  .keypoints li .ic{width:30px;height:30px;border-radius:9px;background:var(--blue-soft);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .keypoints li .ic svg{width:16px;height:16px;color:var(--blue)}
+  .keypoints li .ic.warn{background:var(--amber-soft)}
+  .keypoints li .ic.warn svg{color:var(--amber)}
+  .keypoints li b{font-weight:600}
+
+  /* scenario callout */
+  .scenario{background:linear-gradient(135deg,var(--amber-soft),#fdf6ec);border:1px solid #f0dcc0;border-radius:var(--radius-sm);padding:20px 22px;margin:18px 0;position:relative}
+  .scenario .label{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--amber);margin-bottom:9px}
+  .scenario .label svg{width:14px;height:14px}
+  .scenario p{font-size:15.5px;color:var(--ink);line-height:1.6}
+
+  /* qcards */
+  .qgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px;margin:18px 0}
+  @media(max-width:560px){.qgrid{grid-template-columns:1fr}}
+  .qcard{border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px 18px;background:linear-gradient(180deg,#fff,#fafcfe);transition:transform .2s,box-shadow .2s}
+  .qcard:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+  .qcard .q{display:flex;align-items:center;gap:8px;font-weight:600;color:var(--teal);font-size:15px;margin-bottom:6px}
+  .qcard .q svg{width:16px;height:16px}
+  .qcard .a{font-size:14.5px;color:var(--ink-soft);font-weight:300}
+
+  /* clinical case */
+  .case{border:1px solid var(--line);border-radius:var(--radius-sm);padding:20px 22px;margin:15px 0;background:#fff;transition:border-color .3s,box-shadow .3s}
+  .case .pid{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--blue);background:var(--blue-soft);padding:5px 12px;border-radius:8px;margin-bottom:11px}
+  .case .pres{font-size:15.5px;margin-bottom:15px;color:var(--ink)}
+  .opts{display:flex;gap:9px;flex-wrap:wrap}
+  .opts button,.insight button{font-family:var(--body);font-size:14px;font-weight:500;border:1.5px solid var(--line);background:#fff;color:var(--ink);padding:10px 18px;border-radius:10px;cursor:pointer;transition:all .18s}
+  .opts button:hover:not(:disabled),.insight button:hover:not(:disabled){border-color:var(--teal);background:var(--teal-soft);transform:translateY(-1px)}
+  .opts button:disabled,.insight button:disabled{cursor:default;opacity:.5}
+  .opts button.correct,.insight button.correct{background:var(--green-soft);border-color:var(--green);color:var(--green);opacity:1;font-weight:600}
+  .opts button.wrong,.insight button.wrong{background:var(--red-soft);border-color:var(--red);color:var(--red);opacity:1}
+  .fb{margin-top:14px;font-size:14.5px;padding:13px 16px;border-radius:10px;display:none;line-height:1.55}
+  .fb.show{display:flex;gap:10px;align-items:flex-start;animation:rise .35s}
+  .fb svg{width:18px;height:18px;flex:0 0 auto;margin-top:1px}
+  .fb.ok{background:var(--green-soft);color:var(--green)}
+  .fb.no{background:var(--red-soft);color:var(--red)}
+  .case.done-ok{border-color:var(--green);box-shadow:0 0 0 3px var(--green-soft)}
+  .case.done-no{border-color:var(--red)}
+  .retry{font-family:var(--body);font-size:13.5px;font-weight:600;margin-top:11px;padding:9px 17px;border-radius:10px;cursor:pointer;border:1.5px solid var(--teal);background:#fff;color:var(--teal);display:inline-flex;align-items:center;gap:7px;transition:all .18s}
+  .retry:hover{background:var(--teal-soft)}
+  .retry svg{width:14px;height:14px}
+
+  /* checklist */
+  .checklist{list-style:none;display:grid;gap:9px;margin:16px 0}
+  .checklist li{font-size:15px;padding:14px 16px;border:1.5px solid var(--line);border-radius:var(--radius-sm);background:#fff;cursor:pointer;display:flex;align-items:center;gap:13px;transition:all .18s}
+  .checklist li:hover{border-color:var(--teal);transform:translateX(2px)}
+  .checklist li .box{width:24px;height:24px;border:2px solid var(--line);border-radius:7px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;transition:all .18s}
+  .checklist li .box svg{width:14px;height:14px;color:#fff;opacity:0;transition:opacity .15s}
+  .checklist li.on{background:var(--teal-soft);border-color:var(--teal)}
+  .checklist li.on .box{background:var(--teal);border-color:var(--teal)}
+  .checklist li.on .box svg{opacity:1}
+
+  /* epicurve */
+  .epicurve-card{background:linear-gradient(180deg,#fbfdff,#f4f9fd);border:1px solid var(--line);border-radius:var(--radius-sm);padding:24px 22px 14px;margin:18px 0}
+  .epicurve{display:flex;align-items:flex-end;gap:8px;height:190px}
+  .epicurve .bar{flex:1;background:linear-gradient(180deg,var(--teal),var(--blue));border-radius:5px 5px 0 0;min-height:6px;position:relative;transition:height .7s cubic-bezier(.22,.61,.36,1)}
+  .epicurve .bar::before{content:attr(data-n);position:absolute;top:-22px;left:0;right:0;text-align:center;font-size:12px;font-weight:600;color:var(--blue);font-variant-numeric:tabular-nums}
+  .epicurve .bar span{position:absolute;bottom:-24px;left:0;right:0;text-align:center;font-size:11px;color:var(--muted);font-weight:500}
+  .axis{text-align:center;font-size:12px;color:var(--muted);margin-top:30px;font-weight:500}
+
+  /* two columns */
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+  @media(max-width:560px){.twocol{grid-template-columns:1fr}}
+  .colbox{border:1px solid var(--line);border-radius:var(--radius-sm);padding:18px 20px;background:linear-gradient(180deg,#fff,#fafcfe)}
+  .colbox h4{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--blue);margin-bottom:11px}
+  .colbox h4 svg{width:16px;height:16px}
+  .colbox ul{list-style:none;display:grid;gap:8px}
+  .colbox li{font-size:14.5px;color:var(--ink-soft);padding-left:18px;position:relative;font-weight:300}
+  .colbox li::before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:50%;background:var(--teal)}
+
+  /* score chip */
+  .scorechip{display:flex;align-items:center;justify-content:center;gap:10px;margin:22px 0 4px;font-size:14px;color:var(--muted);font-weight:500}
+  .scorechip .v{font-family:var(--display);font-size:22px;font-weight:600;color:var(--teal)}
+
+  /* nav */
+  .nav{display:flex;justify-content:space-between;gap:12px;margin-top:30px}
+  .nav button{font-family:var(--body);font-size:15px;font-weight:600;padding:13px 26px;border-radius:12px;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:9px;transition:all .2s}
+  .nav .next{background:linear-gradient(135deg,var(--blue),var(--blue-deep));color:#fff;box-shadow:0 6px 18px rgba(11,95,165,.28)}
+  .nav .next:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 10px 26px rgba(11,95,165,.36)}
+  .nav .next:disabled{background:#c4d2de;cursor:not-allowed;box-shadow:none}
+  .nav .next svg,.nav .prev svg{width:17px;height:17px}
+  .nav .prev{background:#fff;color:var(--ink-soft);border:1.5px solid var(--line)}
+  .nav .prev:hover:not(:disabled){border-color:var(--muted)}
+  .nav .prev:disabled{opacity:.4;cursor:not-allowed}
+
+  /* final */
+  .final{text-align:center;padding:36px 0}
+  .cert{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:44px 36px;margin:26px 0;box-shadow:var(--shadow-lg);position:relative;overflow:hidden}
+  .cert::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(15,143,134,.04),rgba(11,95,165,.04))}
+  .cert .ring{width:120px;height:120px;margin:0 auto 18px;position:relative}
+  .cert .ring svg{transform:rotate(-90deg)}
+  .cert .ring .pct{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .cert .ring .pct .num{font-family:var(--display);font-size:34px;font-weight:600;color:var(--blue);line-height:1}
+  .cert .ring .pct .lbl{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .cert h2{margin-bottom:8px}
+  .cert .msg{font-size:15.5px;color:var(--ink-soft);font-weight:300;max-width:46ch;margin:0 auto}
+
+  .footnote{font-size:12.5px;color:var(--muted);text-align:center;margin-top:40px;padding-top:18px;border-top:1px solid var(--line);line-height:1.6;font-weight:300}
+
+  .backlink{display:inline-flex;align-items:center;gap:6px;font-family:var(--body);font-size:12.5px;font-weight:600;color:var(--blue);background:var(--blue-soft);padding:6px 12px;border-radius:20px;text-decoration:none;transition:all .18s}
+  .backlink:hover{background:var(--blue);color:#fff}
+  .backlink svg{width:14px;height:14px}
+
+  /* ===== Afinação para telemóvel ===== */
+  @media (max-width:600px){
+    .wrap{padding:0 16px 48px}
+    .topbar-inner{padding:11px 16px;gap:8px}
+    .brand .t1{font-size:12.5px}
+    .brand .t2{font-size:10px}
+    .brand .mark{width:30px;height:30px}
+    .backlink span{display:none}
+    .backlink{padding:7px 9px}
+    .step-ind{font-size:11px}
+    .hero{padding:30px 0 4px}
+    h1{font-size:26px;line-height:1.12}
+    .hero .sub{font-size:15.5px}
+    h2{font-size:20px}
+    .block{padding:20px 18px;border-radius:14px}
+    .objectives{padding:20px 20px}
+    .objectives li{font-size:14.5px}
+    .keypoints li{font-size:14.5px;gap:11px}
+    .keypoints li .ic{width:27px;height:27px}
+    .opts button{font-size:14px;padding:12px 15px}
+    .nav{gap:9px}
+    .nav button{font-size:14px;padding:12px 17px;flex:1;justify-content:center}
+    .nav .prev{flex:0 0 auto;padding:12px 14px}
+    .eyebrow{font-size:11px;padding:5px 11px}
+    .cert{padding:32px 20px}
+    .scenario{padding:16px 16px}
+  }
+  @media (max-width:380px){
+    h1{font-size:23px}
+    .nav button span,.nav .next{font-size:13.5px}
+    .block{padding:17px 15px}
+  }
+
+  /* reforço: cabeçalho fixo robusto em todos os dispositivos */
+  .topbar{position:-webkit-sticky;position:sticky;top:0;z-index:60;background:rgba(255,255,255,.97)!important}
+  .pbar-track{position:-webkit-sticky;position:sticky;top:54px;z-index:59}
+</style><style>.quiz .opts{margin-top:6px}.nav-confirm{font-family:var(--body);font-size:14px;font-weight:600;margin-top:14px;padding:11px 20px;border-radius:10px;cursor:pointer;border:none;color:#fff;background:linear-gradient(135deg,var(--teal),var(--blue-deep))}.nav-confirm:disabled{opacity:.5;cursor:default}</style></head><body><div class="topbar"><div class="topbar-inner"><div class="brand"><div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2 5 4-12 2 7h6"/></svg></div><div class="txt"><div class="t1">Preparação para Investigação de Campo</div><div class="t2">Módulo 3 · Investigação de Surtos · INS</div></div></div><a href="manual.html#page=140" class="backlink" title="Consultar no manual"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg><span>Manual</span></a><a href="index.html" class="backlink" title="Voltar ao índice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg><span>Índice</span></a><div class="step-ind" id="stepind">Abertura · 1 / 5</div></div><div class="pbar-track"><div class="pbar-fill" id="pbar"></div></div></div><div class="wrap"><div class="screen active" data-s="0" data-name="Abertura"><div class="hero"><span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>Módulo 3 · Preparação</span><h1>Preparação para a investigação de campo</h1><p class="sub">Antes de partir para o terreno: organizar a equipa, definir papéis e reunir os meios certos.</p></div><div class="objectives"><h3>No fim deste módulo, vai ser capaz de</h3><ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Organizar a equipa de investigação e atribuir papéis e responsabilidades.</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Realizar a reunião de alinhamento e definir o plano inicial de investigação.</li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Preparar a logística e o material necessário para o trabalho de campo.</li></ul></div><div class="nav"><button class="prev" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Anterior</button><button class="next">Começar · Módulo 3.1 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div></div>
+<div class="screen" data-s="1" data-name="Módulo 3.1"><div class="hero"><span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>Módulo 3.1 · Equipa</span><h1>Organização da equipa e papéis</h1><p class="sub">Quem faz o quê.</p></div><div class="block"><span class="tag ctx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Organização</span><ul class="keypoints"><li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></span><div>Definir a <b>composição</b> da equipa consoante o evento: coordenação, clínica, epidemiologia, laboratório e comunicação.</div></li><li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg></span><div>Atribuir <b>papéis e responsabilidades</b> claros a cada membro, para evitar sobreposições e lacunas.</div></li><li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></span><div>Conhecer o <b>local</b>: população, água, saneamento e serviços disponíveis.</div></li></ul></div><div class="block"><span class="tag evl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21 8 14 2 9.4h7.6z"/></svg>Verificação</span><h2>Porque se definem papéis e responsabilidades antes de partir?</h2><div class="quiz" data-key="m3q1" data-ok="Correto. Papéis claros tornam a equipa eficaz e coordenada." data-no="Reveja: papéis definidos evitam confusão e garantem cobertura de todas as tarefas."><div class="opts"><button data-c="1">Para que cada membro saiba a sua função e evitar sobreposições e lacunas</button><button data-c="0">Para aumentar o número de pessoas sem critério</button><button data-c="0">Não é necessário planear papéis</button></div><div class="fb"></div></div></div><div class="nav"><button class="prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Anterior</button><button class="next" disabled>Continuar <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div></div>
+<div class="screen" data-s="2" data-name="Módulo 3.2"><div class="hero"><span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>Módulo 3.2 · Alinhamento</span><h1>Reunião de alinhamento e plano inicial</h1><p class="sub">Chegar preparado, não improvisar.</p></div><div class="block"><span class="tag ctx"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><path d="M4 22v-7"/></svg>Alinhamento e plano</span><ul class="keypoints"><li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></span><div><b>Reunião de alinhamento</b> com o solicitante e as autoridades locais antes da chegada — objetivos, expectativas e apoios.</div></li><li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span><div>Definir um <b>plano inicial</b>: objetivos da investigação, o que se quer responder, e primeiras acções no terreno.</div></li></ul></div><div class="block"><span class="tag evl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7.4-6.3-4.6L5.7 21 8 14 2 9.4h7.6z"/></svg>Verificação</span><h2>Qual é o propósito da reunião de alinhamento?</h2><div class="quiz" data-key="m3q2" data-ok="Correto. O alinhamento prévio garante clareza de objetivos e apoio local." data-no="Reveja: a reunião serve para alinhar objetivos, expectativas e apoios."><div class="opts"><button data-c="1">Acordar objetivos, expectativas e apoios com os intervenientes locais</button><button data-c="0">Substituir totalmente a investigação de campo</button><button data-c="0">Apenas apresentar cumprimentos, sem conteúdo</button></div><div class="fb"></div></div></div><div class="nav"><button class="prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Anterior</button><button class="next" disabled>Continuar <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div></div>
+<div class="screen" data-s="3" data-name="Módulo 3.3"><div class="hero"><span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2zM22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>Módulo 3.3 · Actividade prática</span><h1>Checklist de preparação</h1><p class="sub">Monte o material da investigação.</p></div><div class="block"><span class="tag int"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Actividade avaliada</span><h2>Materiais para o trabalho de campo</h2><p style="font-size:15px;color:var(--ink-soft);margin-bottom:4px;font-weight:300">Selecione os itens que a equipa <b>deve</b> levar. Clique para marcar e depois confirme.</p><ul class="checklist" data-key="m3q3"><li data-good="1"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></span>Computador/tablet com Excel ou Epi Info</li><li data-good="1"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></span>EPI: luvas, máscaras e batas</li><li data-good="1"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></span>Material para colheita e transporte de amostras</li><li data-good="1"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></span>Formulários de investigação e definição de caso</li><li data-good="1"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></span>GPS e telemóvel com contactos-chave</li><li data-good="0"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></span>Material promocional do distrito para distribuir</li><li data-good="0"><span class="box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></span>Equipamento de som para eventos públicos</li></ul><button class="confirm nav-confirm" data-key="m3q3">Confirmar seleção</button><div class="fb"></div></div><div class="nav"><button class="prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Anterior</button><button class="next" disabled>Ver resultado <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div></div>
+<div class="screen" data-s="4" data-name="Resultado"><div class="final"><span class="eyebrow" style="margin:0 auto 18px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg> Módulo concluído</span><div class="cert"><div class="ring"><svg width="120" height="120" viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="#e2eaf1" stroke-width="10"/><circle id="ringfill" cx="60" cy="60" r="52" fill="none" stroke="#007088" stroke-width="10" stroke-linecap="round" stroke-dasharray="327" stroke-dashoffset="327" style="transition:stroke-dashoffset 1.1s cubic-bezier(.22,.61,.36,1)"/></svg><div class="pct"><span class="num" id="finalscore">0</span><span class="lbl">Pontuação</span></div></div><h2>Preparação para Investigação de Campo concluído</h2><p class="msg" id="finalmsg"></p><p id="finalbadge" style="display:inline-block;margin-top:16px;font-size:13.5px;font-weight:600;padding:9px 18px;border-radius:30px;font-family:var(--body)"></p></div><p style="font-size:15px;color:var(--ink-soft);font-weight:300;max-width:52ch;margin:0 auto">Consegue preparar uma investigação de campo de forma estruturada — equipa, papéis, plano e material.</p><div class="nav" style="justify-content:center;margin-top:26px"><button class="prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Rever</button></div></div></div><p class="footnote">Protótipo · Módulo 3 — Preparação para Investigação de Campo · conteúdo conforme o Anexo 1 do documento «Desenvolvimento do Curso Virtual de Investigação de Surto» (INS) e o Manual Nacional para Detecção e Investigação de Surtos. Perguntas oficiais a validar pelo INS.</p></div><script>
+(function(){
+  const TOTAL=4;let cur=0;const scored={};
+  const screens=[...document.querySelectorAll('.screen')];
+  const names=screens.map(s=>s.dataset.name);
+  const okIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>';
+  const noIcon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>';
+  const allKeys=[...document.querySelectorAll('[data-key]')].map(e=>e.dataset.key).filter((v,i,a)=>a.indexOf(v)===i);
+  function show(n){
+    cur=n;screens.forEach(s=>s.classList.toggle('active',+s.dataset.s===n));
+    document.getElementById('pbar').style.width=((n+1)/(TOTAL+1)*100)+'%';
+    document.getElementById('stepind').textContent=names[n]+' · '+(n+1)+' / '+(TOTAL+1);
+    window.scrollTo({top:0,behavior:'smooth'});
+    if(n===TOTAL)computeFinal();
+  }
+  document.querySelectorAll('.nav .next').forEach(b=>b.addEventListener('click',()=>{if(!b.disabled)show(cur+1)}));
+  document.querySelectorAll('.nav .prev').forEach(b=>b.addEventListener('click',()=>{if(!b.disabled)show(cur-1)}));
+  function enableNext(sc){const nb=sc.querySelector('.nav .next');if(nb)nb.disabled=false;}
+  function fb(el,ok,txt){el.className='fb show '+(ok?'ok':'no');el.innerHTML=(ok?okIcon:noIcon)+'<span>'+txt+'</span>';}
+  // screens sem pergunta: habilitar next já
+  screens.forEach(s=>{if(!s.querySelector('[data-key]')){const nb=s.querySelector('.nav .next');if(nb&&+s.dataset.s!==TOTAL)nb.disabled=false;}});
+  // escolha múltipla
+  document.querySelectorAll('.quiz').forEach(q=>{
+    const key=q.dataset.key;let done=false;
+    q.querySelectorAll('.opts button').forEach(btn=>btn.addEventListener('click',()=>{
+      if(done)return;done=true;const ok=btn.dataset.c==='1';
+      q.querySelectorAll('.opts button').forEach(b=>{b.disabled=true;if(b.dataset.c==='1')b.classList.add('correct');});
+      if(!ok)btn.classList.add('wrong');
+      scored[key]=ok?1:0;
+      fb(q.querySelector('.fb'),ok,ok?q.dataset.ok:q.dataset.no);
+      enableNext(q.closest('.screen'));
+    }));
+  });
+  // checklist
+  document.querySelectorAll('.checklist[data-key]').forEach(list=>{
+    const key=list.dataset.key;
+    list.querySelectorAll('li').forEach(li=>li.addEventListener('click',()=>{if(!list.classList.contains('locked'))li.classList.toggle('on');}));
+    const btn=list.parentNode.querySelector('.confirm[data-key="'+key+'"]');
+    btn.addEventListener('click',()=>{
+      if(list.classList.contains('locked'))return;list.classList.add('locked');btn.disabled=true;
+      let allok=true;
+      list.querySelectorAll('li').forEach(li=>{
+        const good=li.dataset.good==='1',on=li.classList.contains('on');
+        if(good&&on){li.style.borderColor='var(--green)';li.style.background='var(--green-soft)';}
+        else if(good&&!on){allok=false;li.style.borderColor='var(--amber)';}
+        else if(!good&&on){allok=false;li.style.borderColor='var(--red)';li.style.background='var(--red-soft)';}
+      });
+      scored[key]=allok?1:0;
+      const fbel=list.parentNode.querySelector('.fb');
+      fb(fbel,allok,allok?'Correto. Seleção adequada.':'Reveja: alguns itens essenciais ficaram por marcar ou marcou itens que não pertencem.');
+      enableNext(list.closest('.screen'));
+    });
+  });
+  function computeFinal(){
+    let sum=0,n=0;allKeys.forEach(k=>{if(k in scored){sum+=scored[k];n++;}});
+    const pct=n?Math.round(sum/n*100):0;const aprovado=pct>=85;
+    let i=0;const t=setInterval(()=>{i+=2;if(i>=pct){i=pct;clearInterval(t);}document.getElementById('finalscore').textContent=i;},18);
+    const off=327-(pct/100)*327;const ring=document.getElementById('ringfill');
+    ring.style.stroke=aprovado?'#2f7d4f':'#b9701b';setTimeout(()=>{ring.style.strokeDashoffset=off;},150);
+    const badge=document.getElementById('finalbadge');
+    badge.textContent=aprovado?'✓ Aproveitamento suficiente (≥ 85%)':'Abaixo de 85% — reveja para consolidar';
+    badge.style.color=aprovado?'#2f7d4f':'#b9701b';badge.style.background=aprovado?'#e7f4ec':'#fbf0e2';
+    document.getElementById('finalmsg').textContent=aprovado?'Excelente — domina os conteúdos deste módulo.':pct>=50?'Bom trabalho. Reveja os pontos onde teve dúvidas.':'Recomenda-se rever o módulo antes de avançar.';
+  }
+})();
+</script>
+<script>
+(function(){function sh(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+document.querySelectorAll('.quiz .opts').forEach(function(g){const b=[].filter.call(g.children,n=>n.tagName==='BUTTON');if(b.length>1)sh(b).forEach(x=>g.appendChild(x));});})();
+</script></body></html>

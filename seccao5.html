@@ -684,7 +684,7 @@
     const keys=['s1','c2','s3','s4','s5','s6','c8','s9'];let sum=0,n=0;
     keys.forEach(k=>{if(k in scored){sum+=scored[k];n++;}});
     const pct=n?Math.round(sum/n*100):0;
-    const aprovado=pct>=80; // critério definido no encontro INS-OLOGA
+    const aprovado=pct>=85; // critério definido no encontro INS-OLOGA
     let i=0;const tick=setInterval(()=>{i+=2;if(i>=pct){i=pct;clearInterval(tick);}document.getElementById('finalscore').textContent=i;},18);
     const circ=327,off=circ-(pct/100)*circ;
     const ring=document.getElementById('ringfill');
@@ -692,7 +692,7 @@
     setTimeout(()=>{ring.style.strokeDashoffset=off;},150);
     const badge=document.getElementById('finalbadge');
     if(badge){
-      badge.textContent=aprovado?'✓ Aproveitamento suficiente para certificação (≥ 80%)':'Aproveitamento abaixo de 80% — reveja e repita para obter o certificado';
+      badge.textContent=aprovado?'✓ Aproveitamento suficiente para certificação (≥ 85%)':'Aproveitamento abaixo de 80% — reveja e repita para obter o certificado';
       badge.style.color=aprovado?'#2f7d4f':'#b9701b';
       badge.style.background=aprovado?'#e7f4ec':'#fbf0e2';
     }

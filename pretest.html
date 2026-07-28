@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pré-teste diagnóstico · Investigação de Surtos · INS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EAF1F2;--surface:#fff;--ink:#0e2233;--ink-soft:#3d5468;--muted:#6b8199;
+    --line:#e2eaf1;--line-soft:#eef3f8;--blue:#007088;--blue-deep:#00525F;--blue-soft:#E0EFF1;
+    --teal:#007088;--teal-soft:#E0EFF1;--amber:#b9701b;--amber-soft:#fbf0e2;
+    --red:#B02040;--red-soft:#F8E7EC;--green:#2f7d4f;--green-soft:#e7f4ec;
+    --shadow:0 1px 3px rgba(14,34,51,.04),0 8px 24px rgba(14,34,51,.06);
+    --shadow-lg:0 4px 12px rgba(14,34,51,.06),0 20px 48px rgba(14,34,51,.10);
+    --radius:18px;--radius-sm:12px;--display:'Raleway',system-ui,sans-serif;--body:'Raleway',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--body);background:var(--bg);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(circle at 12% 8%,rgba(15,143,134,.05),transparent 42%),radial-gradient(circle at 88% 0%,rgba(11,95,165,.05),transparent 40%);background-attachment:fixed}
+  .topbar{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.97);backdrop-filter:saturate(180%) blur(14px);border-bottom:1px solid var(--line)}
+  .topbar-inner{max-width:880px;margin:0 auto;padding:13px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .brand{display:flex;align-items:center;gap:11px;min-width:0}
+  .brand .mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--blue),var(--teal));display:flex;align-items:center;justify-content:center;flex:0 0 auto;box-shadow:0 4px 12px rgba(11,95,165,.25)}
+  .brand .mark svg{width:19px;height:19px;color:#fff}
+  .brand .t1{font-size:13.5px;font-weight:600;letter-spacing:-.01em}
+  .brand .t2{font-size:11px;color:var(--muted);font-weight:400}
+  .backlink{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--blue);background:var(--blue-soft);padding:6px 12px;border-radius:20px;text-decoration:none;transition:all .18s}
+  .backlink:hover{background:var(--blue);color:#fff}.backlink svg{width:14px;height:14px}
+  .wrap{max-width:760px;margin:0 auto;padding:0 24px 64px}
+  .hero{padding:44px 0 6px}
+  .eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--amber);background:var(--amber-soft);padding:6px 13px;border-radius:30px;margin-bottom:18px}
+  .eyebrow svg{width:13px;height:13px}
+  h1{font-family:var(--display);font-size:clamp(28px,5vw,42px);line-height:1.1;font-weight:600;letter-spacing:-.02em;margin-bottom:12px}
+  .sub{font-size:16.5px;color:var(--ink-soft);max-width:60ch;font-weight:300}
+  .note-box{background:var(--blue-soft);border-radius:var(--radius-sm);padding:16px 20px;margin:22px 0;font-size:14px;color:var(--ink-soft);font-weight:300;display:flex;gap:12px;align-items:flex-start}
+  .note-box svg{width:20px;height:20px;color:var(--blue);flex:0 0 auto;margin-top:1px}
+  .qcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;margin:16px 0;box-shadow:var(--shadow)}
+  .qnum{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--amber);margin-bottom:8px}
+  .qtext{font-family:var(--display);font-size:18px;font-weight:600;margin-bottom:14px;line-height:1.35}
+  .opts{display:flex;flex-direction:column;gap:9px}
+  .opts button{font-family:var(--body);font-size:14.5px;font-weight:500;border:1.5px solid var(--line);background:#fff;color:var(--ink);padding:12px 18px;border-radius:10px;cursor:pointer;transition:all .18s;text-align:left}
+  .opts button:hover:not(:disabled){border-color:var(--teal);background:var(--teal-soft)}
+  .opts button.selected{background:var(--blue-soft);border-color:var(--blue);color:var(--blue-deep);font-weight:600}
+  .submit{display:block;width:100%;font-family:var(--body);font-size:16px;font-weight:600;padding:15px;border-radius:12px;border:none;color:#fff;background:linear-gradient(135deg,var(--blue),var(--blue-deep));cursor:pointer;margin-top:22px;box-shadow:0 6px 18px rgba(11,95,165,.28);transition:transform .2s}
+  .submit:hover:not(:disabled){transform:translateY(-2px)}.submit:disabled{background:#c4d2de;cursor:not-allowed;box-shadow:none}
+  .result{display:none;text-align:center;padding:20px 0}
+  .result.show{display:block}
+  .ring{width:130px;height:130px;margin:6px auto 18px;position:relative}
+  .ring svg{transform:rotate(-90deg)}
+  .ring .pct{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .ring .num{font-family:var(--display);font-size:36px;font-weight:600;color:var(--blue);line-height:1}
+  .ring .lbl{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .band{display:inline-block;margin:6px 0 14px;font-size:14px;font-weight:600;padding:9px 18px;border-radius:30px}
+  .msg{font-size:15.5px;color:var(--ink-soft);font-weight:300;max-width:52ch;margin:0 auto 8px}
+  .cta{display:inline-flex;align-items:center;gap:9px;margin-top:22px;font-family:var(--body);font-size:15px;font-weight:600;padding:14px 26px;border-radius:12px;text-decoration:none;color:#fff;background:linear-gradient(135deg,var(--blue),var(--blue-deep));box-shadow:0 6px 18px rgba(11,95,165,.28)}
+  .cta svg{width:17px;height:17px}
+  .footnote{font-size:12.5px;color:var(--muted);text-align:center;margin-top:34px;padding-top:18px;border-top:1px solid var(--line);font-weight:300;line-height:1.6}
+  @media (max-width:600px){.wrap{padding:0 16px 48px}.topbar-inner{padding:11px 16px}.qcard{padding:18px 16px}.backlink span{display:none}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2 5 4-12 2 7h6"/></svg></div>
+      <div><div class="t1">Pré-teste diagnóstico</div><div class="t2">Investigação de Surtos · INS / MISAU</div></div>
+    </div>
+    <a href="index.html" class="backlink" title="Voltar ao índice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg><span>Índice</span></a>
+  </div>
+</div>
+
+<div class="wrap">
+  <div id="quiz">
+    <div class="hero">
+      <span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/><circle cx="12" cy="12" r="3"/></svg>Avaliação diagnóstica · início do curso</span>
+      <h1>O que já sabe sobre investigação de surtos?</h1>
+      <p class="sub">Este pré-teste não conta para a certificação. Serve para conhecer o seu ponto de partida e ajudar a orientar o percurso. Responda com sinceridade — no fim verá onde está mais forte.</p>
+      <div class="note-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        <div>8 perguntas de escolha múltipla. O resultado é apenas indicativo (diagnóstico); a certificação depende das avaliações formativas ao longo dos módulos, com classificação final ≥ 85%.</div>
+      </div>
+    </div>
+
+    <div id="questions"></div>
+    <button class="submit" id="submitBtn" disabled>Ver o meu diagnóstico</button>
+  </div>
+
+  <div class="result" id="result">
+    <span class="eyebrow" style="color:var(--blue);background:var(--blue-soft)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>Pré-teste concluído</span>
+    <div class="ring">
+      <svg width="130" height="130" viewBox="0 0 130 130">
+        <circle cx="65" cy="65" r="56" fill="none" stroke="#e2eaf1" stroke-width="11"/>
+        <circle id="ringfill" cx="65" cy="65" r="56" fill="none" stroke="#007088" stroke-width="11" stroke-linecap="round" stroke-dasharray="352" stroke-dashoffset="352" style="transition:stroke-dashoffset 1.1s cubic-bezier(.22,.61,.36,1)"/>
+      </svg>
+      <div class="pct"><span class="num" id="score">0</span><span class="lbl">Diagnóstico</span></div>
+    </div>
+    <div class="band" id="band"></div>
+    <p class="msg" id="msg"></p>
+    <a class="cta" href="index.html#cursos">Começar o curso · Módulo 1 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+  </div>
+
+  <p class="footnote">Protótipo · Pré-teste diagnóstico (avaliação diagnóstica, ponto 6.1 do documento INS). As perguntas oficiais e o registo do resultado serão fornecidos e geridos pelo INS na plataforma.</p>
+</div>
+
+<script>
+  // Banco de pré-teste (diagnóstico) — c: índice da opção correcta
+  const QS=[
+    {q:"O que caracteriza um surto?",o:["A ocorrência de casos de uma doença acima do esperado, numa área e período","Qualquer caso isolado de uma doença infecciosa","Apenas doenças transmitidas por água"],c:0},
+    {q:"Porque é que a cólera surge sobretudo na época chuvosa?",o:["Porque o frio favorece a bactéria","Inundações e falta de água potável e saneamento facilitam a transmissão hídrica","Porque a vacinação para no inverno"],c:1},
+    {q:"O conceito «One Health» reconhece a ligação entre...",o:["Apenas hospitais públicos e privados","Apenas a saúde humana urbana","A saúde humana, animal e o meio ambiente"],c:2},
+    {q:"O que é o RSI 2005?",o:["O Regulamento Sanitário Internacional da OMS","Uma lista de medicamentos essenciais","Um programa nacional de vacinação infantil"],c:0},
+    {q:"Qual é o primeiro passo ao suspeitar de um surto?",o:["Publicar de imediato os resultados","Preparar a investigação e confirmar a existência do surto","Aplicar tratamento em massa sem investigar"],c:1},
+    {q:"Uma «definição de caso» serve para...",o:["Definir quem tem direito a tratamento gratuito","Estabelecer critérios uniformes para classificar quem é considerado caso","Escolher o hospital de referência"],c:1},
+    {q:"A busca activa de casos consiste em...",o:["Esperar que os doentes cheguem à unidade sanitária","Procurar activamente casos nos serviços e na comunidade","Contar apenas os casos confirmados por laboratório"],c:1},
+    {q:"As medidas de controlo devem ser aplicadas...",o:["Apenas depois de concluída toda a investigação","Só após a publicação do relatório final","Assim que possível, sem esperar pelo fim da investigação"],c:2}
+  ];
+  const cont=document.getElementById('questions');
+  const answers={};
+  QS.forEach((item,i)=>{
+    const card=document.createElement('div');card.className='qcard';
+    const opts=item.o.map((t,j)=>'<button data-q="'+i+'" data-o="'+j+'">'+t+'</button>').join('');
+    card.innerHTML='<div class="qnum">Pergunta '+(i+1)+' de '+QS.length+'</div><div class="qtext">'+item.q+'</div><div class="opts">'+opts+'</div>';
+    cont.appendChild(card);
+  });
+  // baralhar opções mantendo o índice correcto
+  document.querySelectorAll('.opts').forEach(grp=>{
+    const btns=Array.from(grp.children);
+    for(let i=btns.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));grp.appendChild(btns[j]);btns.splice(j,1);}
+    btns.forEach(b=>grp.appendChild(b));
+  });
+  cont.addEventListener('click',e=>{
+    const b=e.target.closest('button');if(!b)return;
+    const qi=b.dataset.q;
+    b.parentNode.querySelectorAll('button').forEach(x=>x.classList.remove('selected'));
+    b.classList.add('selected');
+    answers[qi]=+b.dataset.o;
+    if(Object.keys(answers).length===QS.length)document.getElementById('submitBtn').disabled=false;
+  });
+  document.getElementById('submitBtn').addEventListener('click',()=>{
+    let correct=0;QS.forEach((item,i)=>{if(answers[i]===item.c)correct++;});
+    const pct=Math.round(correct/QS.length*100);
+    document.getElementById('quiz').style.display='none';
+    document.getElementById('result').classList.add('show');
+    window.scrollTo({top:0,behavior:'smooth'});
+    let i=0;const t=setInterval(()=>{i+=2;if(i>=pct){i=pct;clearInterval(t);}document.getElementById('score').textContent=i+'%';},18);
+    const off=352-(pct/100)*352;setTimeout(()=>{document.getElementById('ringfill').style.strokeDashoffset=off;},150);
+    let band,bg,col,msg;
+    if(pct>=70){band='Base sólida';col='#2f7d4f';bg='#e7f4ec';msg='Já domina vários conceitos-chave. Use o curso para consolidar e aprofundar a prática nos passos da investigação.';}
+    else if(pct>=40){band='Base intermédia';col='#007088';bg='#E0EFF1';msg='Tem noções importantes. O curso vai ajudá-lo a estruturar a investigação passo a passo e a interpretar os dados.';}
+    else{band='Ponto de partida';col='#b9701b';bg='#fbf0e2';msg='Perfeito para começar do início. Cada módulo constrói sobre o anterior — ao terminar, dominará todo o processo.';}
+    const be=document.getElementById('band');be.textContent=band;be.style.color=col;be.style.background=bg;
+    document.getElementById('ringfill').style.stroke=col;
+    document.getElementById('msg').textContent='Resultado do pré-teste: '+correct+' de '+QS.length+' ('+pct+'%). '+msg;
+  });
+</script>
+</body>
+</html>

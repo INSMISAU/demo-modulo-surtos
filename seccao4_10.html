@@ -214,11 +214,11 @@
 
   function computeFinal(){
     const keys=['s1'];let sum=0,n=0;keys.forEach(k=>{if(k in scored){sum+=scored[k];n++;}});
-    const pct=n?Math.round(sum/n*100):0;const aprovado=pct>=80;
+    const pct=n?Math.round(sum/n*100):0;const aprovado=pct>=85;
     let i=0;const tick=setInterval(()=>{i+=2;if(i>=pct){i=pct;clearInterval(tick);}document.getElementById('finalscore').textContent=i;},18);
     const circ=327,off=circ-(pct/100)*circ;const ring=document.getElementById('ringfill');ring.style.stroke=aprovado?'#2f7d4f':'#b9701b';
     setTimeout(()=>{ring.style.strokeDashoffset=off;},150);
-    const badge=document.getElementById('finalbadge');badge.textContent=aprovado?'✓ Aproveitamento suficiente (≥ 80%)':'Abaixo de 80% — reveja para consolidar';badge.style.color=aprovado?'#2f7d4f':'#b9701b';badge.style.background=aprovado?'#e7f4ec':'#fbf0e2';
+    const badge=document.getElementById('finalbadge');badge.textContent=aprovado?'✓ Aproveitamento suficiente (≥ 85%)':'Abaixo de 85% — reveja para consolidar';badge.style.color=aprovado?'#2f7d4f':'#b9701b';badge.style.background=aprovado?'#e7f4ec':'#fbf0e2';
     document.getElementById('finalmsg').textContent=aprovado?'Domina as definições de caso desta síndrome.':'Reveja as fichas antes de avançar.';
   }
   // modo único (formativo) — pré-visualização removida (decisão INS-OLOGA)
