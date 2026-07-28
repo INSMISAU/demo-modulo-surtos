@@ -136,7 +136,7 @@
   });
   document.getElementById('submitBtn').addEventListener('click',()=>{
     let correct=0;QS.forEach((item,i)=>{if(answers[i]===item.c)correct++;});
-    const pct=Math.round(correct/QS.length*100);
+    const pct=Math.round(correct/QS.length*100);try{if(window.cursoRegistarResultado)window.cursoRegistarResultado("preteste",0,"Pré-teste diagnóstico",pct,null);}catch(_e){}
     document.getElementById('quiz').style.display='none';
     document.getElementById('result').classList.add('show');
     window.scrollTo({top:0,behavior:'smooth'});
@@ -151,5 +151,7 @@
     document.getElementById('msg').textContent='Resultado do pré-teste: '+correct+' de '+QS.length+' ('+pct+'%). '+msg;
   });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="curso.js"></script>
 </body>
 </html>
