@@ -36,7 +36,76 @@ function scheduleInfo(schedule,now){
 }
 function dateLabel(ms){return new Intl.DateTimeFormat('pt-PT',{day:'2-digit',month:'2-digit',year:'numeric',timeZone:'Africa/Maputo'}).format(new Date(ms));}
 
-var API={shuffle:shuffle,grade:grade,migrateState:migrateState,scheduleInfo:scheduleInfo,dateLabel:dateLabel};root.INSFormacao=API;if(typeof module==='object'&&module.exports)module.exports=API;if(typeof document==='undefined')return;
+// Presentation only: keep source text, order, images and reading identifiers.
+var COURSE_EMPHASIS={
+ 'm1-s1':['superior ao esperado','hospedeiro vulnerável'],
+ 'm1-s2':['limiar de alerta','limiar epidémico'],
+ 'm1-s3':['causa, a fonte e o modo de transmissão'],
+ 'm1-s4':['profissionais de saúde devidamente capacitados'],
+ 'm1-s5':['diarreia aquosa','fonte de água partilhada'],
+ 'm2-s1':['níveis basais','padrão de ocorrência'],
+ 'm2-s2':['número de casos fora do comum','limiares predefinidos'],
+ 'm2-s3':['limiar de alerta','limiar epidémico'],
+ 'm2-s4':['comunicação obrigatória'],
+ 'm2-s5':['Reunião de preparação','Reunião inicial','Formulário de saída'],
+ 'm2-s6':['epidemiologistas'],
+ 'm2-s7':['Aspectos administrativos','Aspectos logísticos','Aspectos técnicos'],
+ 'm2-s8':['três óbitos','últimas 48 horas'],
+ 'm3-s1':['requisitos fundamentais'],
+ 'm3-s2':['verificar o diagnóstico','acima do esperado'],
+ 'm3-s3':['diagnóstico está correcto','verificação diagnóstica'],
+ 'm3-s4':['casos suspeitos, prováveis, confirmados'],
+ 'm3-s5':['busca activa de casos','subnotificados'],
+ 'm3-s6':['pessoa, lugar e tempo'],
+ 'm3-s7':['origem, o modo de transmissão','factores de risco'],
+ 'm3-s8':['dados e evidências','provável fonte de infecção'],
+ 'm3-s9':['fonte do agente infeccioso','pessoas susceptíveis'],
+ 'm3-s10':['relatório técnico detalhado','comunicação dos resultados'],
+ 'm3-s11':['comunidade seja informada','fins previstos'],
+ 'm3-s12':['23 casos','2 óbitos']
+};
+function formatCourseContent(container,section){
+ if(!container||container.dataset.presentation)return;
+ container.dataset.presentation='2026-10-16';
+ var doc=container.ownerDocument,group=null,hasContent=false,number=0,headings=0;
+ Array.from(container.childNodes).forEach(function(node){
+  var heading=node.nodeType===1&&node.tagName==='H2',meaningful=node.nodeType===1||!!node.textContent.trim();
+  if(!group||(heading&&hasContent)){
+   group=doc.createElement('section');group.className='source-section';
+   container.insertBefore(group,node);number++;hasContent=false;
+  }
+  group.appendChild(node);
+  if(heading){
+   headings++;if(!node.id)node.id=section.id+'-heading-'+headings;
+   if(!group.hasAttribute('aria-labelledby'))group.setAttribute('aria-labelledby',node.id);
+   var title=node.textContent.trim();
+   if(/^NOTA\b/i.test(title))group.classList.add('source-note');
+   if(/exemplo|situação-problema|contexto/i.test(title))group.classList.add('source-example');
+   if(/perguntas|actividade|exercício|gabarito/i.test(title))group.classList.add('source-practice');
+  }else if(meaningful)hasContent=true;
+ });
+ if(section.practice)container.classList.add('source-exercise');
+ // Highlight exact phrases already in the approved paragraphs; never rewrite them.
+ (COURSE_EMPHASIS[section.id]||[]).forEach(function(phrase){
+  var texts=[];
+  function collect(node){
+   if(node.nodeType===3){texts.push(node);return;}
+   if(node.nodeType!==1||/^(STRONG|B|A|CODE|H[1-6]|FIGCAPTION)$/.test(node.tagName))return;
+   Array.from(node.childNodes).forEach(collect);
+  }
+  container.querySelectorAll('p,li').forEach(function(el){
+   if(!el.parentElement.closest('p,li'))collect(el);
+  });
+  var match=texts.find(function(n){return n.textContent.toLocaleLowerCase('pt').indexOf(phrase.toLocaleLowerCase('pt'))>=0;});
+  if(!match)return;
+  var text=match.textContent,index=text.toLocaleLowerCase('pt').indexOf(phrase.toLocaleLowerCase('pt'));
+  var bold=doc.createElement('strong');bold.className='concept-emphasis';bold.textContent=text.slice(index,index+phrase.length);
+  var fragment=doc.createDocumentFragment();fragment.appendChild(doc.createTextNode(text.slice(0,index)));fragment.appendChild(bold);fragment.appendChild(doc.createTextNode(text.slice(index+phrase.length)));match.parentNode.replaceChild(fragment,match);
+ });
+}
+
+
+var API={shuffle:shuffle,grade:grade,migrateState:migrateState,scheduleInfo:scheduleInfo,dateLabel:dateLabel,formatCourseContent:formatCourseContent,emphasis:COURSE_EMPHASIS};root.INSFormacao=API;if(typeof module==='object'&&module.exports)module.exports=API;if(typeof document==='undefined')return;
 function boot(){
 var cfg=root.INS_CURSO;var folder=location.pathname.slice(0,location.pathname.lastIndexOf('/')+1),key='ins-course-v3:testes-ins-20261016:'+folder;var state={modules:{},last:null};
 var storageReady=true;
@@ -110,7 +179,7 @@ function lesson(index,restore){stopReader();exam=null;state.resume={type:'lesson
  document.getElementById('course-app').innerHTML='<div class="learning-layout"><aside class="topic-index"><a href="index.html#cursos" class="back-course">← Voltar ao curso</a><h2>Módulo '+m.id+'</h2><p data-module-read>'+pctRead(m)+'% · '+ms.read.length+'/'+m.sections.length+' tópicos lidos</p><progress data-module-bar max="'+m.sections.length+'" value="'+ms.read.length+'" aria-label="Leitura deste módulo"></progress>'+progressCard(true)+'<details class="topic-menu"'+(root.innerWidth>850?' open':'')+'><summary>Índice do módulo</summary>'+nav+'</details></aside><main class="lesson-content" id="lesson-content" tabindex="-1">'+body+'<p id="storage-status" role="status"></p></main></div>';
  document.querySelectorAll('[data-go]').forEach(function(b){b.addEventListener('click',function(){ms.scroll=0;lesson(Number(b.dataset.go));});});document.querySelectorAll('[data-topic]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();lesson(Number(a.dataset.topic));});});
  on('read-start',function(){lesson(1);});on('previous-topic',function(){ms.scroll=0;lesson(current-1);});on('next-topic',function(){ms.scroll=0;if(current===m.sections.length)assessmentStart();else lesson(current+1);});on('open-assessment',assessmentStart);
- if(current){reader=root.INSLeitura.start({source:document.querySelector('.course-source'),end:document.getElementById('reading-end'),id:sec.id,index:current-1,state:function(){return ms;},save:save,update:function(info){var el=document.getElementById('reading-coverage');if(el)el.textContent=info.parts+' de '+info.total+' partes percorridas neste tópico.';updateProgress();},completed:function(){updateProgress();updateDeadline();}});on('seek-unread',function(){var next=reader&&reader.firstUnread();if(next){next.el.setAttribute('tabindex','-1');next.el.focus({preventScroll:true});var r=next.el.getBoundingClientRect();root.scrollTo({top:Math.max(0,(root.scrollY||0)+r.top+r.height*next.part-root.innerHeight/2),behavior:'auto'});}});}
+ if(current){formatCourseContent(document.querySelector('.course-source'),sec);reader=root.INSLeitura.start({source:document.querySelector('.course-source'),end:document.getElementById('reading-end'),id:sec.id,index:current-1,state:function(){return ms;},save:save,update:function(info){var el=document.getElementById('reading-coverage');if(el)el.textContent=info.parts+' de '+info.total+' partes percorridas neste tópico.';updateProgress();},completed:function(){updateProgress();updateDeadline();}});on('seek-unread',function(){var next=reader&&reader.firstUnread();if(next){next.el.setAttribute('tabindex','-1');next.el.focus({preventScroll:true});var r=next.el.getBoundingClientRect();root.scrollTo({top:Math.max(0,(root.scrollY||0)+r.top+r.height*next.part-root.innerHeight/2),behavior:'auto'});}});}
  updateProgress();
  if(restore)requestAnimationFrame(function(){root.scrollTo(0,ms.scroll||0);});else{root.scrollTo(0,0);document.getElementById('lesson-content').focus({preventScroll:true});}
 }
