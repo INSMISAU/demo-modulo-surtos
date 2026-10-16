@@ -80,6 +80,7 @@
       <p class="sub">Responda às 8 perguntas para conhecer o seu ponto de partida antes de começar o curso.</p>
     </div>
 
+    <p id="draft-status" class="note-box" role="status" aria-live="polite"></p>
     <div id="questions"></div>
     <button class="submit" id="submitBtn" disabled>Ver o meu diagnóstico</button>
   </div>
@@ -113,30 +114,63 @@
     {q:"As medidas de controlo devem ser aplicadas...",o:["Apenas depois de concluída toda a investigação","Só após a publicação do relatório final","Assim que possível, sem esperar pelo fim da investigação"],c:2}
   ];
   const cont=document.getElementById('questions');
-  const answers={};
+  const draftStatus=document.getElementById('draft-status');
+  const submitBtn=document.getElementById('submitBtn');
+  const draftVersion='preteste-20261016';
+  const draftKey='ins-pretest-v1:testes-ins-20261016:'+location.pathname.slice(0,location.pathname.lastIndexOf('/')+1);
+  let draft=null,storageAvailable=true,submitted=false;
+  function validDraft(value){
+    return value&&value.version===draftVersion&&value.bank===JSON.stringify(QS)
+      &&value.answers&&typeof value.answers==='object'&&!Array.isArray(value.answers)
+      &&Object.keys(value.answers).every(k=>/^\d+$/.test(k)&&String(Number(k))===k&&QS[Number(k)]&&Number.isInteger(value.answers[k])&&value.answers[k]>=0&&value.answers[k]<QS[Number(k)].o.length)
+      &&Array.isArray(value.order)&&value.order.length===QS.length
+      &&value.order.every((row,i)=>Array.isArray(row)&&row.length===QS[i].o.length&&new Set(row).size===row.length&&row.every(n=>Number.isInteger(n)&&n>=0&&n<QS[i].o.length))
+      &&Number.isInteger(value.lastQuestion)&&value.lastQuestion>=0&&value.lastQuestion<QS.length;
+  }
+  try{const saved=JSON.parse(localStorage.getItem(draftKey)||'null');if(validDraft(saved))draft=saved;}catch(_e){/* Um rascunho inválido não impede um novo pré-teste. */}
+  const resumed=!!draft&&Object.keys(draft.answers).length>0;
+  if(!draft){
+    const order=QS.map(item=>{
+      const row=item.o.map((_text,i)=>i);
+      for(let i=row.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[row[i],row[j]]=[row[j],row[i]];}
+      return row;
+    });
+    draft={version:draftVersion,bank:JSON.stringify(QS),answers:{},order,lastQuestion:0};
+  }
+  const answers=draft.answers;
+  function saveDraft(){
+    try{localStorage.setItem(draftKey,JSON.stringify(draft));storageAvailable=true;}
+    catch(_e){storageAvailable=false;}
+  }
+  function showDraftStatus(restored){
+    const count=Object.keys(answers).length;
+    draftStatus.textContent=storageAvailable
+      ?(restored?'Pré-teste retomado. ':'')+count+' de '+QS.length+' respostas guardadas. Pode sair e continuar neste dispositivo e navegador, sem limpar os seus dados.'
+      :'Não foi possível guardar as respostas neste navegador. Mantenha esta página aberta até submeter o pré-teste.';
+    submitBtn.disabled=count!==QS.length;
+  }
   QS.forEach((item,i)=>{
-    const card=document.createElement('div');card.className='qcard';
-    const opts=item.o.map((t,j)=>'<button data-q="'+i+'" data-o="'+j+'">'+t+'</button>').join('');
+    const card=document.createElement('div');card.className='qcard';card.id='pretest-q-'+i;
+    const opts=draft.order[i].map(j=>'<button data-q="'+i+'" data-o="'+j+'" aria-pressed="'+(answers[i]===j)+'"'+(answers[i]===j?' class="selected"':'')+'>'+item.o[j]+'</button>').join('');
     card.innerHTML='<div class="qnum">Pergunta '+(i+1)+' de '+QS.length+'</div><div class="qtext">'+item.q+'</div><div class="opts">'+opts+'</div>';
     cont.appendChild(card);
   });
-  // baralhar opções mantendo o índice correcto
-  document.querySelectorAll('.opts').forEach(grp=>{
-    const btns=Array.from(grp.children);
-    for(let i=btns.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));grp.appendChild(btns[j]);btns.splice(j,1);}
-    btns.forEach(b=>grp.appendChild(b));
-  });
+  saveDraft();showDraftStatus(resumed);
+  if(resumed)requestAnimationFrame(()=>document.getElementById('pretest-q-'+draft.lastQuestion).scrollIntoView({block:'center',behavior:'instant'}));
   cont.addEventListener('click',e=>{
-    const b=e.target.closest('button');if(!b)return;
+    const b=e.target.closest('button');if(!b||submitted)return;
     const qi=b.dataset.q;
-    b.parentNode.querySelectorAll('button').forEach(x=>x.classList.remove('selected'));
-    b.classList.add('selected');
+    b.parentNode.querySelectorAll('button').forEach(x=>{x.classList.remove('selected');x.setAttribute('aria-pressed','false');});
+    b.classList.add('selected');b.setAttribute('aria-pressed','true');
     answers[qi]=+b.dataset.o;
-    if(Object.keys(answers).length===QS.length)document.getElementById('submitBtn').disabled=false;
+    draft.lastQuestion=+qi;saveDraft();showDraftStatus(false);
   });
-  document.getElementById('submitBtn').addEventListener('click',()=>{
+  submitBtn.addEventListener('click',()=>{
+    if(submitted||Object.keys(answers).length!==QS.length)return;
+    submitted=true;submitBtn.disabled=true;
     let correct=0;QS.forEach((item,i)=>{if(answers[i]===item.c)correct++;});
     const pct=Math.round(correct/QS.length*100);try{if(window.cursoRegistarResultado)window.cursoRegistarResultado("preteste",0,"Pré-teste diagnóstico",pct,null);}catch(_e){}
+    try{localStorage.removeItem(draftKey);}catch(_e){}
     document.getElementById('quiz').style.display='none';
     document.getElementById('result').classList.add('show');
     window.scrollTo({top:0,behavior:'smooth'});
