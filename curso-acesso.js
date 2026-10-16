@@ -30,11 +30,18 @@ function mergeStudy(a,b){
   out[topic]=n;
  });return out;
 }
+function mergeSchedule(local,remote,base){
+ // Keep the first recorded start, including after offline changes or an old client.
+ var values=[local,remote,base].filter(function(s){return s&&typeof s.startedAt==='string'&&isFinite(Date.parse(s.startedAt))&&Number.isInteger(s.days)&&s.days>0&&s.days<=3660;});
+ values.sort(function(a,b){return Date.parse(a.startedAt)-Date.parse(b.startedAt)||a.days-b.days;});
+ if(!values.length)return null;
+ return {startedAt:new Date(Date.parse(values[0].startedAt)).toISOString(),days:values[0].days};
+}
 function merge(local,remote,base){
  local=clone(local);remote=clone(remote);base=base||{};
  var result=clone(remote),lc=local.course||{},rc=remote.course||{},bc=base.course||{};
  result.profile={};unique(Object.keys(local.profile||{}).concat(Object.keys(remote.profile||{}))).forEach(function(k){result.profile[k]=choose((local.profile||{})[k],(remote.profile||{})[k],(base.profile||{})[k]);});
- result.course=clone(rc);result.course.modules={};result.course.last=choose(lc.last,rc.last,bc.last);result.course.resume=choose(lc.resume,rc.resume,bc.resume);
+ result.course=clone(rc);result.course.modules={};var schedule=mergeSchedule(lc.schedule,rc.schedule,bc.schedule);if(schedule)result.course.schedule=schedule;else delete result.course.schedule;result.course.last=choose(lc.last,rc.last,bc.last);result.course.resume=choose(lc.resume,rc.resume,bc.resume);
  unique(Object.keys(lc.modules||{}).concat(Object.keys(rc.modules||{}))).forEach(function(id){
   var l=(lc.modules||{})[id]||{},r=(rc.modules||{})[id]||{},b=(bc.modules||{})[id]||{},s=Object.assign({},r,l);
   s.study=mergeStudy(l.study,r.study);
@@ -51,7 +58,7 @@ function merge(local,remote,base){
  result.pretest=pd.draft;result.pretestAlternatives=pd.alternatives;
  return result;
 }
-var API={merge:merge,mergeDraft:mergeDraft};root.INSCursoAcesso=API;
+var API={merge:merge,mergeDraft:mergeDraft,mergeSchedule:mergeSchedule};root.INSCursoAcesso=API;
 if(typeof module==='object'&&module.exports)module.exports=API;
 if(typeof document==='undefined')return;
 var folder=location.pathname.slice(0,location.pathname.lastIndexOf('/')+1),cycle='testes-ins-20261016',prefix='ins-sync:'+cycle+':'+folder;
@@ -127,7 +134,7 @@ async function login(event){
   var key=input.value.trim();if(!/^INS1-[A-Za-z0-9_-]{43}$/.test(key))throw new Error('Copie a chave pessoal completa, começando por INS1-.');
   if(activeKey&&!await synchronise())throw new Error('Conclua o envio deste percurso antes de abrir outro acesso.');
   var res=await request('read',key),old=snapshot(),target=res.state;
-  var hasWork=Object.keys(old.course.modules||{}).some(function(id){var m=old.course.modules[id];return Object.keys(m.study||{}).length||(m.read||[]).length||(m.attempts||[]).length||(m.draft&&Object.keys(m.draft.answers||{}).length);})||(old.pretest&&Object.keys(old.pretest.answers||{}).length)||(old.pretestHistory||[]).length;
+  var hasWork=!!mergeSchedule(old.course.schedule,null,null)||Object.keys(old.course.modules||{}).some(function(id){var m=old.course.modules[id];return Object.keys(m.study||{}).length||(m.read||[]).length||(m.attempts||[]).length||(m.draft&&Object.keys(m.draft.answers||{}).length);})||(old.pretest&&Object.keys(old.pretest.answers||{}).length)||(old.pretestHistory||[]).length;
   if(!activeKey&&hasWork&&root.confirm('Encontrámos leituras ou respostas neste aparelho. Pretende juntá-las ao percurso da sua chave pessoal?'))target=merge(old,res.state,{});
   backup();apply(target,false);remember(res);localStorage.setItem(prefix+':cloud-key',key);activeKey=key;
   if(!same(target,res.state))await synchronise();

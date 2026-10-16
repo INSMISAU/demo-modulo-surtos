@@ -1,4 +1,3 @@
-/* Configuração pedagógica: preencher apenas com a carga horária aprovada para este curso.
-   null mantém a apresentação de tópicos concluídos e tempo de leitura efectivamente registado.
-   Não modifica notas, perguntas, tentativas nem a regra de progressão entre módulos. */
-window.INS_CURSO_TEMPO = { cargaHorariaHoras: null };
+/* Configuração do curso. O prazo é contado a partir do início de cada percurso.
+   A carga horária de estudo só será preenchida quando houver um valor aprovado. */
+window.INS_CURSO_TEMPO = { prazoDias: 90, cargaHorariaHoras: null };
