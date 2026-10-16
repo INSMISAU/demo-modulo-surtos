@@ -157,8 +157,16 @@ async function activate(){
  var button=document.getElementById('curso-access-create');button.disabled=true;
  try{
   backup();var key=get(prefix+':pending-cloud-key')||newKey();localStorage.setItem(prefix+':pending-cloud-key',key);
-  var s=snapshot(),res=await request('create',key,{state:s});
-  localStorage.setItem(prefix+':cloud-key',key);activeKey=key;remember(res);localStorage.removeItem(prefix+':pending-cloud-key');
+  var s=snapshot(),res=await request('create',key,{state:s,protocol:2});
+  var before=snapshot(),oldParticipant=before.participant;
+  if(res.state.participant!==oldParticipant){
+   before.participant=res.state.participant;
+   apply(before,false);
+   localStorage.setItem(prefix+':cloud-key',key);activeKey=key;
+   var detail=clone(before);detail.migratedFrom=oldParticipant;
+   root.dispatchEvent(new CustomEvent('curso:acesso-activado',{detail:detail}));
+  }else{localStorage.setItem(prefix+':cloud-key',key);activeKey=key;root.dispatchEvent(new CustomEvent('curso:acesso-activado',{detail:clone(before)}));}
+  remember(res);localStorage.removeItem(prefix+':pending-cloud-key');
   if(!same(snapshot(),res.state))await synchronise();else setStatus('Acesso criado e percurso guardado. Guarde agora a sua chave pessoal.');
   refresh();showKey();
  }catch(e){setStatus(e.message||'Não foi possível activar o acesso. O percurso local está conservado.');}
@@ -210,6 +218,11 @@ function mount(){
  document.getElementById('curso-copy-key').addEventListener('click',async function(){try{await navigator.clipboard.writeText(activeKey);setStatus('Chave copiada. Guarde-a num local privado.');}catch(_){showKey();setStatus('Seleccione e copie a chave apresentada.');}});
  mountReady=true;refresh();
 }
+API.sendEvent=async function(item){
+ if(!activeKey||!keyIsCurrent()){var missing=new Error('Active o seu acesso em «O meu acesso» para enviar os registos ao painel.');missing.status=428;throw missing;}
+ if(item.row.participante_ref!==get(prefix+':id')){var other=new Error('Este registo pertence a outro acesso guardado neste aparelho.');other.status=403;throw other;}
+ return request('event',activeKey,{table:item.table,row:item.row});
+};
 API.snapshot=snapshot;API.changed=changed;API.sync=synchronise;API.canWrite=keyIsCurrent;API.uuid=uuid;
 API.pretestFinished=function(record){var history=read(prefix+':pretest-history',[]);history.push(record);localStorage.setItem(prefix+':pretest-history',JSON.stringify(unique(history,attemptKey)));changed();refresh();};
 API.ready=(async function(){
