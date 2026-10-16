@@ -64,12 +64,13 @@ if(typeof document==='undefined')return;
 var folder=location.pathname.slice(0,location.pathname.lastIndexOf('/')+1),cycle='testes-ins-20261016',prefix='ins-sync:'+cycle+':'+folder;
 var courseKey='ins-course-v3:'+cycle+':'+folder,preKey='ins-pretest-v1:'+cycle+':'+folder;
 var endpoint='https://watlfdjcgfxmzymztmvc.supabase.co/functions/v1/curso-percurso';
-var activeKey='',meta=null,busy=null,timer=null,status='',onlineReady=false,mountReady=false,applying=false;
+var activeKey='',meta=null,busy=null,timer=null,timerDue=0,retryAt=0,failures=0,status='',onlineReady=false,mountReady=false,applying=false;
+var SYNC_INTERVAL=30000;
 function read(k,fallback){try{var v=localStorage.getItem(k);return v?JSON.parse(v):clone(fallback);}catch(_){return clone(fallback);}}
 function get(k){try{return localStorage.getItem(k)||'';}catch(_){return '';}}
 function uuid(){if(root.crypto.randomUUID)return root.crypto.randomUUID();var a=new Uint8Array(16);root.crypto.getRandomValues(a);a[6]=(a[6]&15)|64;a[8]=(a[8]&63)|128;return Array.from(a,function(x,i){return ([4,6,8,10].indexOf(i)>=0?'-':'')+x.toString(16).padStart(2,'0');}).join('');}
-function snapshot(){
- root.dispatchEvent(new CustomEvent('curso:guardar-leitura'));
+function snapshot(skipFlush){
+ if(!skipFlush)root.dispatchEvent(new CustomEvent('curso:guardar-leitura'));
  var participant=get(prefix+':id');if(!participant){participant=uuid();localStorage.setItem(prefix+':id',participant);}
  return {schema:1,participant:participant,profile:read(prefix+':profile',{}),course:read(courseKey,{version:'2026-10-15-final-ins',modules:{},last:null}),pretest:read(preKey,null),pretestHistory:read(prefix+':pretest-history',[]),pretestAlternatives:read(prefix+':pretest-alternatives',[])};
 }
@@ -93,28 +94,63 @@ async function request(action,key,data){
   return body;
  }finally{clearTimeout(timeout);}
 }
-async function synchronise(){
- clearTimeout(timer);timer=null;if(!activeKey||!keyIsCurrent())return false;if(busy)return busy;
+// Keep frequent local saves; send time/reading details in bounded batches.
+function scheduleSync(delay){
+ if(!activeKey||!keyIsCurrent())return;
+ var due=Math.max(Date.now()+delay,retryAt);
+ if(timer!==null&&timerDue<=due)return;
+ clearTimeout(timer);timerDue=due;
+ timer=setTimeout(function(){timer=null;timerDue=0;synchronise({background:true});},Math.max(0,due-Date.now()));
+}
+function milestones(s){
+ var c=clone(s);Object.keys(c.course.modules||{}).forEach(function(id){delete c.course.modules[id].study;delete c.course.modules[id].scroll;});
+ return serial(c);
+}
+async function synchronise(options){
+ clearTimeout(timer);timer=null;timerDue=0;
+ if(!activeKey||!keyIsCurrent())return false;if(busy)return busy;
+ var background=!!(options&&options.background===true),key=activeKey;
+ var currentAccess=function(){return key===activeKey&&keyIsCurrent();};
  busy=(async function(){
+  await Promise.resolve();
   try{
+   var local=snapshot(),dirty=!meta||!same(local,meta.base);
+   if(background&&!dirty){onlineReady=true;setStatus('Percurso guardado. Pode continuar noutro dispositivo com a sua chave pessoal.');return true;}
    setStatus('A guardar e recuperar o percurso…');
-   var current=await request('read',activeKey),local=snapshot(),merged=merge(local,current.state,meta&&meta.base||current.state);
-   if(!same(merged,local))apply(merged,true);remember(current);
+   // A known revision can be written directly. The server returns its current
+   // state on a conflict, so no initial full read is needed before every save.
+   if(!meta||!dirty){
+    var current=await request('read',key);if(!currentAccess())return false;
+    local=snapshot();var merged=merge(local,current.state,meta&&meta.base||current.state);
+    if(!same(merged,local))apply(merged,true);remember(current);
+   }
    for(var i=0;i<4;i++){
     var next=snapshot();if(same(next,meta.base))break;
-    var sent=clone(next),res=await request('write',activeKey,{revision:meta.revision,state:sent});
+    var res=await request('write',key,{revision:meta.revision,state:clone(next)});
+    if(!currentAccess())return false;
     if(res.conflict){var combined=merge(snapshot(),res.state,meta.base);apply(combined,true);remember(res);continue;}
-    remember(res);
+    remember(res);if(background)break;
    }
+   failures=0;retryAt=0;
    var pending=!same(snapshot(),meta.base);onlineReady=!pending;
-   setStatus(pending?'Alterações guardadas neste aparelho; a concluir o envio…':'Percurso guardado. Pode continuar noutro dispositivo com a sua chave pessoal.');
-   if(pending)timer=setTimeout(synchronise,1500);
+   setStatus(pending?'Alterações guardadas neste aparelho; envio automático pendente. Use «Sincronizar agora» antes de mudar de aparelho.':'Percurso guardado. Pode continuar noutro dispositivo com a sua chave pessoal.');
+   if(pending)scheduleSync(SYNC_INTERVAL);
    return !pending;
-  }catch(e){onlineReady=false;setStatus(e.status===401?'A chave não foi reconhecida. O percurso neste aparelho foi conservado.':'Sem confirmação de envio. O percurso está guardado neste aparelho; volte a sincronizar quando tiver ligação.');return false;}
-  finally{busy=null;}
+  }catch(e){
+   onlineReady=false;
+   if(!currentAccess())return false;
+   setStatus(e.status===401?'A chave não foi reconhecida. O percurso neste aparelho foi conservado.':'Sem confirmação de envio. O percurso está guardado neste aparelho; o envio será repetido quando houver ligação.');
+   if(e.status!==401){failures++;retryAt=Date.now()+Math.min(300000,SYNC_INTERVAL*Math.pow(2,Math.min(failures-1,4)));scheduleSync(SYNC_INTERVAL);}
+   return false;
+  }finally{busy=null;}
  })();return busy;
 }
-function changed(){if(applying||!activeKey||!keyIsCurrent())return;onlineReady=false;setStatus('Alterações guardadas neste aparelho; a enviar…');clearTimeout(timer);timer=setTimeout(synchronise,1200);}
+function changed(){
+ if(applying||!activeKey||!keyIsCurrent())return;
+ onlineReady=false;setStatus('Alterações guardadas neste aparelho; envio automático pendente.');
+ var urgent=!meta||milestones(snapshot(true))!==milestones(meta.base);
+ scheduleSync(urgent?1200:SYNC_INTERVAL);
+}
 function backup(){var entries={};for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k.indexOf(':backup-')>=0||/:cloud-key$|:pending-cloud-key$/.test(k))continue;if(k===courseKey||k===preKey||k.indexOf(prefix+':')===0)entries[k]=localStorage.getItem(k);}localStorage.setItem(prefix+':backup-before-login:'+new Date().toISOString(),JSON.stringify(entries));}
 function newKey(){var b=new Uint8Array(32);root.crypto.getRandomValues(b);return 'INS1-'+btoa(String.fromCharCode.apply(null,b)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
 async function activate(){
@@ -159,7 +195,7 @@ function refresh(){
 async function logout(){
  if(!await synchronise())return;
  backup();[':cloud-key',':cloud-meta',':profile',':id',':pretest-history',':pretest-alternatives',':access'].forEach(function(s){localStorage.removeItem(prefix+s);});
- localStorage.removeItem(courseKey);localStorage.removeItem(preKey);sessionStorage.removeItem(prefix+':access');activeKey='';location.href='index.html';
+ localStorage.removeItem(courseKey);localStorage.removeItem(preKey);sessionStorage.removeItem(prefix+':access');clearTimeout(timer);timer=null;timerDue=0;activeKey='';location.href='index.html';
 }
 function mount(){
  if(mountReady)return;var box=document.createElement('section');box.className='course-access';box.setAttribute('aria-label','O meu acesso');
@@ -185,7 +221,7 @@ API.ready=(async function(){
 root.addEventListener('online',synchronise);
 root.addEventListener('pagehide',function(){
  if(!activeKey||!meta||!keyIsCurrent())return;
- var state=snapshot();if(same(state,meta.base))return;
+ clearTimeout(timer);timer=null;timerDue=0;var state=snapshot();if(same(state,meta.base))return;
  var body=JSON.stringify({action:'write',revision:meta.revision,state:state});
  if(new TextEncoder().encode(body).length<60000)fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','x-curso-chave':activeKey},body:body,keepalive:true,cache:'no-store'}).catch(function(){});
 });
