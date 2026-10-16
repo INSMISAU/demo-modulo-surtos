@@ -22,6 +22,14 @@ function mergeDraft(local,remote,base,completed,alternatives){
  candidates=unique(candidates.concat(alternatives||[])).filter(function(d){return !completed.some(function(a){return (a.id&&a.id===d.id)||(a.started&&a.started===d.started);});});
  return {draft:candidates[0]||null,alternatives:candidates.slice(1)};
 }
+function mergeStudy(a,b){
+ var out={};Object.keys(Object.assign({},a,b)).forEach(function(topic){
+  var x=(a||{})[topic]||{},y=(b||{})[topic]||{},n={seen:{},sessions:{}};
+  Object.keys(Object.assign({},x.seen,y.seen)).forEach(function(k){n.seen[k]=((x.seen||{})[k]||0)|((y.seen||{})[k]||0);});
+  Object.keys(Object.assign({},x.sessions,y.sessions)).forEach(function(k){n.sessions[k]=Math.max(Number((x.sessions||{})[k])||0,Number((y.sessions||{})[k])||0);});
+  out[topic]=n;
+ });return out;
+}
 function merge(local,remote,base){
  local=clone(local);remote=clone(remote);base=base||{};
  var result=clone(remote),lc=local.course||{},rc=remote.course||{},bc=base.course||{};
@@ -29,6 +37,7 @@ function merge(local,remote,base){
  result.course=clone(rc);result.course.modules={};result.course.last=choose(lc.last,rc.last,bc.last);result.course.resume=choose(lc.resume,rc.resume,bc.resume);
  unique(Object.keys(lc.modules||{}).concat(Object.keys(rc.modules||{}))).forEach(function(id){
   var l=(lc.modules||{})[id]||{},r=(rc.modules||{})[id]||{},b=(bc.modules||{})[id]||{},s=Object.assign({},r,l);
+  s.study=mergeStudy(l.study,r.study);
   s.read=unique((r.read||[]).concat(l.read||[])).sort(function(a,b){return a-b;});
   s.attempts=unique((r.attempts||[]).concat(l.attempts||[]),attemptKey).sort(function(a,b){return String(a.at).localeCompare(String(b.at));});
   var scores=[l.best,r.best].concat(s.attempts.map(function(a){return a.percent;})).filter(function(x){return typeof x==='number'&&isFinite(x);});s.best=scores.length?Math.max.apply(null,scores):null;
@@ -53,6 +62,7 @@ function read(k,fallback){try{var v=localStorage.getItem(k);return v?JSON.parse(
 function get(k){try{return localStorage.getItem(k)||'';}catch(_){return '';}}
 function uuid(){if(root.crypto.randomUUID)return root.crypto.randomUUID();var a=new Uint8Array(16);root.crypto.getRandomValues(a);a[6]=(a[6]&15)|64;a[8]=(a[8]&63)|128;return Array.from(a,function(x,i){return ([4,6,8,10].indexOf(i)>=0?'-':'')+x.toString(16).padStart(2,'0');}).join('');}
 function snapshot(){
+ root.dispatchEvent(new CustomEvent('curso:guardar-leitura'));
  var participant=get(prefix+':id');if(!participant){participant=uuid();localStorage.setItem(prefix+':id',participant);}
  return {schema:1,participant:participant,profile:read(prefix+':profile',{}),course:read(courseKey,{version:'2026-10-15-final-ins',modules:{},last:null}),pretest:read(preKey,null),pretestHistory:read(prefix+':pretest-history',[]),pretestAlternatives:read(prefix+':pretest-alternatives',[])};
 }
@@ -117,7 +127,7 @@ async function login(event){
   var key=input.value.trim();if(!/^INS1-[A-Za-z0-9_-]{43}$/.test(key))throw new Error('Copie a chave pessoal completa, começando por INS1-.');
   if(activeKey&&!await synchronise())throw new Error('Conclua o envio deste percurso antes de abrir outro acesso.');
   var res=await request('read',key),old=snapshot(),target=res.state;
-  var hasWork=Object.keys(old.course.modules||{}).some(function(id){var m=old.course.modules[id];return (m.read||[]).length||(m.attempts||[]).length||(m.draft&&Object.keys(m.draft.answers||{}).length);})||(old.pretest&&Object.keys(old.pretest.answers||{}).length)||(old.pretestHistory||[]).length;
+  var hasWork=Object.keys(old.course.modules||{}).some(function(id){var m=old.course.modules[id];return Object.keys(m.study||{}).length||(m.read||[]).length||(m.attempts||[]).length||(m.draft&&Object.keys(m.draft.answers||{}).length);})||(old.pretest&&Object.keys(old.pretest.answers||{}).length)||(old.pretestHistory||[]).length;
   if(!activeKey&&hasWork&&root.confirm('Encontrámos leituras ou respostas neste aparelho. Pretende juntá-las ao percurso da sua chave pessoal?'))target=merge(old,res.state,{});
   backup();apply(target,false);remember(res);localStorage.setItem(prefix+':cloud-key',key);activeKey=key;
   if(!same(target,res.state))await synchronise();
