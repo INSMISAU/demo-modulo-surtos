@@ -1,7 +1,7 @@
 /* Service Worker — Curso de Investigação de Surtos (INS)
    Mostra sempre a versão mais recente com internet e funciona offline.
    Subir CACHE_VERSION quando publicar alterações (v1 -> v2). */
-const CACHE_VERSION = "curso-surtos-v9-retoma-preteste-20261016";
+const CACHE_VERSION = "curso-surtos-v10-retoma-dispositivos-20261016";
 const CORE = [
   "./curva-epidemiologica.svg","./image1.png","./image2.png","./image3.png","./image4.png","./image5.png","./image6.png","./image7.png","./image8.png",
   "./triade-epidemiologica.svg",
@@ -9,7 +9,7 @@ const CORE = [
   "./","./index.html","./pretest.html","./apresentacao.html","./certificado.html",
   "./modulo1.html","./modulo2.html","./modulo3.html","./modulo4.html",
   "./modulo5.html","./modulo6.html","./modulo7.html",
-  "./formacao.js","./formacao.css","./formacao-dados.js","./271bad1e-854b-4f1e-b68a-d84c0b58180c.js","./curso.js","./logo_ins.png","./cover.jpg",
+  "./formacao.js","./formacao.css","./formacao-dados.js","./271bad1e-854b-4f1e-b68a-d84c0b58180c.js","./curso.js","./curso-acesso.js","./logo_ins.png","./cover.jpg",
   "./fig2.png","./fig3.png","./fig6.png","./fig-chitima.png",
   "./i192.png","./i512.png","./manifest.json"
 ];

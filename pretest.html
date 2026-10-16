@@ -101,6 +101,7 @@
 
 </div>
 
+<script src="curso.js"></script>
 <script>
   // Banco de pré-teste (diagnóstico) — c: índice da opção correcta
   const QS=[
@@ -113,6 +114,7 @@
     {q:"A busca activa de casos consiste em...",o:["Esperar que os doentes cheguem à unidade sanitária","Procurar activamente casos nos serviços e na comunidade","Contar apenas os casos confirmados por laboratório"],c:1},
     {q:"As medidas de controlo devem ser aplicadas...",o:["Apenas depois de concluída toda a investigação","Só após a publicação do relatório final","Assim que possível, sem esperar pelo fim da investigação"],c:2}
   ];
+  function iniciarPreteste(){
   const cont=document.getElementById('questions');
   const draftStatus=document.getElementById('draft-status');
   const submitBtn=document.getElementById('submitBtn');
@@ -137,25 +139,29 @@
     });
     draft={version:draftVersion,bank:JSON.stringify(QS),answers:{},order,lastQuestion:0};
   }
-  const answers=draft.answers;
+  if(!draft.id)draft.id=window.INSCursoAcesso?window.INSCursoAcesso.uuid():undefined;
+  if(!draft.started)draft.started=new Date().toISOString();
+  let answers=draft.answers;
   function saveDraft(){
-    try{localStorage.setItem(draftKey,JSON.stringify(draft));storageAvailable=true;}
+    try{if(window.INSCursoAcesso&&!window.INSCursoAcesso.canWrite())return;localStorage.setItem(draftKey,JSON.stringify(draft));storageAvailable=true;if(window.INSCursoAcesso)window.INSCursoAcesso.changed();}
     catch(_e){storageAvailable=false;}
   }
   function showDraftStatus(restored){
     const count=Object.keys(answers).length;
     draftStatus.textContent=storageAvailable
-      ?(restored?'Pré-teste retomado. ':'')+count+' de '+QS.length+' respostas guardadas. Pode sair e continuar neste dispositivo e navegador, sem limpar os seus dados.'
+      ?(restored?'Pré-teste retomado. ':'')+count+' de '+QS.length+' respostas guardadas. Pode continuar neste aparelho. Para usar outro dispositivo, active o seu acesso e aguarde a confirmação de envio em «O meu acesso».'
       :'Não foi possível guardar as respostas neste navegador. Mantenha esta página aberta até submeter o pré-teste.';
     submitBtn.disabled=count!==QS.length;
   }
+  function render(){cont.innerHTML="";
   QS.forEach((item,i)=>{
     const card=document.createElement('div');card.className='qcard';card.id='pretest-q-'+i;
     const opts=draft.order[i].map(j=>'<button data-q="'+i+'" data-o="'+j+'" aria-pressed="'+(answers[i]===j)+'"'+(answers[i]===j?' class="selected"':'')+'>'+item.o[j]+'</button>').join('');
     card.innerHTML='<div class="qnum">Pergunta '+(i+1)+' de '+QS.length+'</div><div class="qtext">'+item.q+'</div><div class="opts">'+opts+'</div>';
     cont.appendChild(card);
   });
-  saveDraft();showDraftStatus(resumed);
+  }
+  render();saveDraft();showDraftStatus(resumed);
   if(resumed)requestAnimationFrame(()=>document.getElementById('pretest-q-'+draft.lastQuestion).scrollIntoView({block:'center',behavior:'instant'}));
   cont.addEventListener('click',e=>{
     const b=e.target.closest('button');if(!b||submitted)return;
@@ -169,8 +175,8 @@
     if(submitted||Object.keys(answers).length!==QS.length)return;
     submitted=true;submitBtn.disabled=true;
     let correct=0;QS.forEach((item,i)=>{if(answers[i]===item.c)correct++;});
-    const pct=Math.round(correct/QS.length*100);try{if(window.cursoRegistarResultado)window.cursoRegistarResultado("preteste",0,"Pré-teste diagnóstico",pct,null);}catch(_e){}
-    try{localStorage.removeItem(draftKey);}catch(_e){}
+    const pct=Math.round(correct/QS.length*100),record={id:draft.id,started:draft.started,at:new Date().toISOString(),percent:pct,version:draftVersion,answers:Object.assign({},answers),score:correct,total:QS.length};try{if(window.cursoRegistarResultado)window.cursoRegistarResultado("preteste",0,"Pré-teste diagnóstico",pct,null,record);}catch(_e){}
+    try{localStorage.removeItem(draftKey);if(window.INSCursoAcesso)window.INSCursoAcesso.pretestFinished(record);}catch(_e){}
     document.getElementById('quiz').style.display='none';
     document.getElementById('result').classList.add('show');
     window.scrollTo({top:0,behavior:'smooth'});
@@ -184,9 +190,17 @@
     document.getElementById('ringfill').style.stroke=col;
     document.getElementById('msg').textContent='Resultado do pré-teste: '+correct+' de '+QS.length+' ('+pct+'%). '+msg;
   });
+  window.addEventListener('curso:percurso-recuperado',function(e){
+    if(submitted)return;
+    var next=e.detail.pretest;
+    if(validDraft(next)){draft=next;answers=draft.answers;render();showDraftStatus(true);}
+    else if(e.detail.pretestHistory.some(function(a){return a.id&&a.id===draft.id;})){submitted=true;submitBtn.disabled=true;draftStatus.textContent='Este pré-teste já foi submetido noutro dispositivo. Consulte a classificação em «O meu acesso».';}
+  });
+  }
+  if(window.cursoPronto)window.cursoPronto.then(iniciarPreteste);else iniciarPreteste();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="curso.js"></script>
+
 <script>if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});}</script>
 </body>
 </html>
