@@ -13,8 +13,27 @@ function migrateState(previous,version){
   if(third){third.read=(third.read||[]).map(function(i){return i===10?11:i;});if(third.topic===11)third.topic=12;}
   if(next.last&&next.last.module===3&&next.last.topic===11)next.last.topic=12;
  }
+ // The source document places ethics within 3.10 and the exercise at 3.11.
+ // Keep existing marks, attempts, study time and the exercise's stable identifier.
+ var documentUpdate=version==='2026-10-20-documento-ins'&&(from==='2026-10-15-final-ins'||from==='2026-10-14');
+ if(documentUpdate){
+  var third20=next.modules&&next.modules[3];
+  function topic20(topic){return topic===12?11:topic===11?10:topic;}
+  if(third20){
+   third20.read=(third20.read||[]).filter(function(i){return i!==10;}).map(function(i){return i===11?10:i;});
+   third20.read=Array.from(new Set(third20.read)).sort(function(a,b){return a-b;});
+   third20.topic=topic20(third20.topic);
+  }
+  if(next.last&&next.last.module===3)next.last.topic=topic20(next.last.topic);
+ }
  Object.keys(next.modules||{}).forEach(function(id){
   var item=next.modules[id];
+  // All 43 assessment items are unchanged in this document update.
+  if(documentUpdate){
+   [item.draft].concat(item.otherDrafts||[]).forEach(function(draft){
+    if(draft&&draft.version==='2026-10-15-final-ins')draft.version=version;
+   });
+  }
   if(item.draft&&item.draft.version!==version){
    item.archivedDrafts=item.archivedDrafts||[];
    item.archivedDrafts.push({version:item.draft.version||from,draft:item.draft});
@@ -173,7 +192,7 @@ function stopReader(discard){if(reader){var old=reader;reader=null;old.stop(disc
 function persistPosition(){if(!m)return;ms.topic=current;ms.scroll=root.scrollY||0;state.last={module:m.id,topic:current};save();}
 function lesson(index,restore){stopReader();exam=null;state.resume={type:'lesson',module:m.id};current=Math.max(0,Math.min(m.sections.length,Number(index)||0));if(current)beginSchedule();ms.topic=current;state.last={module:m.id,topic:current};save();
  var nav='<nav aria-label="Tópicos do módulo"><button class="topic-button'+(current===0?' active':'')+'" data-go="0">Objectivos e avaliação</button>'+m.sections.map(function(s,i){return '<button class="topic-button'+(current===i+1?' active':'')+'" data-go="'+(i+1)+'"><span class="topic-marker" aria-hidden="true">'+(ms.read.indexOf(i)>=0?'✓':'○')+'</span> '+esc(s.title)+'<span class="sr-only topic-read-label">'+(ms.read.indexOf(i)>=0?' — lido':'')+'</span></button>';}).join('')+'<button class="topic-button" id="open-assessment">Avaliação · '+m.questions.length+' perguntas</button></nav>';
- var body;if(!current){body='<p class="eyebrow">Módulo '+m.id+'</p><h1>'+esc(m.title)+'</h1><h2>Objectivos e resultados de aprendizagem</h2><p>No final deste módulo, o participante será capaz de:</p><ul>'+m.objectives.map(function(x){return'<li>'+esc(x)+'</li>';}).join('')+'</ul><h2>Avaliação do módulo</h2><p>O teste aplicado ao módulo contém '+m.questions.length+' perguntas. A aprovação exige pelo menos '+cfg.passMark+'%. As perguntas e as opções mudam de ordem em cada tentativa. A classificação é apresentada depois da submissão de todas as respostas.</p><p>Pode refazer a avaliação, mesmo depois de aprovado. A melhor classificação é conservada.</p>'+button('Iniciar leitura','read-start');}
+ var body;if(!current){body='<p class="eyebrow">Módulo '+m.id+'</p><h1>'+esc(m.title)+'</h1><h2>Objectivos de Aprendizagem</h2><p>O participante será capaz de:</p><ul>'+m.objectives.map(function(x){return'<li>'+esc(x)+'</li>';}).join('')+'</ul><h2>Avaliação do módulo</h2><p>O teste aplicado ao módulo contém '+m.questions.length+' perguntas. A aprovação exige pelo menos '+cfg.passMark+'%. As perguntas e as opções mudam de ordem em cada tentativa. A classificação é apresentada depois da submissão de todas as respostas.</p><p>Pode refazer a avaliação, mesmo depois de aprovado. A melhor classificação é conservada.</p>'+button('Iniciar leitura','read-start');}
  else{var sec=m.sections[current-1];body='<p class="eyebrow">Módulo '+m.id+' · Tópico '+current+' de '+m.sections.length+'</p><h1>'+esc(sec.title)+'</h1><div class="legacy-content course-source">'+sec.html+'</div><div id="reading-end" class="reading-end"><p id="reading-status" role="status">'+(ms.read.indexOf(current-1)>=0?'✓ Leitura deste tópico concluída':'A leitura é registada automaticamente ao percorrer todo o conteúdo.')+'</p><p id="reading-coverage" class="reading-help">Leia cada parte com a página activa. O progresso fica guardado para continuar depois.</p><button class="text-link" id="seek-unread"'+(ms.read.indexOf(current-1)>=0?' hidden':'')+'>Ir para a próxima parte por ler ↑</button></div>'+(sec.practice?'<p>Registe as respostas no seu caderno de exercícios para discussão na tutoria.</p>':'')+'<div class="course-actions">'+button('Anterior','previous-topic',true)+button(current===m.sections.length?'Ir para a avaliação':'Próximo tópico','next-topic')+'</div>';}
 
  document.getElementById('course-app').innerHTML='<div class="learning-layout"><aside class="topic-index"><a href="index.html#cursos" class="back-course">← Voltar ao curso</a><h2>Módulo '+m.id+'</h2><p data-module-read>'+pctRead(m)+'% · '+ms.read.length+'/'+m.sections.length+' tópicos lidos</p><progress data-module-bar max="'+m.sections.length+'" value="'+ms.read.length+'" aria-label="Leitura deste módulo"></progress>'+progressCard(true)+'<details class="topic-menu"'+(root.innerWidth>850?' open':'')+'><summary>Índice do módulo</summary>'+nav+'</details></aside><main class="lesson-content" id="lesson-content" tabindex="-1">'+body+'<p id="storage-status" role="status"></p></main></div>';
@@ -194,7 +213,7 @@ function finish(){if(!exam)return;var result=grade(exam,answerMap,cfg.passMark);
 function start(){if(!cfg)return;var id=Number(document.body.dataset.module||0);m=cfg.modules.find(function(x){return x.id===id;});if(!m){home();return;}if(!canAccess(m)){document.getElementById('course-app').innerHTML='<main class="assessment"><h1>Conclua o módulo anterior</h1><p>A aprovação exige pelo menos '+cfg.passMark+'%.</p><a class="course-btn" href="modulo'+(m.id-1)+'.html">Abrir o módulo anterior</a></main>';return;}ms=moduleState(id);var topic=new URLSearchParams(location.search).get('topic');current=topic!==null?Number(topic):ms.topic||0;if(new URLSearchParams(location.search).get('avaliacao')==='retomar'&&ms.draft){exam=ms.draft.questions;answerMap=ms.draft.answers;qIndex=ms.draft.index||0;question();}else lesson(current,true);root.addEventListener('pagehide',persistPosition);root.addEventListener('scroll',function(){if(!exam)ms.scroll=root.scrollY||0;},{passive:true});}
 root.addEventListener('curso:percurso-recuperado',function(e){
  stopReader(true);importing=true;
- try{state=e.detail.course;if(m){ms=moduleState(m.id);if(exam&&ms.draft){exam=ms.draft.questions;answerMap=ms.draft.answers;qIndex=ms.draft.index||0;question();}else if(exam){exam=null;assessmentStart();}else lesson(ms.topic||0,true);}else home();}finally{importing=false;}
+ try{state=migrateState(e.detail.course,cfg.version);if(m){ms=moduleState(m.id);if(exam&&ms.draft){exam=ms.draft.questions;answerMap=ms.draft.answers;qIndex=ms.draft.index||0;question();}else if(exam){exam=null;assessmentStart();}else lesson(ms.topic||0,true);}else home();}finally{importing=false;}
 });
 root.addEventListener('curso:guardar-leitura',function(){if(reader)reader.flush();});
 var deadlineTimer=null;

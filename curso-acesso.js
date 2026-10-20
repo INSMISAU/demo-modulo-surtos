@@ -37,9 +37,14 @@ function mergeSchedule(local,remote,base){
  if(!values.length)return null;
  return {startedAt:new Date(Date.parse(values[0].startedAt)).toISOString(),days:values[0].days};
 }
+// Normalise topic indices before combining saved versions of the course.
+function currentCourse(course){
+ var cfg=root.INS_CURSO,api=root.INSFormacao;
+ return cfg&&api&&api.migrateState?api.migrateState(course||{modules:{}},cfg.version):clone(course||{});
+}
 function merge(local,remote,base){
  local=clone(local);remote=clone(remote);base=base||{};
- var result=clone(remote),lc=local.course||{},rc=remote.course||{},bc=base.course||{};
+ var result=clone(remote),lc=currentCourse(local.course),rc=currentCourse(remote.course),bc=currentCourse(base.course);
  result.profile={};unique(Object.keys(local.profile||{}).concat(Object.keys(remote.profile||{}))).forEach(function(k){result.profile[k]=choose((local.profile||{})[k],(remote.profile||{})[k],(base.profile||{})[k]);});
  result.course=clone(rc);result.course.modules={};var schedule=mergeSchedule(lc.schedule,rc.schedule,bc.schedule);if(schedule)result.course.schedule=schedule;else delete result.course.schedule;result.course.last=choose(lc.last,rc.last,bc.last);result.course.resume=choose(lc.resume,rc.resume,bc.resume);
  unique(Object.keys(lc.modules||{}).concat(Object.keys(rc.modules||{}))).forEach(function(id){
