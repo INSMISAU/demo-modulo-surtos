@@ -1,0 +1,286 @@
+/* ============================================================
+   Manual Nacional para Deteccao e Investigacao de Surtos
+   Sistema de design — paleta e layout das maquetas (Helder / INS)
+   ============================================================ */
+:root{
+  --petrol:#007088;        /* azul petroleo INS */
+  --petrol-d:#005c70;
+  --petrol-l:#1c8fa8;
+  --carmine:#b02040;       /* carmim INS */
+  --carmine-d:#8e1934;
+  --green:#3a9d4e;
+  --ink:#243038;
+  --muted:#5c6b75;
+  --bg:#eef1f4;
+  --card:#ffffff;
+  --line:#e4e9ed;
+  --shadow:0 4px 14px rgba(20,50,70,.08);
+  --shadow-s:0 2px 6px rgba(20,50,70,.06);
+  --radius:18px;
+  --header-grad:linear-gradient(160deg,#0a7d96 0%,#066b83 45%,#0a90ab 100%);
+  --maxw:480px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:"Mulish","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+  background:var(--bg);color:var(--ink);
+  -webkit-font-smoothing:antialiased;line-height:1.5;
+}
+.app{max-width:var(--maxw);margin:0 auto;min-height:100vh;background:var(--bg);
+  position:relative;padding-bottom:78px;box-shadow:0 0 40px rgba(0,0,0,.06)}
+a{color:inherit;text-decoration:none}
+
+/* ---------- Cabecalho ---------- */
+.hdr{background:var(--header-grad);color:#fff;border-radius:0 0 26px 26px;
+  padding:14px 18px 26px;position:sticky;top:0;z-index:30}
+.hdr-top{display:flex;align-items:center;gap:12px;min-height:30px}
+.hdr-top .crumb{font-size:13px;font-weight:600;opacity:.95;letter-spacing:.2px}
+.hdr-top .spacer{flex:1}
+.icon-btn{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(255,255,255,.16);color:#fff;border:none;cursor:pointer}
+.icon-btn svg{width:18px;height:18px}
+.burger{background:transparent;width:30px}
+.page-title{font-family:"Poppins","Mulish",sans-serif;font-weight:800;
+  font-size:30px;line-height:1.05;margin:14px 2px 0}
+.page-title .thin{font-weight:400}
+.page-sub{font-size:13px;opacity:.92;margin:6px 2px 0}
+
+/* ---------- Pesquisa ---------- */
+.search{margin:16px 2px 0;background:rgba(255,255,255,.92);border-radius:14px;
+  display:flex;align-items:center;gap:10px;padding:11px 14px;color:#5a6b76;box-shadow:var(--shadow-s)}
+.search svg{width:18px;height:18px;flex:none;color:var(--petrol)}
+.search input{border:none;outline:none;background:transparent;width:100%;font-size:14px;color:#33424c}
+
+/* ---------- Corpo ---------- */
+.body{padding:18px 16px 8px}
+.sec-h{font-family:"Poppins",sans-serif;font-weight:700;color:var(--petrol);
+  font-size:15px;margin:22px 4px 12px;letter-spacing:.2px}
+
+/* ---------- Cartoes ---------- */
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);
+  padding:18px;margin-bottom:14px}
+.nav-card{background:#fff;border-radius:16px;box-shadow:var(--shadow);
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:20px 22px;margin-bottom:14px;cursor:pointer;transition:transform .12s,box-shadow .12s}
+.nav-card:active{transform:scale(.99)}
+.nav-card .t{font-family:"Poppins",sans-serif;font-weight:700;color:var(--petrol);font-size:21px}
+.nav-card .az{font-weight:800;color:var(--carmine);font-size:15px;letter-spacing:1px}
+.nav-card .ico{width:42px;height:42px;flex:none}
+
+/* cartao de seccao (lista Explorar por Seccao) */
+.sec-card{background:#fff;border-radius:16px;box-shadow:var(--shadow);padding:18px 18px 16px;margin-bottom:14px}
+.sec-card h3{margin:0 0 6px;font-family:"Poppins",sans-serif;font-size:17px;color:var(--petrol);font-weight:700}
+.sec-card p{margin:0 0 14px;color:var(--muted);font-size:13.5px}
+.pill{display:inline-flex;align-items:center;gap:7px;border:none;cursor:pointer;
+  font-weight:700;font-size:13px;border-radius:999px;padding:9px 18px;color:#fff;background:var(--petrol)}
+.pill.carmine{background:var(--carmine)}
+.pill.green{background:var(--green)}
+.pill.ghost{background:#eef4f6;color:var(--petrol)}
+.pill svg{width:15px;height:15px}
+
+/* ---------- Cartao destaque (hero) ---------- */
+.hero{position:relative;border-radius:18px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:6px;min-height:210px;display:flex;align-items:flex-end}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero .scrim{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,.15) 70%)}
+.hero .ct{position:relative;padding:20px;color:#fff}
+.hero .ct h3{margin:0 0 12px;font-family:"Poppins",sans-serif;font-weight:800;font-size:27px;line-height:1.04;text-shadow:0 1px 6px rgba(0,0,0,.4)}
+.tag{display:inline-block;background:var(--petrol);color:#fff;font-weight:700;font-size:15px;padding:7px 18px;border-radius:10px}
+.hero-meta{font-size:12.5px;color:var(--muted);margin:10px 2px 2px}
+
+.recent{border:1px solid var(--line);background:#fff;border-radius:13px;padding:13px 16px;color:#8a98a1;font-size:13px;margin-top:14px}
+
+/* ---------- Grelha de sindromes ---------- */
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.syn{background:#fff;border-radius:14px;box-shadow:var(--shadow-s);padding:14px 8px 12px;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
+.syn .ico{width:50px;height:50px;margin:2px auto 8px;display:flex;align-items:center;justify-content:center}
+.dico{width:100%;height:100%;object-fit:contain;display:block}
+.syn .nm{font-size:11px;color:#33424c;font-weight:600;line-height:1.25;min-height:2.5em;display:flex;align-items:center;justify-content:center}
+
+/* ---------- Abecedario ---------- */
+.abc-wrap{display:flex;gap:8px}
+.abc-list{flex:1;background:#fff;border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+.abc-row{display:block;padding:12px 16px;border-bottom:1px solid var(--line);font-size:14px;color:#33424c;cursor:pointer}
+.abc-row:last-child{border-bottom:none}
+.abc-row .ltr{color:var(--carmine);font-weight:800;margin-right:6px}
+.abc-row.dim{color:#aab4bb;cursor:default}
+.abc-index{width:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--petrol);font-size:11px;font-weight:700}
+.abc-index span{cursor:pointer;padding:1px}
+.abc-index .on{background:var(--carmine);color:#fff;border-radius:50%;width:18px;height:18px;display:grid;place-items:center}
+
+/* ---------- Conteudo de leitura (seccao / ficha) ---------- */
+.content h3{font-family:"Aptos","Segoe UI","Mulish",Arial,sans-serif;color:var(--petrol);font-size:17px;margin:20px 0 8px}
+.content h4{font-family:"Aptos","Segoe UI","Mulish",Arial,sans-serif;color:var(--petrol-d);font-size:14.5px;margin:16px 0 6px}
+.content p{margin:0 0 11px;font-size:14px;color:#33424c;text-align:justify}
+.content ul{margin:0 0 12px;padding-left:48px}
+.content li{margin:0 0 2px;font-size:14px;color:#33424c;text-align:justify}
+.content li b,.content p b{color:var(--ink)}
+.lead{color:var(--muted);font-size:13.5px;margin:-2px 0 14px}
+
+/* ---------- Acordeao (Saber mais) ---------- */
+.acc{background:#fff;border-radius:14px;box-shadow:var(--shadow-s);margin-bottom:12px;overflow:hidden;border:1px solid var(--line)}
+.acc>summary{list-style:none;cursor:pointer;padding:15px 16px;display:flex;align-items:center;gap:12px;
+  font-family:"Poppins",sans-serif;font-weight:600;color:var(--petrol);font-size:14.5px}
+.acc>summary::-webkit-details-marker{display:none}
+.acc>summary .chev{margin-left:auto;transition:transform .2s;color:var(--petrol)}
+.acc[open]>summary .chev{transform:rotate(180deg)}
+.acc>summary .dot{width:9px;height:9px;border-radius:50%;background:var(--carmine);flex:none}
+.acc .inner{padding:2px 16px 14px}
+
+/* ---------- Abreviaturas (glossario) ---------- */
+.abbr{display:flex;gap:12px;padding:11px 4px;border-bottom:1px solid var(--line)}
+.abbr .k{font-weight:800;color:var(--carmine);min-width:62px}
+.abbr .v{color:#33424c;font-size:13.5px}
+
+/* ---------- Emendas / versoes ---------- */
+.ver-now{background:linear-gradient(160deg,#0a7d96,#066b83);color:#fff;border-radius:16px;padding:18px;box-shadow:var(--shadow);position:relative}
+.ver-now .big{font-family:"Poppins",sans-serif;font-weight:800;font-size:34px;margin:6px 0 2px}
+.ver-now .ok{position:absolute;top:16px;right:16px;width:34px;height:34px;background:var(--green);border-radius:50%;display:grid;place-items:center}
+.ver-item{background:#fff;border-radius:14px;box-shadow:var(--shadow-s);padding:14px 16px;margin-bottom:12px;position:relative}
+.ver-item .vn{font-family:"Poppins",sans-serif;font-weight:800;color:var(--ink)}
+.ver-item .vd{color:var(--muted);font-size:12.5px;margin-bottom:6px}
+.ver-item .badge{position:absolute;top:14px;right:14px;background:var(--carmine);color:#fff;font-size:11px;font-weight:700;padding:3px 12px;border-radius:999px}
+.chg{font-size:13px;margin:4px 0;color:#33424c}
+.chg b{color:var(--petrol)}
+
+/* ---------- Barra inferior ---------- */
+.tabbar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:var(--maxw);
+  background:#fff;border-top:1px solid var(--line);display:flex;z-index:40;box-shadow:0 -3px 12px rgba(20,50,70,.06)}
+.tab{flex:1;padding:9px 0 8px;text-align:center;color:#90a0a8;font-size:11px;position:relative}
+.tab svg{width:23px;height:23px;display:block;margin:0 auto 3px}
+.tab.active{color:var(--petrol)}
+.tab.active::before{content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);width:34px;height:3px;border-radius:3px;background:var(--petrol)}
+
+/* ---------- Alerta integral ---------- */
+.note{background:#fff7e8;border:1px solid #f3dca6;color:#7a5a17;border-radius:12px;padding:11px 14px;font-size:12.5px;margin:14px 0}
+.note b{color:#7a5a17}
+
+.backlink{display:inline-flex;align-items:center;gap:6px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;background:rgba(255,255,255,.16);padding:6px 12px;border-radius:999px;border:none}
+.backlink svg{width:15px;height:15px}
+
+@media(min-width:481px){
+  body{background:#dfe5ea}
+  .app{margin-top:0;border-radius:0}
+}
+
+/* ===== Alinhamento com a maquetização final do Hélder (Raleway, figuras, branding) ===== */
+body{font-family:"Raleway","Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+.page-title,.nav-card .t,.sec-card h3,.sec-h,
+.acc>summary,.ver-now .big,.ver-item .vn,.hero .ct h3,.brand .bt b{font-family:"Raleway","Segoe UI",sans-serif}
+
+/* Figuras do manual */
+.fig{margin:16px 0}
+.fig img{width:100%;display:block;border-radius:12px;border:1px solid var(--line);background:#fff}
+.fig figcaption{font-size:12px;color:var(--muted);font-style:italic;margin-top:6px;padding-left:2px}
+.fig figcaption b{color:var(--petrol);font-style:normal}
+.figs-h{font-family:"Raleway",sans-serif;font-weight:700;color:var(--petrol);font-size:14px;margin:18px 4px 8px}
+
+/* Painéis de leitura com o tom do impresso */
+.content.card{background:#f2f8fa}
+.acc{background:#f7fafb}
+
+/* Barra carmim no rodapé do conteúdo (como no impresso) */
+.body::after{content:"";display:block;height:5px;border-radius:3px;background:var(--carmine);width:120px;margin:22px auto 6px}
+
+/* Banner oficial (logos) */
+.brand{display:flex;align-items:center;gap:12px;background:#fff;border-radius:14px;box-shadow:var(--shadow-s);padding:11px 14px;margin-bottom:14px}
+.brand img{height:38px;width:auto}
+.brand .bt{font-size:11px;color:var(--muted);line-height:1.3}
+.brand .bt b{color:var(--petrol);display:block;font-size:12px}
+
+/* Capa oficial */
+.cover{position:relative;border-radius:16px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:14px}
+.cover img.ph{width:100%;display:block}
+.cover .lk{position:absolute;top:10px;left:10px;background:#fff;border-radius:8px;padding:5px 8px}
+.cover .lk img{height:30px;display:block}
+.cover .dt{position:absolute;top:10px;right:10px;background:var(--carmine);color:#fff;font-size:11px;font-weight:700;padding:5px 10px;border-radius:8px;text-align:right;line-height:1.2}
+.cover .cv-title{background:#fff;padding:12px 14px}
+.cover .cv-title b{font-family:"Raleway",sans-serif;color:var(--petrol);font-size:15px;font-weight:800;display:block;line-height:1.15}
+.cover .cv-title span{font-size:11.5px;color:var(--muted)}
+
+/* Tabelas do manual (Secções 5/6) */
+.tbl-wrap{overflow-x:auto;margin:12px 0;-webkit-overflow-scrolling:touch;border:1px solid #e0e9eb;border-radius:8px}
+.tbl{border-collapse:collapse;width:100%;font-size:13px;min-width:440px}
+.tbl th,.tbl td{border:1px solid #dce7ea;padding:7px 9px;text-align:left;vertical-align:top;line-height:1.35}
+.tbl thead th{background:#e6f2f4;color:#0a4a5a;font-weight:700}
+.tbl tbody tr:nth-child(even){background:#f6fafb}
+
+/* Tabela 1 — agrupamento por vigilância sindrómica */
+table.t1{width:100%;border-collapse:collapse;font-size:12.5px}
+table.t1 th{background:var(--petrol);color:#fff;text-align:left;padding:7px 9px;font-size:12px}
+table.t1 td{padding:7px 9px;border-bottom:1px solid #e2e8ec;vertical-align:top}
+table.t1 tr:nth-child(even) td{background:#fafcfd}
+table.t1 a{color:var(--petrol);text-decoration:none}
+
+/* Comprimir conteudo: cabecalho fixo enquanto aberto + botao Fechar no fim */
+.closer{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin-top:12px;padding:10px 0;
+ border:0;border-top:1px solid var(--line);background:none;cursor:pointer;
+ color:var(--petrol);font-family:inherit;font-size:12.5px;font-weight:700}
+.closer:hover{background:#f2f7f9}
+.closer svg{fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+
+/* Navegacao continua: Anterior / Seguinte */
+.pager{display:flex;gap:10px;margin:18px 0 4px}
+.pager .pg{flex:1 1 0;min-width:0;overflow:hidden;display:flex;align-items:center;gap:9px;padding:12px 13px;background:#fff;
+ border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-s);text-decoration:none;color:inherit}
+.pager .pg.nx{justify-content:flex-end;text-align:right}
+.pager .pg.end{justify-content:center;border-style:dashed;box-shadow:none;background:none;color:var(--muted);font-size:12.5px}
+.pager .pg:active{background:#f2f7f9}
+.pager .tx{display:flex;flex-direction:column;min-width:0;overflow:hidden}
+.pager .lb{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.pager .tt{font-size:13.5px;font-weight:700;color:var(--petrol);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pager .ar{flex:none;color:var(--petrol);display:flex}
+
+/* Imagem de entrada da sindrome */
+.synhero{margin:0 0 14px}
+.synhero img{width:100%;height:auto;display:block;border-radius:14px;border:1px solid var(--line);box-shadow:var(--shadow-s)}
+.synhero figcaption{font-size:11.5px;color:var(--muted);margin-top:6px;text-align:center}
+
+/* Itens de lista subordinados nas seccoes (o manual usa a. b. c. indentados) */
+.content li.sub{list-style:circle;margin-left:20px;color:#4a5a62}
+.content li.sub2{list-style:square;margin-left:38px;color:#5a6a72;font-size:.95em}
+/* Linhas de cabecalho de grupo dentro das tabelas (S56-13) */
+.tbl td.grp{background:#f2f7f9}
+
+/* ── Texto nunca transborda a caixa ──────────────────────────────
+   O manual tem URLs muito longos (ate 133 caracteres, sem espacos) e
+   linhas de preenchimento "______" nos formularios. Sem isto, saem
+   pela margem direita e ficam cortados. */
+.content, .content p, .content li, .content h3, .content h4,
+.card, .lead, .abc-row, .note, .pager .tt, .tbl td, .tbl th,
+.synhero figcaption, .secimg figcaption{
+  overflow-wrap:break-word;
+  word-break:break-word;
+}
+/* URLs e caminhos: partir em qualquer ponto se nao houver alternativa */
+.content a, .content code{word-break:break-all}
+/* Tabelas: nunca empurrar a pagina para o lado */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tbl{min-width:100%}
+/* Cabecalhos dos blocos: os titulos do manual chegam aos 75 caracteres */
+.acc>summary{overflow-wrap:break-word;min-width:0}
+.acc>summary .dot{flex:none}
+
+/* ── Tabelas largas: cada coluna com largura minima ──────────────
+   O manual imprime a "Lista de Casos" com 11 colunas tao estreitas
+   que as palavras partem letra a letra ("Des fec ho"). No ecra nao
+   temos essa limitacao: damos espaco a cada coluna e a tabela rola
+   na horizontal, ficando legivel. */
+.tbl th, .tbl td{min-width:88px}
+.tbl th:first-child, .tbl td:first-child{min-width:40px}
+.tbl-wrap{position:relative}
+
+.gloss-entry p,.abbr .v,.fig figcaption,.synhero figcaption,.secimg figcaption{text-align:justify!important;line-height:1.65}
+.fig .photo-caption-text{display:block;font-style:normal}
+.fig .photo-source{display:block;margin-top:4px;font-size:11.5px;line-height:1.6;font-style:normal;overflow-wrap:break-word}
+
+/* Grelha de síndromes em ecrãs pequenos. */
+.syn{min-width:0}.syn .nm{max-width:100%;overflow-wrap:anywhere}
+@media(max-width:360px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Revisão do suporte: ajustes locais de leitura, sem alterar os parágrafos corridos. */
+.content .section-six h3,.content .section-six h4{text-align:left!important;font-weight:700!important;line-height:1.4;margin-top:24px;margin-bottom:10px}
+.content .section-six .section-reference{text-align:left!important;overflow-wrap:anywhere;word-break:normal;line-height:1.65}
+.content .section-six li{text-align:left!important;line-height:1.6}
+.syn .syndrome-card-icon{display:flex;align-items:center;justify-content:center;width:64px;height:64px;flex:none}
+.syn .syndrome-card-icon img{display:block;width:64px;height:64px;max-width:100%;object-fit:contain}
