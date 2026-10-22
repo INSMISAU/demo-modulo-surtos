@@ -1,13 +1,13 @@
 /* Service Worker — Curso de Investigação de Surtos (INS)
    Mostra sempre a versão mais recente com internet e funciona offline.
    Subir CACHE_VERSION quando publicar alterações (v1 -> v2). */
-const CACHE_VERSION = "curso-surtos-v18-larsen-20261021";
+const CACHE_VERSION = "curso-surtos-v19-suporte-20261022";
 const CORE = [
   "./ins-fluxo-trabalho-campo.png","./ins-preparacao-investigacao.png",
   "./curva-epidemiologica.svg","./image1.png","./image2.png","./image3.png","./image4.png","./image5.png","./image6.png","./image7.png","./image8.png",
   "./triade-epidemiologica.svg",
 "./fig-chitima.png","./fig2.png","./fig3.png","./fig6.png",
-  "./","./index.html","./pretest.html","./apresentacao.html","./certificado.html",
+  "./","./index.html","./percurso.html","./pretest.html","./apresentacao.html","./certificado.html",
   "./modulo1.html","./modulo2.html","./modulo3.html","./modulo4.html",
   "./modulo5.html","./modulo6.html","./modulo7.html",
   "./formacao-config.js","./formacao-leitura.js","./formacao.js","./formacao.css","./formacao-dados.js","./271bad1e-854b-4f1e-b68a-d84c0b58180c.js","./curso.js","./curso-acesso.js","./logo_ins.png","./cover.jpg",
