@@ -1,7 +1,7 @@
 {
-  "name": "Curso de Investigação de Surtos — INS Moçambique",
+  "name": "Curso Básico em Investigação de Surtos — INS Moçambique",
   "short_name": "Curso Surtos",
-  "description": "Curso virtual de investigação de surtos do INS. Funciona sem internet depois de aberto.",
+  "description": "Curso Básico em Investigação de Surtos do INS. Funciona sem internet depois de aberto.",
   "lang": "pt",
   "start_url": "./index.html",
   "scope": "./",
