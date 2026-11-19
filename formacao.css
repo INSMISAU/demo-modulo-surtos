@@ -465,6 +465,10 @@ body.reading-mode .course-foot{display:none}
 #exam-warning{font-size:14px;color:#8a4800;margin:4px 0 0}
 #exam-warning:empty{display:none}
 body[data-access-page="true"] #course-app{padding-bottom:0}
+.course-offline{max-width:1140px;margin:24px auto;padding:20px;border:1px solid #b7d0d6;border-radius:12px;background:#fff;color:#164b56}
+.course-offline h2{font-size:20px;margin:0 0 8px}.course-offline p{line-height:1.6}.course-offline small{display:block;margin-top:12px;line-height:1.5}
+.course-offline progress{display:block;width:100%;margin:12px 0}.course-offline [hidden]{display:none!important}
+@media(max-width:850px){.course-offline{margin:18px 12px;padding:18px}.course-offline .course-btn{max-width:100%;white-space:normal}}
 body[data-access-page="true"] .course-access,body[data-access-page="true"] .course-sync{margin:14px auto;max-width:1140px}
 @media(max-width:850px){
  body.reading-mode #course-app{padding:8px 12px}

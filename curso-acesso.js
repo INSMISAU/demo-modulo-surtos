@@ -92,6 +92,9 @@ function apply(s,notify){
 function setStatus(text){status=text;var el=document.getElementById('curso-cloud-status');if(el)el.textContent=text;}
 function keyIsCurrent(){return get(prefix+':cloud-key')===activeKey;}
 async function request(action,key,data){
+  // An offline visit uses the local copy immediately; the existing queue and
+  // online event handle synchronisation when the connection returns.
+  if(root.navigator&&root.navigator.onLine===false)throw new Error('Sem ligação à internet.');
  var abort=new AbortController(),timeout=setTimeout(function(){abort.abort();},12000);
  try{
   var res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','x-curso-chave':key},body:JSON.stringify(Object.assign({action:action},data||{})),signal:abort.signal,cache:'no-store'});
