@@ -26,10 +26,15 @@ for (const m of course.modules) for (const s of m.sections) {
 for (const name of ['index.html','modulo1.html','modulo2.html','modulo3.html','percurso.html']) {
   const html = (await readFile(name)).toString();
   for (const m of html.matchAll(/(?:src|href)="([^"#]+)"/g)) {
-    if (m[1].startsWith('http')) throw new Error('External resource in course shell');
+    if (m[1].startsWith('http')) {
+      eq(m[1], 'https://insmisau.github.io/academia-digital-ins/#catalogo', 'Fixed return to Academy');
+      continue;
+    }
     ok(listed.has(m[1].split(/[?#]/)[0]), name + ' dependency ' + m[1]);
   }
   eq((html.match(/src="offline.js"/g) || []).length, 1, 'One registration path');
+  eq((html.match(/class="academy-return"/g) || []).length, 1, 'Return link on every course page');
+  ok(html.includes('href="https://insmisau.github.io/academia-digital-ins/#catalogo"'), 'Return reaches the Academy catalogue');
 }
 for (const name of ['formacao-dados.js','formacao-config.js','formacao.js','formacao-leitura.js','curso.js','manual.pdf',
  'image1.png','image2.png','image3.png','image4.png','image5.png','image6.png','image7.png','image8.png']) {

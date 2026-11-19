@@ -485,3 +485,5 @@ body[data-access-page="true"] .course-access,body[data-access-page="true"] .cour
  .course-head .access-link{font-size:11px}
  .exam-clock{top:90px}
 }
+
+.course-head .academy-return{font-size:13px;font-weight:600;white-space:nowrap;padding:7px 0;min-height:44px;display:inline-flex;align-items:center}

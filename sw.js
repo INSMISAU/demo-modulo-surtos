@@ -1,6 +1,6 @@
 /* Each release is downloaded and verified before it can replace the previous one. */
-const RELEASE = 'v22-offline-20261118';
-const CONTENT_ID = /* OFFLINE_ID_START */ "d50cbf5889d30139" /* OFFLINE_ID_END */;
+const RELEASE = 'v23-regresso-academia-20261119';
+const CONTENT_ID = /* OFFLINE_ID_START */ "4c3c2494eff22312" /* OFFLINE_ID_END */;
 const SCOPE = new URL('./', self.location.href);
 const CACHE_NAME = 'curso-surtos-' + encodeURIComponent(SCOPE.pathname) + '-' + RELEASE + '-' + CONTENT_ID;
 const COMPLETE_URL = new URL('__offline_complete__', SCOPE).href;
@@ -43,8 +43,8 @@ const CORE = /* OFFLINE_FILES_START */ [
   },
   {
     "path": "formacao.css",
-    "bytes": 42294,
-    "sha256": "18e0692bb3d3e00f6718b7d7a00f9e9aa91ab66ac530c047fcfe55e33baf36b9"
+    "bytes": 42444,
+    "sha256": "e91eb8e9d717efaab72eeea4abd67bebc1257b1c6e22c81e9190db51b75aabab"
   },
   {
     "path": "formacao.js",
@@ -103,8 +103,8 @@ const CORE = /* OFFLINE_FILES_START */ [
   },
   {
     "path": "index.html",
-    "bytes": 1828,
-    "sha256": "90c703dc95439de675d5a0d8ebf7c2188e2febb6f5e149700fbd49baecfc8649"
+    "bytes": 1978,
+    "sha256": "b86243f6c8f926fa70397cdfae1f173fab01e56968e076dcbc79c7f3f9f4ae4e"
   },
   {
     "path": "ins-fluxo-trabalho-campo.png",
@@ -133,18 +133,18 @@ const CORE = /* OFFLINE_FILES_START */ [
   },
   {
     "path": "modulo1.html",
-    "bytes": 1227,
-    "sha256": "bd3746e9074b42d12ac8f87701e8a58386a26d05c5336c8ebb01d5f31b4f699f"
+    "bytes": 1377,
+    "sha256": "4ca2d8f0cb821f08b83ada976e2af3cbd8bb474a7344f827c64066c80eb36ac2"
   },
   {
     "path": "modulo2.html",
-    "bytes": 1227,
-    "sha256": "f285c14c8f3694e0fad317dd6675cf9d278d34d999fa6de59fbb83fda2d43f77"
+    "bytes": 1377,
+    "sha256": "175a5cfb5c3102172d751c595d8c250d890fcd166d9674baea3d41fbcaeb7ea0"
   },
   {
     "path": "modulo3.html",
-    "bytes": 1227,
-    "sha256": "30b32f927f481f146389fe5a5a84c20eba47a3a2734f5b2656cc6c48a19f87f2"
+    "bytes": 1377,
+    "sha256": "72b13763b7f894d828fa4345ae4777c98285f7d9e4cae76c90907aa6ad776edd"
   },
   {
     "path": "modulo4.html",
@@ -173,8 +173,8 @@ const CORE = /* OFFLINE_FILES_START */ [
   },
   {
     "path": "percurso.html",
-    "bytes": 1480,
-    "sha256": "4666a64919aa7acab1c22fb5fd5234316b6142f9a32e3ba5a0007cf9f19cb581"
+    "bytes": 1630,
+    "sha256": "386deab3563a62bb45f29a9005a0c71bfaec0f850da5dc639577084323b80cd8"
   }
 ] /* OFFLINE_FILES_END */;
 const FILES = new Map(CORE.map(file => [new URL(file.path, SCOPE).href, file]));
