@@ -1,6 +1,6 @@
 /* Each release is downloaded and verified before it can replace the previous one. */
-const RELEASE = 'v23-regresso-academia-20261119';
-const CONTENT_ID = /* OFFLINE_ID_START */ "4c3c2494eff22312" /* OFFLINE_ID_END */;
+const RELEASE = 'v24-acessos-validacao-20261124';
+const CONTENT_ID = /* OFFLINE_ID_START */ "95677427bd2854d7" /* OFFLINE_ID_END */;
 const SCOPE = new URL('./', self.location.href);
 const CACHE_NAME = 'curso-surtos-' + encodeURIComponent(SCOPE.pathname) + '-' + RELEASE + '-' + CONTENT_ID;
 const COMPLETE_URL = new URL('__offline_complete__', SCOPE).href;
@@ -103,8 +103,8 @@ const CORE = /* OFFLINE_FILES_START */ [
   },
   {
     "path": "index.html",
-    "bytes": 1978,
-    "sha256": "b86243f6c8f926fa70397cdfae1f173fab01e56968e076dcbc79c7f3f9f4ae4e"
+    "bytes": 2035,
+    "sha256": "134ee799fea88dbbcb8714359da7b65eba6b4aef08421a5e0e3a8e8930c8866e"
   },
   {
     "path": "ins-fluxo-trabalho-campo.png",
@@ -133,38 +133,38 @@ const CORE = /* OFFLINE_FILES_START */ [
   },
   {
     "path": "modulo1.html",
-    "bytes": 1377,
-    "sha256": "4ca2d8f0cb821f08b83ada976e2af3cbd8bb474a7344f827c64066c80eb36ac2"
+    "bytes": 1434,
+    "sha256": "aea3f7e35883ff43cc6366caa3b9252be72c2fe9d3a18add720c69ce967cb9f3"
   },
   {
     "path": "modulo2.html",
-    "bytes": 1377,
-    "sha256": "175a5cfb5c3102172d751c595d8c250d890fcd166d9674baea3d41fbcaeb7ea0"
+    "bytes": 1434,
+    "sha256": "39a0381a7ae806ed7ae0f8c8179e98357e016bbfd526a7472b645ea7527ae074"
   },
   {
     "path": "modulo3.html",
-    "bytes": 1377,
-    "sha256": "72b13763b7f894d828fa4345ae4777c98285f7d9e4cae76c90907aa6ad776edd"
+    "bytes": 1434,
+    "sha256": "106661acfd9429f3109ae103d0a0596e653a68e538feea312a3bd0be4efecfea"
   },
   {
     "path": "modulo4.html",
-    "bytes": 330,
-    "sha256": "c04217bf251dc901422811cf060233112f2aaf48b5b3e4958490267323567c8d"
+    "bytes": 331,
+    "sha256": "860616d6eff4b2389da88c5074b9a4059e226c90344ce510cb79ed93c6c676fa"
   },
   {
     "path": "modulo5.html",
-    "bytes": 330,
-    "sha256": "4e7047c312cd3e58e68d332b1a0a9f3aaedabad0ea56e94216e818208a874a59"
+    "bytes": 331,
+    "sha256": "a46424deaeb3a11da68a606b1ba073c9c6751d6b5c67cfdceae523a29c01c1ea"
   },
   {
     "path": "modulo6.html",
-    "bytes": 330,
-    "sha256": "81154d78f39bd260fee18e93769721985a2f1bf9be40ab7e245309b263df8e79"
+    "bytes": 331,
+    "sha256": "dab0bb5a6d4c2085510a975006c23733f377b5c0d692b646908c8f73339e836c"
   },
   {
     "path": "modulo7.html",
-    "bytes": 332,
-    "sha256": "83f646c142aaf237b7b5504a2084ab50b761148f4a7bf97cbb7f290ef60f1cd4"
+    "bytes": 333,
+    "sha256": "4524520bb5f67ae5283c828c209565e9a989e9415cd1041dabd6c0e7c809f9ee"
   },
   {
     "path": "offline.js",
@@ -173,8 +173,13 @@ const CORE = /* OFFLINE_FILES_START */ [
   },
   {
     "path": "percurso.html",
-    "bytes": 1630,
-    "sha256": "386deab3563a62bb45f29a9005a0c71bfaec0f850da5dc639577084323b80cd8"
+    "bytes": 1687,
+    "sha256": "0231dfa0c7393a7471ba1c56e3c6b97d83b77c99bfb0e9d157d01b8f0c32ffb3"
+  },
+  {
+    "path": "validation-access.js",
+    "bytes": 6602,
+    "sha256": "45b1c30a1880e49c87c0992f8437e3d9b578ebae86087607d173e2b96fc283c3"
   }
 ] /* OFFLINE_FILES_END */;
 const FILES = new Map(CORE.map(file => [new URL(file.path, SCOPE).href, file]));
@@ -304,3 +309,4 @@ self.addEventListener('fetch', event => {
   // No API, credentials, unrelated pages or other origins enter the course cache.
   if (file) event.respondWith(resource(request, file));
 });
+
