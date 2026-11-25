@@ -1,4 +1,4 @@
-/* Conteúdo: validação de Germano Pires de 23/10/2026, aplicada em 26/10/2026. */
+/* Conteúdo publicado pelo gestor do Curso Básico. */
 window.INS_CURSO = {
   "version": "2026-10-20-documento-ins",
   "passMark": 80,

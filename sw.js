@@ -1,6 +1,6 @@
 /* Each release is downloaded and verified before it can replace the previous one. */
 const RELEASE = 'v24-acessos-validacao-20261124';
-const CONTENT_ID = /* OFFLINE_ID_START */ "95677427bd2854d7" /* OFFLINE_ID_END */;
+const CONTENT_ID = /* OFFLINE_ID_START */ "548dc9203654bd3f" /* OFFLINE_ID_END */;
 const SCOPE = new URL('./', self.location.href);
 const CACHE_NAME = 'curso-surtos-' + encodeURIComponent(SCOPE.pathname) + '-' + RELEASE + '-' + CONTENT_ID;
 const COMPLETE_URL = new URL('__offline_complete__', SCOPE).href;
@@ -33,8 +33,8 @@ const CORE = /* OFFLINE_FILES_START */ [
   },
   {
     "path": "formacao-dados.js",
-    "bytes": 126230,
-    "sha256": "b9cd0ec1edca72370fb24616dae75e42e6255283b39441eade3c2c7c1b58d485"
+    "bytes": 126201,
+    "sha256": "fd5a33e428ac6111fbc47c363d661e2a2c36ec4ed3868ad07e2b03b78939c732"
   },
   {
     "path": "formacao-leitura.js",
