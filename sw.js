@@ -1,10 +1,17 @@
-/* Each release is downloaded and verified before it can replace the previous one. */
-const RELEASE = 'v24-acessos-validacao-20261124';
-const CONTENT_ID = /* OFFLINE_ID_START */ "48175b7d12f4c8ac" /* OFFLINE_ID_END */;
-const SCOPE = new URL('./', self.location.href);
-const CACHE_NAME = 'curso-surtos-' + encodeURIComponent(SCOPE.pathname) + '-' + RELEASE + '-' + CONTENT_ID;
-const COMPLETE_URL = new URL('__offline_complete__', SCOPE).href;
-// Generated from the actual files by scripts/build-offline.mjs.
+/* Each release is downloaded and verified before it can replace the previous one. */
+
+const RELEASE = 'v24-acessos-validacao-20261124';
+
+const CONTENT_ID = /* OFFLINE_ID_START */ "58a089033f402fa6" /* OFFLINE_ID_END */;
+
+const SCOPE = new URL('./', self.location.href);
+
+const CACHE_NAME = 'curso-surtos-' + encodeURIComponent(SCOPE.pathname) + '-' + RELEASE + '-' + CONTENT_ID;
+
+const COMPLETE_URL = new URL('__offline_complete__', SCOPE).href;
+
+// Generated from the actual files by scripts/build-offline.mjs.
+
 const CORE = /* OFFLINE_FILES_START */ [
   {
     "path": "271bad1e-854b-4f1e-b68a-d84c0b58180c.js",
@@ -183,135 +190,264 @@ const CORE = /* OFFLINE_FILES_START */ [
   },
   {
     "path": "ajuda.html",
-    "bytes": 13690,
-    "sha256": "0594189f4dc1dcb3c79d466cb59aeae31c7cd4f0ac3cb6d3b2ce8fd17a584ef0"
+    "bytes": 852,
+    "sha256": "a35d0202eb48631e6364deae7d4aa49d2327fed1d18e25041aa5e3ea5fd3eeaa"
   }
-] /* OFFLINE_FILES_END */;
-const FILES = new Map(CORE.map(file => [new URL(file.path, SCOPE).href, file]));
-let preparing = null;
-
-function canonical(url) {
-  const u = new URL(url);
-  u.search = ''; u.hash = '';
-  if (u.href === SCOPE.href) return new URL('index.html', SCOPE).href;
-  return u.href;
-}
-async function status() {
-  const cache = await caches.open(CACHE_NAME);
-  const marker = await cache.match(COMPLETE_URL);
-  let completed = 0;
-  for (const file of CORE) {
-    const response = await cache.match(new URL(file.path, SCOPE).href);
-    if (response && response.status === 200) completed++;
-  }
-  return {version: RELEASE, ready: !!marker && completed === CORE.length,
-    completed, total: CORE.length, bytes: CORE.reduce((sum, file) => sum + file.bytes, 0)};
-}
-async function broadcast(message) {
-  const clients = await self.clients.matchAll({type: 'window', includeUncontrolled: true});
-  for (const client of clients) {
-    if (client.url.startsWith(SCOPE.href)) client.postMessage(message);
-  }
-}
-async function verifiedFetch(file) {
-  const url = new URL(file.path, SCOPE).href;
-  const abort = new AbortController();
-  const timeout = setTimeout(() => abort.abort(), 45000);
-  try {
-    const response = await fetch(new Request(url, {cache: 'reload', credentials: 'same-origin', signal: abort.signal}));
-    if (response.status !== 200 || response.redirected) throw new Error('Download failed: ' + file.path);
-    const body = await response.clone().arrayBuffer();
-    const hash = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', body)))
-      .map(byte => byte.toString(16).padStart(2, '0')).join('');
-    if (body.byteLength !== file.bytes || hash !== file.sha256) throw new Error('Release mismatch: ' + file.path);
-    return response;
-  } finally { clearTimeout(timeout); }
-}
-function prepare() {
-  if (preparing) return preparing;
-  preparing = (async () => {
-    const cache = await caches.open(CACHE_NAME);
-    if ((await status()).ready) return status();
-    await cache.delete(COMPLETE_URL);
-    let completed = 0;
-    // A failed file never creates a ready marker. Successfully verified files
-    // remain available for retry, without touching an older release or progress.
-    for (const file of CORE) {
-      const url = new URL(file.path, SCOPE).href;
-      const cached = await cache.match(url);
-      if (!cached || cached.status !== 200) await cache.put(url, await verifiedFetch(file));
-      completed++;
-      await broadcast({type: 'COURSE_OFFLINE_PROGRESS', completed, total: CORE.length, version: RELEASE});
-    }
-    await cache.put(COMPLETE_URL, new Response(JSON.stringify({version: RELEASE}), {
-      headers: {'Content-Type': 'application/json'}
-    }));
-    const result = await status();
-    if (!result.ready) throw new Error('Incomplete offline package');
-    return result;
-  })().finally(() => { preparing = null; });
-  return preparing;
-}
-self.addEventListener('install', event => {
-  // No skipWaiting: an open assessment keeps its existing worker and release.
-  event.waitUntil(prepare());
-});
-self.addEventListener('activate', event => {
-  // Leave older caches alone: an old tab may still need its own release.
-  event.waitUntil(self.clients.claim());
-});
-self.addEventListener('message', event => {
-  if (!event.source || !event.source.url || !event.source.url.startsWith(SCOPE.href)) return;
-  if (!event.data || !['COURSE_OFFLINE_STATUS', 'COURSE_OFFLINE_PREPARE'].includes(event.data.type)) return;
-  const port = event.ports && event.ports[0];
-  event.waitUntil((async () => {
-    try {
-      const result = await (event.data.type === 'COURSE_OFFLINE_PREPARE' ? prepare() : status());
-      if (port) port.postMessage({ok: true, ...result});
-    } catch (_) { if (port) port.postMessage({ok: false}); }
-  })());
-});
-async function ranged(request, response) {
-  const range = request.headers.get('range');
-  if (!range || request.headers.has('if-range')) return response;
-  const match = /^bytes=(\d*)-(\d*)$/.exec(range.trim());
-  // Ignoring malformed or multiple ranges and returning the full 200 is valid.
-  if (!match || (!match[1] && !match[2])) return response;
-  const body = await response.arrayBuffer(), size = body.byteLength;
-  let start, end;
-  if (!match[1]) { start = Math.max(0, size - Number(match[2])); end = size - 1; }
-  else { start = Number(match[1]); end = match[2] ? Number(match[2]) : size - 1; }
-  const headers = new Headers(response.headers);
-  headers.delete('Content-Encoding'); headers.delete('Content-Length');
-  headers.set('Accept-Ranges', 'bytes');
-  if (!Number.isSafeInteger(start) || !Number.isSafeInteger(end) || start >= size || end < start || match[2] === '0' && !match[1]) {
-    headers.set('Content-Range', 'bytes */' + size);
-    return new Response(null, {status: 416, headers});
-  }
-  end = Math.min(end, size - 1);
-  headers.set('Content-Range', 'bytes ' + start + '-' + end + '/' + size);
-  headers.set('Content-Length', String(end - start + 1));
-  return new Response(body.slice(start, end + 1), {status: 206, headers});
-}
-async function resource(request, file) {
-  const cache = await caches.open(CACHE_NAME), url = new URL(file.path, SCOPE).href;
-  let response = await cache.match(url);
-  if (!response) {
-    try { response = await verifiedFetch(file); await cache.put(url, response.clone()); }
-    catch (_) {
-      return new Response('Este recurso ainda não está guardado. Volte ao curso com ligação e conclua a preparação para utilizar sem internet.', {
-        status: 503, headers: {'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store'}
-      });
-    }
-  }
-  if (request.method === 'HEAD') return new Response(null, {status: response.status, headers: response.headers});
-  return ranged(request, response);
-}
-self.addEventListener('fetch', event => {
-  const request = event.request;
-  if (!['GET', 'HEAD'].includes(request.method)) return;
-  const file = FILES.get(canonical(request.url));
-  // No API, credentials, unrelated pages or other origins enter the course cache.
-  if (file) event.respondWith(resource(request, file));
-});
-
+] /* OFFLINE_FILES_END */;
+
+const FILES = new Map(CORE.map(file => [new URL(file.path, SCOPE).href, file]));
+
+let preparing = null;
+
+
+
+function canonical(url) {
+
+  const u = new URL(url);
+
+  u.search = ''; u.hash = '';
+
+  if (u.href === SCOPE.href) return new URL('index.html', SCOPE).href;
+
+  return u.href;
+
+}
+
+async function status() {
+
+  const cache = await caches.open(CACHE_NAME);
+
+  const marker = await cache.match(COMPLETE_URL);
+
+  let completed = 0;
+
+  for (const file of CORE) {
+
+    const response = await cache.match(new URL(file.path, SCOPE).href);
+
+    if (response && response.status === 200) completed++;
+
+  }
+
+  return {version: RELEASE, ready: !!marker && completed === CORE.length,
+
+    completed, total: CORE.length, bytes: CORE.reduce((sum, file) => sum + file.bytes, 0)};
+
+}
+
+async function broadcast(message) {
+
+  const clients = await self.clients.matchAll({type: 'window', includeUncontrolled: true});
+
+  for (const client of clients) {
+
+    if (client.url.startsWith(SCOPE.href)) client.postMessage(message);
+
+  }
+
+}
+
+async function verifiedFetch(file) {
+
+  const url = new URL(file.path, SCOPE).href;
+
+  const abort = new AbortController();
+
+  const timeout = setTimeout(() => abort.abort(), 45000);
+
+  try {
+
+    const response = await fetch(new Request(url, {cache: 'reload', credentials: 'same-origin', signal: abort.signal}));
+
+    if (response.status !== 200 || response.redirected) throw new Error('Download failed: ' + file.path);
+
+    const body = await response.clone().arrayBuffer();
+
+    const hash = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', body)))
+
+      .map(byte => byte.toString(16).padStart(2, '0')).join('');
+
+    if (body.byteLength !== file.bytes || hash !== file.sha256) throw new Error('Release mismatch: ' + file.path);
+
+    return response;
+
+  } finally { clearTimeout(timeout); }
+
+}
+
+function prepare() {
+
+  if (preparing) return preparing;
+
+  preparing = (async () => {
+
+    const cache = await caches.open(CACHE_NAME);
+
+    if ((await status()).ready) return status();
+
+    await cache.delete(COMPLETE_URL);
+
+    let completed = 0;
+
+    // A failed file never creates a ready marker. Successfully verified files
+
+    // remain available for retry, without touching an older release or progress.
+
+    for (const file of CORE) {
+
+      const url = new URL(file.path, SCOPE).href;
+
+      const cached = await cache.match(url);
+
+      if (!cached || cached.status !== 200) await cache.put(url, await verifiedFetch(file));
+
+      completed++;
+
+      await broadcast({type: 'COURSE_OFFLINE_PROGRESS', completed, total: CORE.length, version: RELEASE});
+
+    }
+
+    await cache.put(COMPLETE_URL, new Response(JSON.stringify({version: RELEASE}), {
+
+      headers: {'Content-Type': 'application/json'}
+
+    }));
+
+    const result = await status();
+
+    if (!result.ready) throw new Error('Incomplete offline package');
+
+    return result;
+
+  })().finally(() => { preparing = null; });
+
+  return preparing;
+
+}
+
+self.addEventListener('install', event => {
+
+  // No skipWaiting: an open assessment keeps its existing worker and release.
+
+  event.waitUntil(prepare());
+
+});
+
+self.addEventListener('activate', event => {
+
+  // Leave older caches alone: an old tab may still need its own release.
+
+  event.waitUntil(self.clients.claim());
+
+});
+
+self.addEventListener('message', event => {
+
+  if (!event.source || !event.source.url || !event.source.url.startsWith(SCOPE.href)) return;
+
+  if (!event.data || !['COURSE_OFFLINE_STATUS', 'COURSE_OFFLINE_PREPARE'].includes(event.data.type)) return;
+
+  const port = event.ports && event.ports[0];
+
+  event.waitUntil((async () => {
+
+    try {
+
+      const result = await (event.data.type === 'COURSE_OFFLINE_PREPARE' ? prepare() : status());
+
+      if (port) port.postMessage({ok: true, ...result});
+
+    } catch (_) { if (port) port.postMessage({ok: false}); }
+
+  })());
+
+});
+
+async function ranged(request, response) {
+
+  const range = request.headers.get('range');
+
+  if (!range || request.headers.has('if-range')) return response;
+
+  const match = /^bytes=(\d*)-(\d*)$/.exec(range.trim());
+
+  // Ignoring malformed or multiple ranges and returning the full 200 is valid.
+
+  if (!match || (!match[1] && !match[2])) return response;
+
+  const body = await response.arrayBuffer(), size = body.byteLength;
+
+  let start, end;
+
+  if (!match[1]) { start = Math.max(0, size - Number(match[2])); end = size - 1; }
+
+  else { start = Number(match[1]); end = match[2] ? Number(match[2]) : size - 1; }
+
+  const headers = new Headers(response.headers);
+
+  headers.delete('Content-Encoding'); headers.delete('Content-Length');
+
+  headers.set('Accept-Ranges', 'bytes');
+
+  if (!Number.isSafeInteger(start) || !Number.isSafeInteger(end) || start >= size || end < start || match[2] === '0' && !match[1]) {
+
+    headers.set('Content-Range', 'bytes */' + size);
+
+    return new Response(null, {status: 416, headers});
+
+  }
+
+  end = Math.min(end, size - 1);
+
+  headers.set('Content-Range', 'bytes ' + start + '-' + end + '/' + size);
+
+  headers.set('Content-Length', String(end - start + 1));
+
+  return new Response(body.slice(start, end + 1), {status: 206, headers});
+
+}
+
+async function resource(request, file) {
+
+  const cache = await caches.open(CACHE_NAME), url = new URL(file.path, SCOPE).href;
+
+  let response = await cache.match(url);
+
+  if (!response) {
+
+    try { response = await verifiedFetch(file); await cache.put(url, response.clone()); }
+
+    catch (_) {
+
+      return new Response('Este recurso ainda não está guardado. Volte ao curso com ligação e conclua a preparação para utilizar sem internet.', {
+
+        status: 503, headers: {'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store'}
+
+      });
+
+    }
+
+  }
+
+  if (request.method === 'HEAD') return new Response(null, {status: response.status, headers: response.headers});
+
+  return ranged(request, response);
+
+}
+
+self.addEventListener('fetch', event => {
+
+  const request = event.request;
+
+  if (!['GET', 'HEAD'].includes(request.method)) return;
+
+  const file = FILES.get(canonical(request.url));
+
+  // No API, credentials, unrelated pages or other origins enter the course cache.
+
+  if (file) event.respondWith(resource(request, file));
+
+});
+
+
+
